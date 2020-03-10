@@ -7,6 +7,10 @@ public class Company {
 	
 	public Company() {}
 	
+	public Company(int id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}

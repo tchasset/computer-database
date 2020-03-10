@@ -3,8 +3,7 @@ import java.sql.*;
 
 public class Dao {
 	public Connection conn;
-    private Statement statement;
-    public static Dao db;
+    public static Dao instance;
     
     private Dao() {
         String url= "jdbc:mysql://localhost:3306/";
@@ -22,22 +21,19 @@ public class Dao {
     }
 
     public static final Dao getInstance() {
-        if ( db == null ) {
-            db = new Dao();
-        }
-        return db;
+		if (Dao.instance == null) {
+			synchronized(Dao.class) {
+				if (Dao.instance == null) {
+					Dao.instance = new Dao();
+	            }
+	        }
+		}
+	    return Dao.instance;
     }
     
-    public ResultSet execute(String query) throws SQLException{
-        statement = db.conn.createStatement();
-        ResultSet res = statement.executeQuery(query);
-        return res;
-    }
-
-    public int update(String insertQuery) throws SQLException {
-        statement = db.conn.createStatement();
-        int result = statement.executeUpdate(insertQuery);
-        return result;
- 
-    }
+    
+    
+    public Connection getConn() {
+		return conn;
+	}
 }
