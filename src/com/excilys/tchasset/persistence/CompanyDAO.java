@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.excilys.tchasset.mapper.CompanyMapper;
 import com.excilys.tchasset.model.Company;
 
 public class CompanyDAO {
@@ -25,16 +26,17 @@ public class CompanyDAO {
 	    return CompanyDAO.instance;
     }
 
-	public List<Company> getCompanies() throws SQLException{
+	public List<Company> getCompanies() {
 		List<Company> companies = new ArrayList<Company>();
 		String query = "SELECT id,name FROM company;";
-		Statement statement = Dao.getInstance().getConn().createStatement();
-		ResultSet res = statement.executeQuery(query);
-		while(res.next()) {
-			Company comp=new Company();
-			comp.setId(res.getInt("id"));
-			comp.setName(res.getString("name"));
-			companies.add(comp);
+		try(Statement statement = Dao.getInstance().getConn().createStatement()) {
+			ResultSet res = statement.executeQuery(query);
+			while(res.next()) {
+				companies.add(CompanyMapper.getInstance().getCompany(res));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return companies;
 	}
@@ -42,15 +44,11 @@ public class CompanyDAO {
 	public Optional<Company> getById(int id) {
 		Optional<Company> company = Optional.empty();
 		String query = "SELECT id,name FROM company WHERE id=?;";
-		try {
-			PreparedStatement statementCompany = Dao.getInstance().getConn().prepareStatement(query);
+		try (PreparedStatement statementCompany = Dao.getInstance().getConn().prepareStatement(query)) {
 			statementCompany.setInt(1,id);
 			ResultSet res = statementCompany.executeQuery();
 			while(res.next()) {
-				Company comp=new Company();
-				comp.setId(res.getInt("id"));
-				comp.setName(res.getString("name"));
-				company = Optional.of(comp);
+				company = Optional.of(CompanyMapper.getInstance().getCompany(res));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

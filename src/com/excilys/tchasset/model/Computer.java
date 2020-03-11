@@ -10,13 +10,44 @@ public class Computer {
 	private LocalDate discontinued;
 	private Company company;
 	
+	public static class Builder {
+		private String name;
+		private LocalDate introduced;
+		private LocalDate discontinued;
+		private Company company;
+		
+		public Builder setName(String name) {
+			this.name = name;
+			return this;
+		}
+		
+        public Builder setIntroduced(LocalDate introduced) {
+			this.introduced = introduced;
+			return this;
+		}
+
+		public Builder setDiscontinued(LocalDate discontinued) {
+			this.discontinued = discontinued;
+			return this;
+		}
+
+		public Builder setCompany(Company company) {
+			this.company = company;
+			return this;
+		}
+
+		public Computer build() {
+            return new Computer(this);
+        }
+    }
+	
 	public Computer() {}
 	
-	public Computer(String name, LocalDate introduced, LocalDate discontinued, Company company) {
-		this.name = name;
-		this.introduced = introduced;
-		this.discontinued = discontinued;
-		this.company = company;
+	public Computer(Builder builder) {
+		this.name = builder.name;
+		this.introduced = builder.introduced;
+		this.discontinued = builder.discontinued;
+		this.company = builder.company;
 	}
 
 	public String getName() {

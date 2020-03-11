@@ -1,7 +1,7 @@
 package com.excilys.tchasset.persistence;
 import java.sql.*;
 
-public class Dao {
+public class Dao implements AutoCloseable {
 	public Connection conn;
     public static Dao instance;
     
@@ -31,9 +31,12 @@ public class Dao {
 	    return Dao.instance;
     }
     
-    
-    
     public Connection getConn() {
 		return conn;
+	}
+
+	@Override
+	public void close() throws Exception {
+		getConn().close();
 	}
 }

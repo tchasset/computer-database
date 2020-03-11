@@ -5,15 +5,16 @@ import java.time.LocalDate;
 import com.excilys.tchasset.model.Company;
 import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.persistence.ComputerDAO;
+import com.excilys.tchasset.service.CompanyService;
 
 public class App {
 
 	public static void main(String[] args) {
-		Computer c = new Computer("abc",LocalDate.of(1995,7,30),LocalDate.of(2000,7,30),new Company());
-    	System.out.println(ComputerDAO.getInstance().getById(1000));
-    	//ComputerDAO.getInstance().addComputer(c);
-    	//ComputerDAO.getInstance().deleteComputer(1002);
+		Computer c = new Computer.Builder().setName("test2").setIntroduced(LocalDate.of(1980,10,1)).build();
+    	ComputerDAO.getInstance().addComputer(c);
     	for (Computer cc : ComputerDAO.getInstance().getComputers())
     		System.out.println(cc.toString());
+//		CompanyService cs = new CompanyService();
+//		System.out.println(cs.getById(2));
 	}
 }
