@@ -8,7 +8,20 @@ import com.excilys.tchasset.persistence.ComputerDAO;
 
 public class ComputerService {
 	
-	public List<Computer> getCompanies() {
+private static ComputerService instance;
+	
+	public static final ComputerService getInstance() {
+		if (ComputerService.instance == null) {
+			synchronized(ComputerService.class) {
+				if (ComputerService.instance == null) {
+					ComputerService.instance = new ComputerService();
+	            }
+	        }
+		}
+	    return ComputerService.instance;
+    }
+	
+	public List<Computer> getComputers() {
 		List<Computer> companies = ComputerDAO.getInstance().getComputers();
 		return companies;
 	}

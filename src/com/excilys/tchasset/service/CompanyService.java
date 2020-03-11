@@ -9,6 +9,19 @@ import com.excilys.tchasset.persistence.CompanyDAO;
 
 public class CompanyService {
 	
+	private static CompanyService instance;
+	
+	public static final CompanyService getInstance() {
+		if (CompanyService.instance == null) {
+			synchronized(CompanyService.class) {
+				if (CompanyService.instance == null) {
+					CompanyService.instance = new CompanyService();
+	            }
+	        }
+		}
+	    return CompanyService.instance;
+    }
+	
 	public List<Company> getCompanies() {
 		List<Company> companies = new ArrayList<>();
 		companies = CompanyDAO.getInstance().getCompanies();

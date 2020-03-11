@@ -89,7 +89,7 @@ public class Computer {
 
 	@Override
 	public String toString() {
-		return "Computer: "+name+" n°"+id+" introduced in "+introduced+" and discontinued in "+discontinued+" belonging to Company n°"+company.getId();
+		return "Computer: "+name+" n°"+id+" introduced in "+introduced+" and discontinued in "+discontinued+" belonging to Company n°"+company.getId()+"\n";
 	}
 	
 }
