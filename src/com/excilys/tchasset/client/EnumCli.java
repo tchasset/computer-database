@@ -26,7 +26,8 @@ public enum EnumCli {
 				return DELETECOMPUTER;
 			case 7:
 				return UPDATECOMPUTER;
+			default:
+				return EXIT;
 		}
-		return EXIT;
 	}
 }

@@ -26,6 +26,11 @@ private static ComputerService instance;
 		return companies;
 	}
 	
+	public List<Computer> getComputersPaginate(int current, int sizeByPage) {
+		List<Computer> companies = ComputerDAO.getInstance().getComputersPaginate(current, sizeByPage);
+		return companies;
+	}
+	
 	public Optional<Computer> getById(int id) {
 		Optional<Computer> computer = ComputerDAO.getInstance().getById(id);
 		return computer;
@@ -41,5 +46,9 @@ private static ComputerService instance;
 	
 	public void deleteComputer(int id) {
 		ComputerDAO.getInstance().deleteComputer(id);
+	}
+	
+	public int getNbComputers() {
+		return ComputerDAO.getInstance().getNbComputers();
 	}
 }
