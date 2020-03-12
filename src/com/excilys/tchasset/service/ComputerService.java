@@ -8,8 +8,26 @@ import com.excilys.tchasset.persistence.ComputerDAO;
 
 public class ComputerService {
 	
-	public List<Computer> getCompanies() {
+private static ComputerService instance;
+	
+	public static final ComputerService getInstance() {
+		if (ComputerService.instance == null) {
+			synchronized(ComputerService.class) {
+				if (ComputerService.instance == null) {
+					ComputerService.instance = new ComputerService();
+	            }
+	        }
+		}
+	    return ComputerService.instance;
+    }
+	
+	public List<Computer> getComputers() {
 		List<Computer> companies = ComputerDAO.getInstance().getComputers();
+		return companies;
+	}
+	
+	public List<Computer> getComputersPaginate(int current, int sizeByPage) {
+		List<Computer> companies = ComputerDAO.getInstance().getComputersPaginate(current, sizeByPage);
 		return companies;
 	}
 	
@@ -28,5 +46,9 @@ public class ComputerService {
 	
 	public void deleteComputer(int id) {
 		ComputerDAO.getInstance().deleteComputer(id);
+	}
+	
+	public int getNbComputers() {
+		return ComputerDAO.getInstance().getNbComputers();
 	}
 }

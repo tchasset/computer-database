@@ -30,6 +30,10 @@ public class Company {
 		this.id = builder.id;
 		this.name = builder.name;
 	}
+	
+	public Company(int id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -46,6 +50,6 @@ public class Company {
 
 	@Override
 	public String toString() {
-		return "Company n°"+id+": "+name;
+		return "Company n°"+id+": "+name+"\n";
 	}	
 }

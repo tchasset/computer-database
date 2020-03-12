@@ -40,6 +40,22 @@ public class ComputerDAO {
 		return computers;
 	}
 	
+	public List<Computer> getComputersPaginate(int current, int sizeByPage) {
+		List<Computer> computers = new ArrayList<Computer>();
+		String query = "SELECT computer.id,computer.name,introduced,discontinued,company_id FROM computer LEFT JOIN company ON company_id LIMIT ?, ?;";
+		try (PreparedStatement statementComputer = Dao.getInstance().getConn().prepareStatement(query)) {
+			statementComputer.setInt(1,current);
+			statementComputer.setInt(2,sizeByPage);
+			ResultSet res = statementComputer.executeQuery();
+			while(res.next()) {
+				computers.add(ComputerMapper.getInstance().getComputer(res));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return computers;
+	}
+	
 	public Optional<Computer> getById(int id) {
 		Optional<Computer> computer = Optional.empty();
 		String query = "SELECT id,name,introduced,discontinued,company_id FROM computer WHERE id=?;";
@@ -73,5 +89,19 @@ public class ComputerDAO {
 	public void updateComputer(Computer computer) {
 		String query = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id="+computer.getId()+";";
 		ComputerMapper.getInstance().manageComputer(computer, query);
+	}
+	
+	public int getNbComputers() {
+		int nb=0;
+		String query = "SELECT COUNT(*) as 'Computers' FROM computer;";
+		try (Statement statement = Dao.getInstance().getConn().createStatement()) {
+			ResultSet res = statement.executeQuery(query);
+			while(res.next()) {
+				nb=res.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return nb;
 	}
 }
