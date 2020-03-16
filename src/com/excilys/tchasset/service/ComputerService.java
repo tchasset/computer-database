@@ -8,7 +8,7 @@ import com.excilys.tchasset.persistence.ComputerDAO;
 
 public class ComputerService {
 	
-private static ComputerService instance;
+	private static ComputerService instance;
 	
 	public static final ComputerService getInstance() {
 		if (ComputerService.instance == null) {
@@ -33,6 +33,11 @@ private static ComputerService instance;
 	
 	public Optional<Computer> getById(int id) {
 		Optional<Computer> computer = ComputerDAO.getInstance().getById(id);
+		return computer;
+	}
+	
+	public Optional<Computer> getByName(String name) {
+		Optional<Computer> computer = ComputerDAO.getInstance().getByName(name);
 		return computer;
 	}
 

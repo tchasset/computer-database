@@ -71,6 +71,21 @@ public class ComputerDAO {
 		return computer;
 	}
 	
+	public Optional<Computer> getByName(String name) {
+		Optional<Computer> computer = Optional.empty();
+		String query = "SELECT id,name,introduced,discontinued,company_id FROM computer WHERE name=?;";
+		try (PreparedStatement statementComputer = Dao.getInstance().getConn().prepareStatement(query)) {
+			statementComputer.setString(1,name);
+			ResultSet res = statementComputer.executeQuery();
+			while(res.next()) {
+				computer = Optional.of(ComputerMapper.getInstance().getComputer(res));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return computer;
+	}
+	
 	public void addComputer(Computer computer) {
 		String query = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?);";
 		ComputerMapper.getInstance().manageComputer(computer, query);

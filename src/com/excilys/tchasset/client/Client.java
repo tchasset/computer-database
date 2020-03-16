@@ -140,13 +140,15 @@ public class Client {
 		System.out.println("Ancien nom : "+computer.getName());
 		System.out.print("Nouveau nom (entrée pour ne pas modifier) : ");
 		String name = sc.useDelimiter("\n").next();
-		sc.useDelimiter(" ").nextLine();
+		sc.nextLine();
 		if(!name.isEmpty())
 			computer.setName(name);
 		
+		sc.useDelimiter(" ");
 		System.out.println("Ancienne date de debut de service : "+computer.getIntroduced());
 		System.out.print("Nouvelle date de debut de service au format (jour mois annee) (entrée pour ne pas modifier) : ");
 		String jour = sc.next(), 	mois=sc.next(), 	annee=sc.next(); 
+		sc.nextLine();
 		if(!jour.isEmpty() && !mois.isEmpty() && (!annee.isEmpty()&&Integer.valueOf(annee)>=1970) )
 			computer.setIntroduced(LocalDate.of(Integer.valueOf(annee), Integer.valueOf(mois), Integer.valueOf(jour)));
 		

@@ -40,6 +40,10 @@ public class ComputerMapper {
 		return comp;
 	}
 	
+	/*
+	 * Gère les cas, ou les champs, lors de l'ajout ou la modification d'un ordinateur
+	 * sont à null puis execute la requete SQL
+	 */
 	public void manageComputer(Computer computer, String query) {
 		if(!computer.getName().isEmpty()) {
 			try (PreparedStatement statementComputer = Dao.getInstance().getConn().prepareStatement(query)) {
@@ -53,6 +57,9 @@ public class ComputerMapper {
 		}
 	}
 	
+	/*
+	 * Verifie si les dates sont null ou non pour effectuer l'ajout/modif en base
+	 */
 	private void manageDate(PreparedStatement statementComputer, Computer computer) throws SQLException {
 		if (computer.getIntroduced()!=null)
 			statementComputer.setDate(2,Date.valueOf(computer.getIntroduced()));
@@ -64,6 +71,9 @@ public class ComputerMapper {
 			statementComputer.setNull(3, java.sql.Types.TIMESTAMP);
 	}
 	
+	/*
+	 * Verifie si la compagnie est null ou non pour effectuer l'ajout/modif en base
+	 */
 	private void manageCompany(PreparedStatement statementComputer, Computer computer) throws SQLException {
 		if(computer.getCompany()!=null)
 			statementComputer.setInt(4,computer.getCompany().getId());
