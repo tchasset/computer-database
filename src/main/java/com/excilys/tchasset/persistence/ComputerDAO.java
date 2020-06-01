@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.excilys.tchasset.log.Logging;
 import com.excilys.tchasset.mapper.ComputerMapper;
 import com.excilys.tchasset.model.Computer;
 
@@ -35,7 +36,7 @@ public class ComputerDAO {
 				computers.add(ComputerMapper.getInstance().getComputer(res));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Logging.error(e.getMessage());
 		}
 		return computers;
 	}
@@ -51,7 +52,7 @@ public class ComputerDAO {
 				computers.add(ComputerMapper.getInstance().getComputer(res));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Logging.error(e.getMessage());
 		}
 		return computers;
 	}
@@ -66,7 +67,7 @@ public class ComputerDAO {
 				computer = Optional.of(ComputerMapper.getInstance().getComputer(res));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Logging.error(e.getMessage());
 		}
 		return computer;
 	}
@@ -81,7 +82,7 @@ public class ComputerDAO {
 				computer = Optional.of(ComputerMapper.getInstance().getComputer(res));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Logging.error(e.getMessage());
 		}
 		return computer;
 	}
@@ -97,7 +98,7 @@ public class ComputerDAO {
 			statementComputer.setInt(1,id);
 			statementComputer.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Logging.error(e.getMessage());
 		}
 	}
 	
@@ -115,7 +116,7 @@ public class ComputerDAO {
 				nb=res.getInt(1);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Logging.error(e.getMessage());
 		}
 		return nb;
 	}

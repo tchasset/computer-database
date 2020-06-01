@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.excilys.tchasset.log.Logging;
 import com.excilys.tchasset.mapper.CompanyMapper;
 import com.excilys.tchasset.model.Company;
 
@@ -36,7 +37,7 @@ public class CompanyDAO {
 			}
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Logging.writeFile(e.getMessage());
 		}
 		return companies;
 	}
@@ -51,7 +52,7 @@ public class CompanyDAO {
 				company = Optional.of(CompanyMapper.getInstance().getCompany(res));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Logging.writeFile(e.getMessage());
 		}
 		return company;
 	}

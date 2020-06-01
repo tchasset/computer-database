@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.excilys.tchasset.log.Logging;
 import com.excilys.tchasset.model.Company;
 import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.persistence.Dao;
@@ -35,7 +36,7 @@ public class ComputerMapper {
 				comp.setDiscontinued(res.getDate("discontinued").toLocalDate());
 			comp.setCompany(new Company.Builder().setId(res.getInt("company_id")).build());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Logging.error(e.getMessage());
 		}
 		return comp;
 	}
@@ -52,7 +53,7 @@ public class ComputerMapper {
 				manageCompany(statementComputer, computer);
 				statementComputer.executeUpdate();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				Logging.error(e.getMessage());
 			}
 		}
 	}

@@ -1,6 +1,8 @@
 package com.excilys.tchasset.persistence;
 import java.sql.*;
 
+import com.excilys.tchasset.log.Logging;
+
 public class Dao implements AutoCloseable {
 	public Connection conn;
     public static Dao instance;
@@ -16,7 +18,7 @@ public class Dao implements AutoCloseable {
             this.conn = (Connection)DriverManager.getConnection(url+dbName,userName,password);
         }
         catch (Exception sqle) {
-            sqle.printStackTrace();
+        	Logging.writeFile(sqle.getMessage());;
         }
     }
 

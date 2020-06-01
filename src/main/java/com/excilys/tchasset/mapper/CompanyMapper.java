@@ -3,6 +3,7 @@ package com.excilys.tchasset.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.excilys.tchasset.log.Logging;
 import com.excilys.tchasset.model.Company;
 
 public class CompanyMapper {
@@ -26,7 +27,7 @@ public class CompanyMapper {
 			comp.setId(res.getInt("id"));
 			comp.setName(res.getString("name"));
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Logging.writeFile(e.getMessage());
 		}
 		return comp;
 	}
