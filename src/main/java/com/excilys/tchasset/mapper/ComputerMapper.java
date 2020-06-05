@@ -34,7 +34,7 @@ public class ComputerMapper {
 				comp.setIntroduced(res.getDate("introduced").toLocalDate());
 			if(res.getDate("discontinued")!=null)
 				comp.setDiscontinued(res.getDate("discontinued").toLocalDate());
-			comp.setCompany(new Company.Builder().setId(res.getInt("company_id")).build());
+			comp.setCompany(new Company.Builder().setId(res.getInt("company_id")).setName(res.getString("company.name")).build());
 		} catch (SQLException e) {
 			Logging.error(e.getMessage());
 		}
