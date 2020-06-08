@@ -15,7 +15,7 @@ public class Dao implements AutoCloseable {
         String password = "qwerty1234";
         try {
             Class.forName(driver).newInstance();
-            this.conn = (Connection)DriverManager.getConnection(url+dbName,userName,password);
+            this.conn = (Connection)DriverManager.getConnection(url+dbName+"?serverTimezone=UTC",userName,password);
         }
         catch (Exception sqle) {
         	Logging.writeFile(sqle.getMessage());;

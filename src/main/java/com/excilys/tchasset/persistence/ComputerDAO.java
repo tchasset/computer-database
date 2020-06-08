@@ -29,7 +29,7 @@ public class ComputerDAO {
 	
 	public List<Computer> getComputers(){
 		List<Computer> computers = new ArrayList<Computer>();
-		String query = "SELECT computer.id,computer.name,introduced,discontinued,company_id FROM computer LEFT JOIN company ON company_id;";
+		String query = "SELECT computer.id,computer.name,introduced,discontinued,company.id,company.name FROM computer LEFT JOIN company ON computer.company_id = company.id;";
 		try (Statement statement = Dao.getInstance().getConn().createStatement()) {
 			ResultSet res = statement.executeQuery(query);
 			while(res.next()) {
@@ -43,7 +43,7 @@ public class ComputerDAO {
 	
 	public List<Computer> getComputersPaginate(int current, int sizeByPage) {
 		List<Computer> computers = new ArrayList<Computer>();
-		String query = "SELECT computer.id,computer.name,introduced,discontinued,company_id FROM computer LEFT JOIN company ON company_id LIMIT ?, ?;";
+		String query = "SELECT computer.id,computer.name,introduced,discontinued,company.id,company.name FROM computer LEFT JOIN company ON computer.company_id = company.id LIMIT ?, ?;";
 		try (PreparedStatement statementComputer = Dao.getInstance().getConn().prepareStatement(query)) {
 			statementComputer.setInt(1,current);
 			statementComputer.setInt(2,sizeByPage);

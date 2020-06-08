@@ -4,11 +4,15 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Optional;
 
+import com.excilys.tchasset.dto.ComputerDTO;
 import com.excilys.tchasset.log.Logging;
 import com.excilys.tchasset.model.Company;
 import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.persistence.Dao;
+import com.excilys.tchasset.service.CompanyService;
 
 public class ComputerMapper {
 	
@@ -25,6 +29,21 @@ public class ComputerMapper {
 	    return ComputerMapper.instance;
     }
 	
+	public Computer fromDTO(ComputerDTO computerDTO) {
+		Computer computer;
+		
+		String name = computerDTO.getName();
+		LocalDate introduced   = (computerDTO.getIntroduced() == "" ? null : LocalDate.parse(computerDTO.getIntroduced()));
+		LocalDate discontinued = (computerDTO.getDiscontinued() == "" ? null : LocalDate.parse(computerDTO.getDiscontinued()));
+		int id = Integer.valueOf(computerDTO.getCompanyId());
+		Optional<Company> companyOpt = CompanyService.getInstance().getById(id);
+		Company company = companyOpt.isPresent() ? companyOpt.get() : null;
+		
+		computer = new Computer.Builder().setName(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(company).build();
+		
+		return computer;
+	}
+	
 	public Computer getComputer(ResultSet res) {
 		Computer comp=new Computer();
 		try {
@@ -34,7 +53,7 @@ public class ComputerMapper {
 				comp.setIntroduced(res.getDate("introduced").toLocalDate());
 			if(res.getDate("discontinued")!=null)
 				comp.setDiscontinued(res.getDate("discontinued").toLocalDate());
-			comp.setCompany(new Company.Builder().setId(res.getInt("company_id")).build());
+			comp.setCompany(new Company.Builder().setId(res.getInt("company_id")).setName(res.getString("company.name")).build());
 		} catch (SQLException e) {
 			Logging.error(e.getMessage());
 		}
