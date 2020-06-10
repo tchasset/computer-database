@@ -1,6 +1,7 @@
 package com.excilys.tchasset.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Computer {
 	
@@ -11,10 +12,16 @@ public class Computer {
 	private Company company;
 	
 	public static class Builder {
+		private int id;
 		private String name;
 		private LocalDate introduced;
 		private LocalDate discontinued;
 		private Company company;
+		
+		public Builder setId(int id) {
+			this.id = id;
+			return this;
+		}
 		
 		public Builder setName(String name) {
 			this.name = name;
@@ -44,6 +51,7 @@ public class Computer {
 	public Computer() {}
 	
 	public Computer(Builder builder) {
+		this.id = builder.id;
 		this.name = builder.name;
 		this.introduced = builder.introduced;
 		this.discontinued = builder.discontinued;
@@ -89,7 +97,22 @@ public class Computer {
 
 	@Override
 	public String toString() {
-		return "Computer: "+name+" n°"+id+" introduced in "+introduced+" and discontinued in "+discontinued+" belonging to Company n°"+company.getId()+"\n";
+		if (company==null)
+			return "Computer: "+name+" n°"+id+" introduced in "+introduced+" and discontinued in "+discontinued+" not in a company\n";
+		else
+			return "Computer: "+name+" n°"+id+" introduced in "+introduced+" and discontinued in "+discontinued+" belonging to Company n°"+company.getId()+"\n";
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Computer computer = (Computer) o;
+		return id == computer.id &&
+				name.equals(computer.name) &&
+				Objects.equals(introduced, computer.introduced) &&
+				Objects.equals(discontinued, computer.discontinued) &&
+				Objects.equals(company, computer.company);
 	}
 	
 }

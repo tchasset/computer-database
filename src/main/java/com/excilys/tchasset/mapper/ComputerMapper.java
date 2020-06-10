@@ -35,7 +35,7 @@ public class ComputerMapper {
 		String name = computerDTO.getName();
 		LocalDate introduced   = (computerDTO.getIntroduced() == "" ? null : LocalDate.parse(computerDTO.getIntroduced()));
 		LocalDate discontinued = (computerDTO.getDiscontinued() == "" ? null : LocalDate.parse(computerDTO.getDiscontinued()));
-		int id = Integer.valueOf(computerDTO.getCompanyId());
+		int id = Integer.valueOf(computerDTO.getCompanyId())!=null ? Integer.valueOf(computerDTO.getCompanyId()) : 0;
 		Optional<Company> companyOpt = CompanyService.getInstance().getById(id);
 		Company company = companyOpt.isPresent() ? companyOpt.get() : null;
 		
