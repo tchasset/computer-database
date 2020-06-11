@@ -1,5 +1,6 @@
 package com.excilys.tchasset.persistence;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,7 +30,10 @@ public class ComputerDAO {
 	
 	public List<Computer> getComputers(){
 		List<Computer> computers = new ArrayList<Computer>();
-		String query = "SELECT computer.id,computer.name,introduced,discontinued,company.id,company.name FROM computer LEFT JOIN company ON computer.company_id = company.id;";
+		String query = "SELECT computer.id,computer.name,introduced,discontinued,company.id,company.name "
+					 + "FROM computer "
+					 + "LEFT JOIN company "
+					 + "ON computer.company_id = company.id;";
 		try (Statement statement = Dao.getInstance().getConn().createStatement()) {
 			ResultSet res = statement.executeQuery(query);
 			while(res.next()) {
@@ -43,7 +47,11 @@ public class ComputerDAO {
 	
 	public List<Computer> getComputersPaginate(int current, int sizeByPage) {
 		List<Computer> computers = new ArrayList<Computer>();
-		String query = "SELECT computer.id,computer.name,introduced,discontinued,company.id,company.name FROM computer LEFT JOIN company ON computer.company_id = company.id LIMIT ?, ?;";
+		String query = "SELECT computer.id,computer.name,introduced,discontinued,company.id,company.name "
+					 + "FROM computer "
+					 + "LEFT JOIN company "
+					 + "ON computer.company_id = company.id "
+					 + "LIMIT ?, ?;";
 		try (PreparedStatement statementComputer = Dao.getInstance().getConn().prepareStatement(query)) {
 			statementComputer.setInt(1,current);
 			statementComputer.setInt(2,sizeByPage);
@@ -59,7 +67,11 @@ public class ComputerDAO {
 	
 	public Optional<Computer> getById(int id) {
 		Optional<Computer> computer = Optional.empty();
-		String query = "SELECT id,name,introduced,discontinued,company_id FROM computer WHERE id=?;";
+		String query = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
+					 + "FROM computer "
+					 + "LEFT JOIN company "
+					 + "ON computer.company_id = company.id "
+					 + "WHERE computer.id=?;";
 		try (PreparedStatement statementComputer = Dao.getInstance().getConn().prepareStatement(query)) {
 			statementComputer.setInt(1,id);
 			ResultSet res = statementComputer.executeQuery();
@@ -74,7 +86,11 @@ public class ComputerDAO {
 	
 	public Optional<Computer> getByName(String name) {
 		Optional<Computer> computer = Optional.empty();
-		String query = "SELECT id,name,introduced,discontinued,company_id FROM computer WHERE name=?;";
+		String query = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
+					 + "FROM computer "
+					 + "LEFT JOIN company "
+					 + "ON computer.company_id = company.id "
+					 + "WHERE name=?;";
 		try (PreparedStatement statementComputer = Dao.getInstance().getConn().prepareStatement(query)) {
 			statementComputer.setString(1,name);
 			ResultSet res = statementComputer.executeQuery();
@@ -89,7 +105,55 @@ public class ComputerDAO {
 	
 	public void addComputer(Computer computer) {
 		String query = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?);";
-		ComputerMapper.getInstance().manageComputer(computer, query);
+		manageComputer(computer, query);
+	}
+	
+	
+	public void updateComputer(Computer computer) {
+		String query = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?;";
+		manageComputer(computer, query);
+	}
+	
+	/*
+	 * Gère les cas, ou les champs, lors de l'ajout ou la modification d'un ordinateur
+	 * sont à null puis execute la requete SQL
+	 */
+	private void manageComputer(Computer computer, String query) {
+		if(!computer.getName().isEmpty()) {
+			try (PreparedStatement statementComputer = Dao.getInstance().getConn().prepareStatement(query)) {
+				statementComputer.setString(1,computer.getName());
+				manageDate(statementComputer, computer);
+				manageCompany(statementComputer, computer);
+				statementComputer.setInt(5,computer.getId());
+				statementComputer.executeUpdate();
+			} catch (SQLException e) {
+				Logging.error(e.getMessage());
+			}
+		}
+	}
+	
+	/*
+	 * Verifie si les dates sont null ou non pour effectuer l'ajout/modif en base
+	 */
+	private void manageDate(PreparedStatement statementComputer, Computer computer) throws SQLException {
+		if (computer.getIntroduced()!=null)
+			statementComputer.setDate(2,Date.valueOf(computer.getIntroduced()));
+		else
+			statementComputer.setNull(2, java.sql.Types.TIMESTAMP);
+		if (computer.getDiscontinued()!=null)
+			statementComputer.setDate(3,Date.valueOf(computer.getDiscontinued()));
+		else
+			statementComputer.setNull(3, java.sql.Types.TIMESTAMP);
+	}
+	
+	/*
+	 * Verifie si la compagnie est null ou non pour effectuer l'ajout/modif en base
+	 */
+	private void manageCompany(PreparedStatement statementComputer, Computer computer) throws SQLException {
+		if(computer.getCompany()!=null)
+			statementComputer.setInt(4,computer.getCompany().getId());
+		else
+			statementComputer.setNull(4, java.sql.Types.BIGINT);
 	}
 	
 	public void deleteComputer(int id) {
@@ -100,11 +164,6 @@ public class ComputerDAO {
 		} catch (SQLException e) {
 			Logging.error(e.getMessage());
 		}
-	}
-	
-	public void updateComputer(Computer computer) {
-		String query = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id="+computer.getId()+";";
-		ComputerMapper.getInstance().manageComputer(computer, query);
 	}
 	
 	public int getNbComputers() {

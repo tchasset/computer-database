@@ -17,7 +17,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
+            <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
         </div>
     </header>
 
@@ -83,10 +83,10 @@
                 	<c:forEach items="${ computerList }" var="computer">
 						<tr>
 	                        <td class="editMode">
-	                            <input type="checkbox" name="cb" class="cb" value="0">
+	                            <input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
 	                        </td>
 	                        <td>
-	                            <a href="editComputer.html" onclick="">${computer.getName()}</a>
+	                            <a href="editComputer?id=${computer.getId()}" onclick="">${computer.getName()}</a>
 	                        </td>
 	                        <td>${computer.getIntroduced()}</td>
 	                        <td>${computer.getDiscontinued()}</td>

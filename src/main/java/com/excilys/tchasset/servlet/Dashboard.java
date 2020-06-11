@@ -44,7 +44,7 @@ public class Dashboard extends HttpServlet {
 		computerList = computerService.getComputersPaginate((currentPage-1)*sizePage, sizePage);
 		request.setAttribute("computerList", computerList);
 			
-		getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request,response);
+		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request,response);
 	}
 	
 	public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {

@@ -20,20 +20,35 @@ import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.service.CompanyService;
 import com.excilys.tchasset.service.ComputerService;
 
-@WebServlet("/addComputer")
-public class AddComputer extends HttpServlet{
+@WebServlet("/editComputer")
+public class EditComputer extends HttpServlet{
 
 	private static final long serialVersionUID = 1L;
-	
+	private static int id;
 	
 	public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 		
 		CompanyService companyService = CompanyService.getInstance();
-		List<Company> companies = companyService.getCompanies();
+		ComputerService computerService = ComputerService.getInstance();
 		
-		request.setAttribute("companyName", companies);
+		//Verifie qu'un ordinateur a bien été selectionné
+		if(request.getParameter("id")==null)
+			getServletContext().getRequestDispatcher("/WEB-INF/views/404.html").forward(request, response);
 			
-		getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request,response);
+		//Verifie que l'ordinateur possedant cet id existe
+		id = Integer.valueOf(request.getParameter("id"));
+		Optional<Computer> computer = computerService.getById(id);
+		
+		if(!computer.isPresent())
+			getServletContext().getRequestDispatcher("/WEB-INF/views/404.html").forward(request, response);
+		
+		ComputerDTO computerDTO = ComputerMapper.getInstance().toDTO(computer.get());
+		request.setAttribute("computer", computerDTO);
+		
+		List<Company> companies = companyService.getCompanies();
+		request.setAttribute("companyName", companies);
+		
+		getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request,response);
 	}
 
 	public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -42,6 +57,7 @@ public class AddComputer extends HttpServlet{
 		ComputerService computerService = ComputerService.getInstance();
 		Computer computer;
 		
+		String computerId	= String.valueOf(id);
 		String name 		= request.getParameter("computerName");
 		String introduced 	= request.getParameter("introduced");
 		String discontinued = request.getParameter("discontinued");
@@ -53,7 +69,8 @@ public class AddComputer extends HttpServlet{
 		else {
 			Optional<Company> company = CompanyService.getInstance().getById(Integer.valueOf(companyId));
 			CompanyDTO companyDTO = company.isPresent() ? CompanyMapper.getInstance().toDTO(company.get()) : null;
-			ComputerDTO computerDTO = new ComputerDTO.Builder()	.setName(name)
+			ComputerDTO computerDTO = new ComputerDTO.Builder()	.setId(computerId)
+																.setName(name)
 															   	.setIntroduced(introduced)
 																.setDiscontinued(discontinued)
 																.setCompanyDTO(companyDTO).build();
@@ -70,7 +87,7 @@ public class AddComputer extends HttpServlet{
 			if(computer.getDiscontinued()!=null && computer.getDiscontinued().isBefore(LocalDate.of(1970,1,1)))
 				getServletContext().getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
 			
-			computerService.addComputer(computer);
+			computerService.updateComputer(computer);
 		}
 	}
 }
