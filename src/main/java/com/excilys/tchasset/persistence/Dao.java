@@ -7,20 +7,7 @@ public class Dao implements AutoCloseable {
 	private Connection conn;
     public static Dao instance;
     
-    private Dao() {
-        String url= "jdbc:mysql://localhost:3306/";
-        String dbName = "computer-database-db";
-        String driver = "com.mysql.cj.jdbc.Driver";
-        String userName = "admincdb";
-        String password = "qwerty1234";
-        try {
-            Class.forName(driver).newInstance();
-            this.conn = (Connection)DriverManager.getConnection(url+dbName+"?serverTimezone=UTC",userName,password);
-        }
-        catch (Exception sqle) {
-        	Logging.writeFile(sqle.getMessage());;
-        }
-    }
+    private Dao() {}
 
     public static final Dao getInstance() {
 		if (Dao.instance == null) {
@@ -34,7 +21,12 @@ public class Dao implements AutoCloseable {
     }
     
     public Connection getConn() {
-		return conn;
+		try {
+			conn = HikariCP.getConnection();
+		} catch (SQLException e) {
+			Logging.writeFile(e.getMessage());
+		}
+    	return conn;
 	}
 
 	@Override
