@@ -88,6 +88,7 @@ public class EditComputer extends HttpServlet{
 				getServletContext().getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
 			
 			computerService.updateComputer(computer);
+			response.sendRedirect("dashboard");
 		}
 	}
 }

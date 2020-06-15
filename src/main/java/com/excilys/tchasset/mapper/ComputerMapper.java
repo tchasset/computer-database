@@ -3,6 +3,7 @@ package com.excilys.tchasset.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 import com.excilys.tchasset.dto.CompanyDTO;
 import com.excilys.tchasset.dto.ComputerDTO;
@@ -50,6 +51,11 @@ public class ComputerMapper {
 		computerDTO = new ComputerDTO.Builder().setName(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompanyDTO(companyDTO).build();
 		
 		return computerDTO;
+	}
+	
+	public List<Computer> sorted(List<Computer> computer) {
+		computer.sort((Computer c1, Computer c2)->c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
+		return computer;
 	}
 	
 	public Computer getComputer(ResultSet res) {

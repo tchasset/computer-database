@@ -28,8 +28,21 @@ public class CompanyService {
 		return companies;
 	}
 	
+	public List<Company> getCompaniesOrderBy(String order) {
+		return CompanyDAO.getInstance().getCompaniesOrderBy(order);
+	}
+	
 	public Optional<Company> getById(int id) {
 		Optional<Company> company = CompanyDAO.getInstance().getById(id);
 		return company;
+	}
+	
+	public Optional<Company> getByName(String name) {
+		Optional<Company> company = CompanyDAO.getInstance().getByName(name);
+		return company;
+	}
+	
+	public void deleteCompany(int id) {
+		CompanyDAO.getInstance().deleteCompany(id);
 	}
 }

@@ -4,7 +4,7 @@ import java.sql.*;
 import com.excilys.tchasset.log.Logging;
 
 public class Dao implements AutoCloseable {
-	public Connection conn;
+	private Connection conn;
     public static Dao instance;
     
     private Dao() {

@@ -46,20 +46,21 @@ public class AddComputer extends HttpServlet{
 		String introduced 	= request.getParameter("introduced");
 		String discontinued = request.getParameter("discontinued");
 		String companyId	= request.getParameter("companyId");
-		
+
 		if(name.isEmpty())
 			getServletContext().getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response); 
 		
 		else {
 			Optional<Company> company = CompanyService.getInstance().getById(Integer.valueOf(companyId));
 			CompanyDTO companyDTO = company.isPresent() ? CompanyMapper.getInstance().toDTO(company.get()) : null;
-			ComputerDTO computerDTO = new ComputerDTO.Builder()	.setName(name)
+			ComputerDTO computerDTO = new ComputerDTO.Builder()	.setId("0")
+																.setName(name)
 															   	.setIntroduced(introduced)
 																.setDiscontinued(discontinued)
 																.setCompanyDTO(companyDTO).build();
 			
 			computer = computerMapper.fromDTO(computerDTO);
-			
+
 			if(computer.getDiscontinued()!=null && computer.getIntroduced()!=null)
 				if(computer.getDiscontinued().isBefore(computer.getIntroduced()))
 					getServletContext().getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
@@ -71,6 +72,7 @@ public class AddComputer extends HttpServlet{
 				getServletContext().getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
 			
 			computerService.addComputer(computer);
+			response.sendRedirect("dashboard");
 		}
 	}
 }

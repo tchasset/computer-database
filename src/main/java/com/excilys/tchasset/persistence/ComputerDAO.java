@@ -45,6 +45,42 @@ public class ComputerDAO {
 		return computers;
 	}
 	
+	public List<Computer> getComputersOrderByComputer(String order){
+		List<Computer> computers = new ArrayList<Computer>();
+		String query = "SELECT computer.id,computer.name,introduced,discontinued,company.id,company.name "
+					 + "FROM computer "
+					 + "LEFT JOIN company "
+					 + "ON computer.company_id = company.id "
+					 + "ORDER BY computer.name "+order+";";
+		try (Statement statement = Dao.getInstance().getConn().createStatement()) {
+			ResultSet res = statement.executeQuery(query);
+			while(res.next()) {
+				computers.add(ComputerMapper.getInstance().getComputer(res));
+			}
+		} catch (SQLException e) {
+			Logging.error(e.getMessage());
+		}
+		return computers;
+	}
+	
+	public List<Computer> getComputersOrderByCompany(String order){
+		List<Computer> computers = new ArrayList<Computer>();
+		String query = "SELECT computer.id,computer.name,introduced,discontinued,company.id,company.name "
+					 + "FROM computer "
+					 + "LEFT JOIN company "
+					 + "ON computer.company_id = company.id "
+					 + "ORDER BY company.name IS NULL, company.name "+order+";";
+		try (Statement statement = Dao.getInstance().getConn().createStatement()) {
+			ResultSet res = statement.executeQuery(query);
+			while(res.next()) {
+				computers.add(ComputerMapper.getInstance().getComputer(res));
+			}
+		} catch (SQLException e) {
+			Logging.error(e.getMessage());
+		}
+		return computers;
+	}
+	
 	public List<Computer> getComputersPaginate(int current, int sizeByPage) {
 		List<Computer> computers = new ArrayList<Computer>();
 		String query = "SELECT computer.id,computer.name,introduced,discontinued,company.id,company.name "
@@ -90,7 +126,7 @@ public class ComputerDAO {
 					 + "FROM computer "
 					 + "LEFT JOIN company "
 					 + "ON computer.company_id = company.id "
-					 + "WHERE name=?;";
+					 + "WHERE computer.name=?;";
 		try (PreparedStatement statementComputer = Dao.getInstance().getConn().prepareStatement(query)) {
 			statementComputer.setString(1,name);
 			ResultSet res = statementComputer.executeQuery();
@@ -103,8 +139,27 @@ public class ComputerDAO {
 		return computer;
 	}
 	
+	public List<Computer> getByCompany(String name){
+		List<Computer> computers = new ArrayList<Computer>();
+		String query = "SELECT computer.id,computer.name,introduced,discontinued,company.id,company.name "
+					 + "FROM computer "
+					 + "LEFT JOIN company "
+					 + "ON computer.company_id = company.id "
+					 + "WHERE company.name=?;";
+		try (PreparedStatement statementComputer = Dao.getInstance().getConn().prepareStatement(query)) {
+			statementComputer.setString(1,name);
+			ResultSet res = statementComputer.executeQuery();
+			while(res.next()) {
+				computers.add(ComputerMapper.getInstance().getComputer(res));
+			}
+		} catch (SQLException e) {
+			Logging.error(e.getMessage());
+		}
+		return computers;
+	}
+	
 	public void addComputer(Computer computer) {
-		String query = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?);";
+		String query = "INSERT INTO computer (name, introduced, discontinued, company_id, id) VALUES (?,?,?,?,?);";
 		manageComputer(computer, query);
 	}
 	

@@ -2,6 +2,7 @@ package com.excilys.tchasset.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.excilys.tchasset.dto.CompanyDTO;
 import com.excilys.tchasset.log.Logging;
@@ -45,6 +46,11 @@ public class CompanyMapper {
 											.setName(name).build();
 		}
 		
+		return company;
+	}
+	
+	public List<Company> sorted(List<Company> company) {
+		company.sort((Company c1, Company c2)->c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 		return company;
 	}
 	
