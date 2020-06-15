@@ -17,7 +17,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
+            <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
         </div>
     </header>
 
@@ -45,6 +45,10 @@
         <form id="deleteForm" action="#" method="POST">
             <input type="hidden" name="selection" value="">
         </form>
+        <form id="orderForm" action="#" method="GET">
+            <input type="hidden" name="computerName" value="" class="computerName"/>
+            <input type="hidden" name="companyName"  value="" class="companyName"/>
+        </form>
 
         <div class="container" style="margin-top: 10px;">
             <table class="table table-striped table-bordered">
@@ -61,7 +65,7 @@
                                     </a>
                             </span>
                         </th>
-                        <th>
+                        <th id="computerName">
                             Computer name
                         </th>
                         <th>
@@ -72,7 +76,7 @@
                             Discontinued date
                         </th>
                         <!-- Table header for Company -->
-                        <th>
+                        <th id="companyName">
                             Company
                         </th>
 
@@ -83,10 +87,10 @@
                 	<c:forEach items="${ computerList }" var="computer">
 						<tr>
 	                        <td class="editMode">
-	                            <input type="checkbox" name="cb" class="cb" value="0">
+	                            <input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
 	                        </td>
 	                        <td>
-	                            <a href="editComputer.html" onclick="">${computer.getName()}</a>
+	                            <a href="editComputer?id=${computer.getId()}" onclick="">${computer.getName()}</a>
 	                        </td>
 	                        <td>${computer.getIntroduced()}</td>
 	                        <td>${computer.getDiscontinued()}</td>
@@ -136,19 +140,12 @@
 				    </c:otherwise>
 				</c:choose>
             
-                    
-              <!-- <li><a href="dashboard?page=${page}#">1</a></li>
-              <li><a href="dashboard?page=${page}#">2</a></li>
-              <li><a href="dashboard?page=${page}#">3</a></li>
-              <li><a href="dashboard?page=${page}#">4</a></li>
-              <li><a href="dashboard?page=${page}#">5</a></li>-->
               <li>
                 <c:if test="${page!=maxPage}"><a href="dashboard?page=${page+1}#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a></c:if>
             </li>
         </ul>
-
         <div class="btn-group btn-group-sm pull-right" role="group" >
             <a href="dashboard?size=10&page=1#"><button  type="button" class="btn btn-default">10</button></a>
             <a href="dashboard?size=50&page=1#"><button type="button" class="btn btn-default">50</button></a>

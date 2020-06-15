@@ -8,6 +8,7 @@ public enum EnumCli {
 	ADDCOMPUTER,
 	DELETECOMPUTER,
 	UPDATECOMPUTER,
+	DELETECOMPANY,
 	EXIT;
 	
 	public static EnumCli value(int val) {
@@ -26,6 +27,8 @@ public enum EnumCli {
 				return DELETECOMPUTER;
 			case 7:
 				return UPDATECOMPUTER;
+			case 8:
+				return DELETECOMPANY;
 			default:
 				return EXIT;
 		}

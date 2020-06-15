@@ -26,6 +26,14 @@ public class ComputerService {
 		return companies;
 	}
 	
+	public List<Computer> getComputersOrderByComputer(String order) {
+		return ComputerDAO.getInstance().getComputersOrderByComputer(order);
+	}
+	
+	public List<Computer> getComputersOrderByCompany(String order){
+		return ComputerDAO.getInstance().getComputersOrderByCompany(order);
+	}
+	
 	public List<Computer> getComputersPaginate(int current, int sizeByPage) {
 		List<Computer> companies = ComputerDAO.getInstance().getComputersPaginate(current, sizeByPage);
 		return companies;
@@ -55,5 +63,9 @@ public class ComputerService {
 	
 	public int getNbComputers() {
 		return ComputerDAO.getInstance().getNbComputers();
+	}
+	
+	public List<Computer> getByCompany(String name) {
+		return ComputerDAO.getInstance().getByCompany(name);
 	}
 }

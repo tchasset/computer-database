@@ -1,30 +1,9 @@
-$(function() {
-	var options = $("#companyId option"); 
-    options.detach().sort(function(a, b) { 
-        var at = $(a).text(); 
-        var bt = $(b).text(); 
-        return (at > bt) ? 1 : ((at < bt) ? -1 : 0); 
-    }); 
-    options.appendTo("#companyId"); 
-});
-
-
 function valider(){
 	
-	if(checkName() && checkDate()) {  
+	if(checkDate()) {  
 		return true;
 	}
 	else {
-		return false;
-	}
-}
-
-function checkName() {
-	if(document.form.computerName.value != "") {  
-		return true;
-	}
-	else {
-		alert("Computer name can't be empty");
 		return false;
 	}
 }
@@ -33,13 +12,21 @@ function checkDate() {
 	
 	var introduced   = document.form.introduced.value,
 		discontinued = document.form.discontinued.value;
-	
+
+	if(introduced != "" && introduced<"1970-01-01") {
+		alert("Introduced date can't be before 01-01-1970");
+		return false
+	}
+	if(discontinued != "" && discontinued<"1970-01-01") {
+		alert("Discontinued date can't be before 01-01-1970");
+		return false
+	}
 	if(introduced != "" && discontinued != "") {
 		if (introduced < discontinued) {
 			return true;
 		}
 		else {
-			alert("au revoir");
+			alert("Introduced date can't be after discontinued date");
 			return false;
 		}
 	}

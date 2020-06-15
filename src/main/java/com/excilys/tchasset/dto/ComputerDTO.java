@@ -2,16 +2,23 @@ package com.excilys.tchasset.dto;
 
 public class ComputerDTO {
 
-	private String name,
-				   introduced,
-				   discontinued,
-				   companyId;
+	private String 	id,
+				   	name,
+				   	introduced="",
+				   	discontinued="";
+	private CompanyDTO companyDTO;
 	
 	public static class Builder {
-		private String name,
-					   introduced,
-					   discontinued,
-					   companyId;
+		private String 	id,
+						name,
+						introduced="",
+						discontinued="";
+		private CompanyDTO companyDTO;
+		
+		public Builder setId(String id) {
+			this.id = id;
+			return this;
+		}
 		
 		public Builder setName(String name) {
 			this.name = name;
@@ -28,8 +35,8 @@ public class ComputerDTO {
 			return this;
 		}
 
-		public Builder setCompanyId(String companyId) {
-			this.companyId = companyId;
+		public Builder setCompanyDTO(CompanyDTO companyDTO) {
+			this.companyDTO = companyDTO;
 			return this;
 		}
 
@@ -41,10 +48,11 @@ public class ComputerDTO {
 	public ComputerDTO() {}
 	
 	public ComputerDTO(Builder builder) {
+		this.setId(builder.id);
 		this.name = builder.name;
 		this.introduced = builder.introduced;
 		this.discontinued = builder.discontinued;
-		this.companyId = builder.companyId;
+		this.companyDTO = builder.companyDTO;
 	}
 
 	public String getName() {
@@ -71,13 +79,22 @@ public class ComputerDTO {
 		this.discontinued = discontinued;
 	}
 
-	public String getCompanyId() {
-		return companyId;
+	public CompanyDTO getCompanyDTO() {
+		return companyDTO;
 	}
 
-	public void setCompanyId(String companyId) {
-		this.companyId = companyId;
+	public void setCompanyDTO(CompanyDTO companyDTO) {
+		this.companyDTO = companyDTO;
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+	
 	
 	
 }

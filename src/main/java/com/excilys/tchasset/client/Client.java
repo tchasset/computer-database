@@ -43,6 +43,9 @@ public class Client {
 				case UPDATECOMPUTER:
 					menuUpdate(sc);
 					break;
+				case DELETECOMPANY:
+					menuDeleteCompany(sc);
+					break;
 				default:
 					System.out.println("Fin du programme");	
 					System.exit(0);
@@ -63,6 +66,7 @@ public class Client {
 		System.out.println("# 5 : Pour ajouter un ordinateur                #");
 		System.out.println("# 6 : Pour supprimer un ordinateur              #");
 		System.out.println("# 7 : Pour mettre à jour un ordinateur          #");
+		System.out.println("# 8 : Pour supprimer une companie               #");
 		System.out.println("# 0 : Pour fermer le programme                  #");
 		System.out.println("# # # # # # # # # # # # # # # # # # # # # # # # #");
 	}
@@ -124,6 +128,16 @@ public class Client {
 			ComputerService.getInstance().deleteComputer(c.get().getId());
 		else
 			System.out.println("Aucun ordinateur avec cet ID");
+	}
+	
+	private void menuDeleteCompany(Scanner sc) {
+		System.out.print("Saisir l'ID de la company à supprimer : ");
+		int id = sc.nextInt();
+		Optional<Company> c = CompanyService.getInstance().getById(id);
+		if (c.isPresent())
+			CompanyService.getInstance().deleteCompany(c.get().getId());
+		else
+			System.out.println("Aucune company avec cet ID");
 	}
 	
 	private void menuUpdate(Scanner sc) {
