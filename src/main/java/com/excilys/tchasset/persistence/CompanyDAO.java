@@ -30,8 +30,10 @@ public class CompanyDAO {
 
 	public List<Company> getCompanies() {
 		List<Company> companies = new ArrayList<Company>();
-		String query = "SELECT id,name FROM company;";
-		try(Statement statement = Dao.getInstance().getConn().createStatement()) {
+		String query = EnumQuery.SELECTCOMPANY.toString();
+		try(Connection conn = Dao.getInstance().getConn();
+			Statement statement = conn.createStatement()) {
+			
 			ResultSet res = statement.executeQuery(query);
 			while(res.next()) {
 				companies.add(CompanyMapper.getInstance().getCompany(res));
@@ -45,8 +47,11 @@ public class CompanyDAO {
 	
 	public List<Company> getCompaniesOrderBy(String order) {
 		List<Company> companies = new ArrayList<Company>();
-		String query = "SELECT id,name FROM company ORDER BY name "+order+";";
-		try(Statement statement = Dao.getInstance().getConn().createStatement()) {
+		String query = EnumQuery.SELECTCOMPANY
+					+ " ORDER BY name "+order+";";
+		try(Connection conn = Dao.getInstance().getConn();
+			Statement statement = conn.createStatement()) {
+			
 			ResultSet res = statement.executeQuery(query);
 			while(res.next()) {
 				companies.add(CompanyMapper.getInstance().getCompany(res));
@@ -60,8 +65,11 @@ public class CompanyDAO {
 	
 	public Optional<Company> getById(int id) {
 		Optional<Company> company = Optional.empty();
-		String query = "SELECT id,name FROM company WHERE id=?;";
-		try (PreparedStatement statementCompany = Dao.getInstance().getConn().prepareStatement(query)) {
+		String query = EnumQuery.SELECTCOMPANY
+					+ " WHERE id=?;";
+		try(Connection conn =Dao.getInstance().getConn();
+			PreparedStatement statementCompany = conn.prepareStatement(query)) {
+			
 			statementCompany.setInt(1,id);
 			ResultSet res = statementCompany.executeQuery();
 			while(res.next()) {
@@ -75,10 +83,11 @@ public class CompanyDAO {
 	
 	public Optional<Company> getByName(String name) {
 		Optional<Company> company = Optional.empty();
-		String query = "SELECT id, name "
-					 + "FROM company "
-					 + "WHERE name=?;";
-		try (PreparedStatement statementCompany = Dao.getInstance().getConn().prepareStatement(query)) {
+		String query = EnumQuery.SELECTCOMPANY
+					 + " WHERE name=?;";
+		try(Connection conn = Dao.getInstance().getConn();
+			PreparedStatement statementCompany = conn.prepareStatement(query)) {
+			
 			statementCompany.setString(1,name);
 			ResultSet res = statementCompany.executeQuery();
 			while(res.next()) {
@@ -97,10 +106,10 @@ public class CompanyDAO {
 			   query2="DELETE company "
 			   		+ "FROM company "
 			   		+ "WHERE id=?;";
-		try (	Connection con = Dao.getInstance().getConn();
-				PreparedStatement deleteComputer = con.prepareStatement(query1);
-				PreparedStatement deleteCompany  = con.prepareStatement(query2)) {
-			con.setAutoCommit(false);
+		try (	Connection conn = Dao.getInstance().getConn();
+				PreparedStatement deleteComputer = conn.prepareStatement(query1);
+				PreparedStatement deleteCompany  = conn.prepareStatement(query2)) {
+			conn.setAutoCommit(false);
 			
 			deleteComputer.setInt(1, id);
 			deleteComputer.execute();
@@ -108,7 +117,7 @@ public class CompanyDAO {
 			deleteCompany.setInt(1, id);
 			deleteCompany.execute();
 			
-			con.commit();
+			conn.commit();
 		} catch (SQLException e) {
 			Logging.error(e.getMessage());
 		}

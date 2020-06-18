@@ -22,24 +22,6 @@ $(function() {
         }
     });
     
-    $("#computerName").click(function() {
-    	if($(".computerName").val()!="ASC") 
-    		$(".computerName").attr('value','ASC');
-    	else
-    		$(".computerName").attr('value','DESC');
-    	$(".companyName").attr('value','');
-    	$('#orderForm').submit();
-    });
-    
-    $("#companyName").click(function() {
-    	if($(".companyName").val()!="ASC")
-    		$(".companyName").attr('value','ASC');
-    	else
-    		$(".companyName").attr('value','DESC');
-    	$(".computerName").attr('value','');
-    	$('#orderForm').submit();
-    });
-
 });
 
 

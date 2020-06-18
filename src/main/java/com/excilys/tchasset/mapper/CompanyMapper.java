@@ -23,6 +23,11 @@ public class CompanyMapper {
 	    return CompanyMapper.instance;
     }
 	
+	/*
+	 * @param company	bean to convert into DTO
+	 * 
+	 * @return 			The company bean to a company DTO
+	 */
 	public CompanyDTO toDTO(Company company) {
 		CompanyDTO companyDTO=new CompanyDTO();
 		
@@ -36,6 +41,11 @@ public class CompanyMapper {
 		return companyDTO;
 	}
 	
+	/*
+	 * @param companyDTO	DTO to convert into bean
+	 * 
+	 * @return 				The company bean from a company DTO
+	 */
 	public Company fromDTO(CompanyDTO companyDTO) {
 		Company company = null;
 		
@@ -49,11 +59,17 @@ public class CompanyMapper {
 		return company;
 	}
 	
+	@Deprecated
 	public List<Company> sorted(List<Company> company) {
 		company.sort((Company c1, Company c2)->c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 		return company;
 	}
 	
+	/*
+	 * @param res	result of a SQL request
+	 * 
+	 * @return 		The company found by the request
+	 */
 	public Company getCompany(ResultSet res) {
 		Company comp=new Company();
 		try {

@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import com.excilys.tchasset.model.Company;
 import com.excilys.tchasset.model.Computer;
+import com.excilys.tchasset.model.Page;
 import com.excilys.tchasset.service.CompanyService;
 import com.excilys.tchasset.service.ComputerService;
 
@@ -182,25 +183,26 @@ public class Client {
 	}
 	
 	private void paginateComputer(Scanner sc) {
-		int continu=1, current=0, max=ComputerService.getInstance().getNbComputers();
-		final int SIZE=20;
-		
+		int continu=1, max=ComputerService.getInstance().getNbComputers();
+		Page page = new Page.Builder().setCurrentPage(0).setSizePage(20).build();
+		page.setNbPages(max);
+				
 		while(continu==1 || continu==2) {
-			System.out.println(ComputerService.getInstance().getComputersPaginate(current, SIZE));
-			if(current==0)
+			System.out.println(ComputerService.getInstance().getAllComputers(page));
+			if(page.getCurrentPage()==0)
 				System.out.print("Page suivante (entrez 1), arreter (entrez 0)");
-			else if(current<max)
+			else if(page.getCurrentPage()<page.getNbPages())
 				System.out.print("Page suivante (entrez 1), page précédente (entrez 2), arreter (entrez 0) ");
 			else
 				System.out.print("Page précédente (entrez 2), arreter (entrez 0) ");
 			
 			continu = sc.nextInt();
 			
-			if(continu==1 && current<max) {
-				current+=SIZE;
+			if(continu==1 && page.getCurrentPage()<page.getNbPages()) {
+				page.nextPage();
 			}
-			if(continu==2 && current>0) {
-				current-=SIZE;
+			if(continu==2 && page.getCurrentPage()>0) {
+				page.previousPage();
 			}
 		}	
 	}

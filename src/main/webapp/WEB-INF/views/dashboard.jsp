@@ -17,7 +17,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
+            <a class="navbar-brand" href="dashboard?page=1"> Application - Computer Database </a>
         </div>
     </header>
 
@@ -45,10 +45,6 @@
         <form id="deleteForm" action="#" method="POST">
             <input type="hidden" name="selection" value="">
         </form>
-        <form id="orderForm" action="#" method="GET">
-            <input type="hidden" name="computerName" value="" class="computerName"/>
-            <input type="hidden" name="companyName"  value="" class="companyName"/>
-        </form>
 
         <div class="container" style="margin-top: 10px;">
             <table class="table table-striped table-bordered">
@@ -65,8 +61,11 @@
                                     </a>
                             </span>
                         </th>
+						
                         <th id="computerName">
-                            Computer name
+                            Computer name 
+                            <a href="dashboard?page=1&orderByName=ASC"><i class="fa fa-arrow-up"></i></a>
+                            <a href="dashboard?page=1&orderByName=DESC"><i class="fa fa-arrow-down"></i></a>
                         </th>
                         <th>
                             Introduced date
@@ -77,7 +76,9 @@
                         </th>
                         <!-- Table header for Company -->
                         <th id="companyName">
-                            Company
+                            Company 
+                            <a href="dashboard?page=1&orderByCompany=ASC"><i class="fa fa-arrow-up"></i></a>
+                            <a href="dashboard?page=1&orderByCompany=DESC"><i class="fa fa-arrow-down"></i></a>
                         </th>
 
                     </tr>
@@ -106,12 +107,16 @@
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
         	<div class="btn-group btn-group-sm pull-left" role="group" >
-	            <a href="dashboard?page=1#">Retour première page</a>
+	            <a href="dashboard?page=1&search=${search}&${orderByName}&${orderByCompany}#">Retour première page</a>
 	        </div>
             <ul class="pagination">
+            
+				<c:set var="orderByName" value="orderByName=${orderByName}"/>  
+				<c:set var="orderByCompany" value="orderByCompany=${orderByCompany}"/>  
+            
             	<c:set var="page" value="${currentPage}"/>
             	<li>
-                    <c:if test="${page!=1}"><a href="dashboard?page=${page-1}#" aria-label="Previous">
+                    <c:if test="${page!=1}"><a href="dashboard?page=${page-1}&search=${search}&${orderByName}&${orderByCompany}#" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   	</a></c:if>
              	</li>
@@ -119,29 +124,29 @@
             	<c:choose>
 				    <c:when test="${maxPage > 5}">
 				    	<c:if test="${page<=maxPage-5}">
-					    	<li><a href="dashboard?page=${page}#">${page}</a></li>
-				            <li><a href="dashboard?page=${page+1}#">${page+1}</a></li>
+					    	<li><a href="dashboard?page=${page}&search=${search}&${orderByName}&${orderByCompany}#">${page}</a></li>
+				            <li><a href="dashboard?page=${page+1}&search=${search}&${orderByName}&${orderByCompany}#">${page+1}</a></li>
 				            <li><a >...</a></li>
-				            <li><a href="dashboard?page=${maxPage-1}#">${maxPage-1}</a></li>
-				            <li><a href="dashboard?page=${maxPage}#">${maxPage}</a></li>
+				            <li><a href="dashboard?page=${maxPage-1}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage-1}</a></li>
+				            <li><a href="dashboard?page=${maxPage}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage}</a></li>
 				        </c:if> 
 				        <c:if test="${page>maxPage-5}">
-					    	<li><a href="dashboard?page=${maxPage-4}#">${maxPage-4}</a></li>
-				            <li><a href="dashboard?page=${maxPage-3}#">${maxPage-3}</a></li>
-				            <li><a href="dashboard?page=${maxPage-2}#">${maxPage-2}</a></li>
-				            <li><a href="dashboard?page=${maxPage-1}#">${maxPage-1}</a></li>
-				            <li><a href="dashboard?page=${maxPage}#">${maxPage}</a></li>
+					    	<li><a href="dashboard?page=${maxPage-4}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage-4}</a></li>
+				            <li><a href="dashboard?page=${maxPage-3}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage-3}</a></li>
+				            <li><a href="dashboard?page=${maxPage-2}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage-2}</a></li>
+				            <li><a href="dashboard?page=${maxPage-1}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage-1}</a></li>
+				            <li><a href="dashboard?page=${maxPage}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage}</a></li>
 				        </c:if>   
 				    </c:when>
 				    <c:otherwise>
 				        <c:forEach var="i" begin="1" end="${maxPage}" >
-				        	<li><a href="dashboard?page=${i}#">${i}</a></li>
+				        	<li><a href="dashboard?page=${i}&search=${search}&${orderByName}&${orderByCompany}#">${i}</a></li>
 				        </c:forEach>
 				    </c:otherwise>
 				</c:choose>
             
               <li>
-                <c:if test="${page!=maxPage}"><a href="dashboard?page=${page+1}#" aria-label="Next">
+                <c:if test="${page!=maxPage}"><a href="dashboard?page=${page+1}&search=${search}&${orderByName}&${orderByCompany}#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a></c:if>
             </li>
@@ -151,7 +156,7 @@
             <a href="dashboard?size=50&page=1#"><button type="button" class="btn btn-default">50</button></a>
             <a href="dashboard?size=100&page=1#"><button type="button" class="btn btn-default">100</button></a>
         </div>
-
+	</div>
     </footer>
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>

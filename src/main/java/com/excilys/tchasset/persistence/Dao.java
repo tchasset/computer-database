@@ -7,7 +7,14 @@ public class Dao implements AutoCloseable {
 	private Connection conn;
     public static Dao instance;
     
-    private Dao() {}
+    private Dao() {
+    	String driver="com.mysql.cj.jdbc.Driver";
+    	try {
+			Class.forName(driver).newInstance();
+		} catch (Exception sqle) {
+        	Logging.writeFile(sqle.getMessage());;
+        }
+    }
 
     public static final Dao getInstance() {
 		if (Dao.instance == null) {

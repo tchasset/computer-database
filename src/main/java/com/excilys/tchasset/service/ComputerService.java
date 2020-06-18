@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.excilys.tchasset.model.Computer;
+import com.excilys.tchasset.model.Page;
 import com.excilys.tchasset.persistence.ComputerDAO;
 
 public class ComputerService {
@@ -21,22 +22,16 @@ public class ComputerService {
 	    return ComputerService.instance;
     }
 	
-	public List<Computer> getComputers() {
-		List<Computer> companies = ComputerDAO.getInstance().getComputers();
-		return companies;
+	public List<Computer> getAllComputers(Page page) {
+		return ComputerDAO.getInstance().getAllComputers(page);
 	}
 	
-	public List<Computer> getComputersOrderByComputer(String order) {
-		return ComputerDAO.getInstance().getComputersOrderByComputer(order);
+	public List<Computer> getComputersOrderByComputer(Page page, String order) {
+		return ComputerDAO.getInstance().getComputersOrderByComputer(page, order);
 	}
 	
-	public List<Computer> getComputersOrderByCompany(String order){
-		return ComputerDAO.getInstance().getComputersOrderByCompany(order);
-	}
-	
-	public List<Computer> getComputersPaginate(int current, int sizeByPage) {
-		List<Computer> companies = ComputerDAO.getInstance().getComputersPaginate(current, sizeByPage);
-		return companies;
+	public List<Computer> getComputersOrderByCompany(Page page, String order){
+		return ComputerDAO.getInstance().getComputersOrderByCompany(page, order);
 	}
 	
 	public Optional<Computer> getById(int id) {
@@ -44,11 +39,18 @@ public class ComputerService {
 		return computer;
 	}
 	
-	public Optional<Computer> getByName(String name) {
-		Optional<Computer> computer = ComputerDAO.getInstance().getByName(name);
-		return computer;
+	public List<Computer> getByAllName(Page page, String name) {
+		return ComputerDAO.getInstance().getByAllName(page, name);
 	}
-
+	
+	public List<Computer> getByName(Page page, String name) {
+		return ComputerDAO.getInstance().getByName(page, name);
+	}
+	
+	public List<Computer> getByCompany(Page page, String name) {
+		return ComputerDAO.getInstance().getByCompany(page, name);
+	}
+	
 	public void addComputer(Computer computer) {
 		ComputerDAO.getInstance().addComputer(computer);
 	}
@@ -63,9 +65,5 @@ public class ComputerService {
 	
 	public int getNbComputers() {
 		return ComputerDAO.getInstance().getNbComputers();
-	}
-	
-	public List<Computer> getByCompany(String name) {
-		return ComputerDAO.getInstance().getByCompany(name);
 	}
 }

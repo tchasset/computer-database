@@ -17,58 +17,66 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <junit>4.12</junit>
+    <mysql>8.0.19</mysql>
+    <javax-servlet>4.0.1</javax-servlet>
+    <jstl>1.2</jstl>
+    <mockito>3.0.0</mockito>
+    <slf4j>1.7.30</slf4j>
+    <dbunit>2.7.0</dbunit>
+    <hikaricp>3.4.5</hikaricp>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.12</version>
+      <version>${junit}</version>
       <scope>test</scope>
     </dependency>
     
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.19</version>
+      <version>${mysql}</version>
 	</dependency>
 	
 	<dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
-      <version>4.0.1</version>
+      <version>${javax-servlet}</version>
 	</dependency>
 	
 	<dependency>
     	<groupId>javax.servlet</groupId>
     	<artifactId>jstl</artifactId>
-    	<version>1.2</version>
+    	<version>${jstl}</version>
 	</dependency>
 	
 	<dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.0.0</version>
+      <version>${mockito}</version>
       <scope>test</scope>
 	</dependency>
 	
 	<dependency> 
   	  <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
-  	  <version>1.7.30</version>
+  	  <version>${slf4j}</version>
 	</dependency>
 	
 	<dependency>
 	    <groupId>org.dbunit</groupId>
 	    <artifactId>dbunit</artifactId>
-	    <version>2.7.0</version>
+	    <version>${dbunit}</version>
 	     <scope>test</scope>
 	</dependency>
 	
 	<dependency>
 	    <groupId>com.zaxxer</groupId>
 	    <artifactId>HikariCP</artifactId>
-	    <version>3.4.5</version>
+	    <version>${hikaricp}</version>
 	</dependency>
 	
   </dependencies>
@@ -87,6 +95,11 @@
           		<suppressionsFileExpression>suppressions.file</suppressionsFileExpression>
         	</configuration>
       	</plugin>
+      	<plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <version>3.7.1</version>
+        </plugin>
     </plugins>
     
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->

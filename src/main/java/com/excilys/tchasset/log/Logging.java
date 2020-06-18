@@ -13,7 +13,7 @@ public class Logging {
 	public static Logger LOGGER = LoggerFactory.getLogger(Logging.class);
 
 	public static void writeFile(String message) {
-		try (FileWriter file = new FileWriter("file.log")) {
+		try (FileWriter file = new FileWriter("config/file.log")) {
 			
 			PrintWriter writer = new PrintWriter(file);
 			writer.println(Calendar.getInstance().getTime()+" : \n"+message);

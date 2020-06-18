@@ -26,6 +26,11 @@ public class ComputerMapper {
 	    return ComputerMapper.instance;
     }
 	
+	/*
+	 * @param computerDTO	DTO to convert into bean
+	 * 
+	 * @return 				The computer bean from a computer DTO
+	 */
 	public Computer fromDTO(ComputerDTO computerDTO) {
 		Computer computer;
 		
@@ -40,6 +45,11 @@ public class ComputerMapper {
 		return computer;
 	}
 	
+	/*
+	 * @param computerDTO	Bean to convert into DTO
+	 * 
+	 * @return 				The computer DTO from a computer bean
+	 */
 	public ComputerDTO toDTO(Computer computer) {
 		ComputerDTO computerDTO;
 		
@@ -53,11 +63,17 @@ public class ComputerMapper {
 		return computerDTO;
 	}
 	
+	@Deprecated
 	public List<Computer> sorted(List<Computer> computer) {
 		computer.sort((Computer c1, Computer c2)->c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 		return computer;
 	}
 	
+	/*
+	 * @param res	result of a SQL request
+	 * 
+	 * @return 		The computer found by the request
+	 */
 	public Computer getComputer(ResultSet res) {
 		Computer comp=new Computer();
 		try {
