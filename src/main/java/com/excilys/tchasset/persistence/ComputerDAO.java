@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -345,12 +348,16 @@ public class ComputerDAO {
 	 * Check if dates are NULL to execute the good function
 	 */
 	private void manageDate(PreparedStatement statementComputer, Computer computer) throws SQLException {
-		if (computer.getIntroduced()!=null)
-			statementComputer.setDate(2,Date.valueOf(computer.getIntroduced()));
+		if (computer.getIntroduced()!=null) {
+			Timestamp intro = Timestamp.valueOf(LocalDateTime.of(computer.getIntroduced(),LocalTime.of(12, 0)));
+			statementComputer.setTimestamp(2, intro);
+		}
 		else
 			statementComputer.setNull(2, java.sql.Types.TIMESTAMP);
-		if (computer.getDiscontinued()!=null)
-			statementComputer.setDate(3,Date.valueOf(computer.getDiscontinued()));
+		if (computer.getDiscontinued()!=null) {	
+			Timestamp disco = Timestamp.valueOf(LocalDateTime.of(computer.getDiscontinued(),LocalTime.of(12, 0)));
+			statementComputer.setTimestamp(3, disco);
+		}
 		else
 			statementComputer.setNull(3, java.sql.Types.TIMESTAMP);
 	}
