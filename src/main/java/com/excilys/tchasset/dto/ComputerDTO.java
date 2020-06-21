@@ -2,15 +2,15 @@ package com.excilys.tchasset.dto;
 
 public class ComputerDTO {
 
-	private String 	id,
-				   	name,
+	private String 	id="0",
+				   	name="",
 				   	introduced="",
 				   	discontinued="";
 	private CompanyDTO companyDTO;
 	
 	public static class Builder {
-		private String 	id,
-						name,
+		private String 	id="0",
+						name="",
 						introduced="",
 						discontinued="";
 		private CompanyDTO companyDTO;

@@ -2,7 +2,6 @@ package com.excilys.tchasset.log;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Calendar;
 
 import org.slf4j.Logger;
@@ -13,11 +12,8 @@ public class Logging {
 	public static Logger LOGGER = LoggerFactory.getLogger(Logging.class);
 
 	public static void writeFile(String message) {
-		try (FileWriter file = new FileWriter("src/main/resources/file.log")) {
-			
-			PrintWriter writer = new PrintWriter(file);
-			writer.println(Calendar.getInstance().getTime()+" : \n"+message);
-			writer.close();
+		try (FileWriter file = new FileWriter("src/main/resources/file.log",true)) {
+			file.write(Calendar.getInstance().getTime()+" : "+message+"\n");
 		} catch (IOException e) {
 			LOGGER.error("Error with file : " + e.getMessage());
 		}
