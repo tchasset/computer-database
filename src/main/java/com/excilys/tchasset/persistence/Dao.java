@@ -10,7 +10,7 @@ public class Dao implements AutoCloseable {
     private Dao() {
     	String driver="com.mysql.cj.jdbc.Driver";
     	try {
-			Class.forName(driver).newInstance();
+			Class.forName(driver);
 		} catch (Exception sqle) {
         	Logging.writeFile(sqle.getMessage());;
         }
