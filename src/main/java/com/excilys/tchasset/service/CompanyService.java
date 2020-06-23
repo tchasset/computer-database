@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.excilys.tchasset.model.Company;
 import com.excilys.tchasset.persistence.CompanyDAO;
 
+@Service
 public class CompanyService {
 	
-	private static CompanyService instance;
+private static CompanyService instance;
 	
 	public static final CompanyService getInstance() {
 		if (CompanyService.instance == null) {

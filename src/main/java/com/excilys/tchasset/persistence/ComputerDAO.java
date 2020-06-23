@@ -12,14 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.excilys.tchasset.log.Logging;
 import com.excilys.tchasset.mapper.ComputerMapper;
 import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.model.Page;
 
+@Repository
 public class ComputerDAO {
 
-	private static ComputerDAO instance;
+private static ComputerDAO instance;
 	
 	public static final ComputerDAO getInstance() {
 		if (ComputerDAO.instance == null) {

@@ -5,15 +5,18 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.tchasset.dto.CompanyDTO;
 import com.excilys.tchasset.dto.ComputerDTO;
 import com.excilys.tchasset.log.Logging;
 import com.excilys.tchasset.model.Company;
 import com.excilys.tchasset.model.Computer;
 
+@Component
 public class ComputerMapper {
 	
-	private static ComputerMapper instance;
+private static ComputerMapper instance;
 	
 	public static final ComputerMapper getInstance() {
 		if (ComputerMapper.instance == null) {
@@ -23,8 +26,8 @@ public class ComputerMapper {
 	            }
 	        }
 		}
-	    return ComputerMapper.instance;
-    }
+	    return ComputerMapper.instance;    
+	}
 	
 	/*
 	 * @param computerDTO	DTO to convert into bean

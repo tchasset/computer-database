@@ -3,13 +3,16 @@ package com.excilys.tchasset.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.model.Page;
 import com.excilys.tchasset.persistence.ComputerDAO;
 
+@Service
 public class ComputerService {
 	
-	private static ComputerService instance;
+private static ComputerService instance;
 	
 	public static final ComputerService getInstance() {
 		if (ComputerService.instance == null) {

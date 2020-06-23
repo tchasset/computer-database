@@ -16,5 +16,9 @@ public class HikariCP {
     public static Connection getConnection() throws SQLException {
         return ds.getConnection();
     }
+    
+    public static HikariDataSource getDatasource() {
+    	return ds;
+    }
    
 }

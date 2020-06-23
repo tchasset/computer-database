@@ -9,13 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.excilys.tchasset.log.Logging;
 import com.excilys.tchasset.mapper.CompanyMapper;
 import com.excilys.tchasset.model.Company;
 
+@Repository
 public class CompanyDAO {
 	
-	private static CompanyDAO instance=null;
+private static CompanyDAO instance=null;
 	
 	public static final CompanyDAO getInstance() {
 		if (CompanyDAO.instance == null) {

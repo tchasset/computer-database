@@ -6,7 +6,7 @@
 
   <groupId>com.excilys.tchasset</groupId>
   <artifactId>computer-database</artifactId>
-  <version>3.0.0</version>
+  <version>4.0.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
   <name>computer-database Maven Webapp</name>
@@ -25,6 +25,7 @@
     <slf4j>1.7.30</slf4j>
     <dbunit>2.7.0</dbunit>
     <hikaricp>3.4.5</hikaricp>
+    <spring>5.2.7.RELEASE</spring>
   </properties>
 
   <dependencies>
@@ -77,6 +78,24 @@
 	    <groupId>com.zaxxer</groupId>
 	    <artifactId>HikariCP</artifactId>
 	    <version>${hikaricp}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-context</artifactId>
+	    <version>${spring}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-web</artifactId>
+	    <version>${spring}</version>
+	</dependency>
+	
+	<dependency>
+    <groupId>org.springframework</groupId>
+	    <artifactId>spring-jdbc</artifactId>
+	    <version>${spring}</version>
 	</dependency>
 	
   </dependencies>
