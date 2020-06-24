@@ -19,17 +19,19 @@ import com.excilys.tchasset.model.Company;
 import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.service.CompanyService;
 import com.excilys.tchasset.service.ComputerService;
+import com.excilys.tchasset.spring.SpringConfig;
 
 @WebServlet("/editComputer")
 public class EditComputer extends HttpServlet{
 
 	private static final long serialVersionUID = 1L;
 	private static int id;
-	
+	private static CompanyMapper companyMapper = SpringConfig.getContext().getBean(CompanyMapper.class);
+	private static ComputerMapper computerMapper = SpringConfig.getContext().getBean(ComputerMapper.class);
+	private static ComputerService computerService = SpringConfig.getContext().getBean(ComputerService.class);
+	private static CompanyService companyService = SpringConfig.getContext().getBean(CompanyService.class);
+
 	public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-		
-		CompanyService companyService = CompanyService.getInstance();
-		ComputerService computerService = ComputerService.getInstance();
 		
 		//Verifie qu'un ordinateur a bien été selectionné
 		if(request.getParameter("id")==null)
@@ -42,7 +44,7 @@ public class EditComputer extends HttpServlet{
 		if(!computer.isPresent())
 			getServletContext().getRequestDispatcher("/WEB-INF/views/404.html").forward(request, response);
 		
-		ComputerDTO computerDTO = ComputerMapper.getInstance().toDTO(computer.get());
+		ComputerDTO computerDTO = computerMapper.toDTO(computer.get());
 		request.setAttribute("computer", computerDTO);
 		
 		List<Company> companies = companyService.getCompanies();
@@ -53,8 +55,6 @@ public class EditComputer extends HttpServlet{
 
 	public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 		
-		ComputerMapper computerMapper   = ComputerMapper.getInstance();
-		ComputerService computerService = ComputerService.getInstance();
 		Computer computer;
 		
 		String computerId	= String.valueOf(id);
@@ -67,8 +67,8 @@ public class EditComputer extends HttpServlet{
 			getServletContext().getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response); 
 		
 		else {
-			Optional<Company> company = CompanyService.getInstance().getById(Integer.valueOf(companyId));
-			CompanyDTO companyDTO = company.isPresent() ? CompanyMapper.getInstance().toDTO(company.get()) : null;
+			Optional<Company> company = companyService.getById(Integer.valueOf(companyId));
+			CompanyDTO companyDTO = company.isPresent() ? companyMapper.toDTO(company.get()) : null;
 			ComputerDTO computerDTO = new ComputerDTO.Builder()	.setId(computerId)
 																.setName(name)
 															   	.setIntroduced(introduced)

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.tchasset.log.Logging;
@@ -22,18 +23,8 @@ import com.excilys.tchasset.model.Page;
 @Repository
 public class ComputerDAO {
 
-private static ComputerDAO instance;
-	
-	public static final ComputerDAO getInstance() {
-		if (ComputerDAO.instance == null) {
-			synchronized(ComputerDAO.class) {
-				if (ComputerDAO.instance == null) {
-					ComputerDAO.instance = new ComputerDAO();
-	            }
-	        }
-		}
-	    return ComputerDAO.instance;
-    }
+	@Autowired
+	private ComputerMapper computerMapper;
 
 	/*
 	 * @param page 		paginate request if not null
@@ -89,7 +80,7 @@ private static ComputerDAO instance;
 			statementComputer.setInt(1,id);
 			ResultSet res = statementComputer.executeQuery();
 			while(res.next()) {
-				computer = Optional.of(ComputerMapper.getInstance().getComputer(res));
+				computer = Optional.of(computerMapper.getComputer(res));
 			}
 		} catch (SQLException e) {
 			Logging.error(e.getMessage());
@@ -123,7 +114,7 @@ private static ComputerDAO instance;
 			}
 			ResultSet res = statementComputer.executeQuery();
 			while(res.next()) {
-				computer.add(ComputerMapper.getInstance().getComputer(res));
+				computer.add(computerMapper.getComputer(res));
 			}
 		} catch (SQLException e) {
 			Logging.error(e.getMessage());
@@ -155,7 +146,7 @@ private static ComputerDAO instance;
 			}
 			ResultSet res = statementComputer.executeQuery();
 			while(res.next()) {
-				computer.add(ComputerMapper.getInstance().getComputer(res));
+				computer.add(computerMapper.getComputer(res));
 			}
 		} catch (SQLException e) {
 			Logging.error(e.getMessage());
@@ -187,7 +178,7 @@ private static ComputerDAO instance;
 			}
 			ResultSet res = statementComputer.executeQuery();
 			while(res.next()) {
-				computers.add(ComputerMapper.getInstance().getComputer(res));
+				computers.add(computerMapper.getComputer(res));
 			}
 		} catch (SQLException e) {
 			Logging.error(e.getMessage());
@@ -219,7 +210,7 @@ private static ComputerDAO instance;
 
 			ResultSet res = statement.executeQuery(query);
 			while(res.next()) {
-				computers.add(ComputerMapper.getInstance().getComputer(res));
+				computers.add(computerMapper.getComputer(res));
 			}
 		} catch (SQLException e) {
 			Logging.error(e.getMessage());
@@ -244,7 +235,7 @@ private static ComputerDAO instance;
 			statementComputer.setInt(2,sizeByPage);
 			ResultSet res = statementComputer.executeQuery();
 			while(res.next()) {
-				computers.add(ComputerMapper.getInstance().getComputer(res));
+				computers.add(computerMapper.getComputer(res));
 			}
 		} catch (SQLException e) {
 			Logging.error(e.getMessage());
@@ -266,7 +257,7 @@ private static ComputerDAO instance;
 		statement.setInt(nbParam,sizeByPage);
 		ResultSet res = statement.executeQuery();
 		while(res.next()) {
-			computers.add(ComputerMapper.getInstance().getComputer(res));
+			computers.add(computerMapper.getComputer(res));
 		}
         return computers;
     }
