@@ -1,5 +1,8 @@
 package com.excilys.tchasset.model;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Page {
 	private int currentPage;
 	private int sizePage;

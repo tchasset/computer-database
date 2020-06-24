@@ -1,5 +1,8 @@
 package com.excilys.tchasset.dto;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class CompanyDTO {
 	private String id;
 	private String name;

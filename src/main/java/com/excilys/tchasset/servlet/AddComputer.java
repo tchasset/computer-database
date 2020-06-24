@@ -19,16 +19,19 @@ import com.excilys.tchasset.model.Company;
 import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.service.CompanyService;
 import com.excilys.tchasset.service.ComputerService;
+import com.excilys.tchasset.spring.SpringConfig;
 
 @WebServlet("/addComputer")
 public class AddComputer extends HttpServlet{
 
 	private static final long serialVersionUID = 1L;
-	
-	
+	private static CompanyMapper companyMapper = SpringConfig.getContext().getBean(CompanyMapper.class);
+	private static ComputerMapper computerMapper = SpringConfig.getContext().getBean(ComputerMapper.class);
+	private static ComputerService computerService = SpringConfig.getContext().getBean(ComputerService.class);
+	private static CompanyService companyService = SpringConfig.getContext().getBean(CompanyService.class);
+
 	public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-		
-		CompanyService companyService = CompanyService.getInstance();
+
 		List<Company> companies = companyService.getCompanies();
 		
 		request.setAttribute("companyName", companies);
@@ -38,8 +41,6 @@ public class AddComputer extends HttpServlet{
 
 	public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 		
-		ComputerMapper computerMapper   = ComputerMapper.getInstance();
-		ComputerService computerService = ComputerService.getInstance();
 		Computer computer;
 		
 		String name 		= request.getParameter("computerName");
@@ -51,8 +52,8 @@ public class AddComputer extends HttpServlet{
 			getServletContext().getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response); 
 		
 		else {
-			Optional<Company> company = CompanyService.getInstance().getById(Integer.valueOf(companyId));
-			CompanyDTO companyDTO = company.isPresent() ? CompanyMapper.getInstance().toDTO(company.get()) : null;
+			Optional<Company> company = companyService.getById(Integer.valueOf(companyId));
+			CompanyDTO companyDTO = company.isPresent() ? companyMapper.toDTO(company.get()) : null;
 			ComputerDTO computerDTO = new ComputerDTO.Builder()	.setId("0")
 																.setName(name)
 															   	.setIntroduced(introduced)

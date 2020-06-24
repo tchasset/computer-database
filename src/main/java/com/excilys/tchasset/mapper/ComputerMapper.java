@@ -5,26 +5,20 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.tchasset.dto.CompanyDTO;
 import com.excilys.tchasset.dto.ComputerDTO;
 import com.excilys.tchasset.log.Logging;
 import com.excilys.tchasset.model.Company;
 import com.excilys.tchasset.model.Computer;
 
+@Component
 public class ComputerMapper {
 	
-	private static ComputerMapper instance;
-	
-	public static final ComputerMapper getInstance() {
-		if (ComputerMapper.instance == null) {
-			synchronized(ComputerMapper.class) {
-				if (ComputerMapper.instance == null) {
-					ComputerMapper.instance = new ComputerMapper();
-	            }
-	        }
-		}
-	    return ComputerMapper.instance;
-    }
+	@Autowired
+	private CompanyMapper companyMapper;
 	
 	/*
 	 * @param computerDTO	DTO to convert into bean
@@ -38,7 +32,7 @@ public class ComputerMapper {
 		String name = computerDTO.getName();
 		LocalDate introduced   = (computerDTO.getIntroduced() == "" ? null : LocalDate.parse(computerDTO.getIntroduced()));
 		LocalDate discontinued = (computerDTO.getDiscontinued() == "" ? null : LocalDate.parse(computerDTO.getDiscontinued()));
-		Company company = CompanyMapper.getInstance().fromDTO(computerDTO.getCompanyDTO());
+		Company company = companyMapper.fromDTO(computerDTO.getCompanyDTO());
 		
 		computer = new Computer.Builder().setId(id).setName(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(company).build();
 		
@@ -56,7 +50,7 @@ public class ComputerMapper {
 		String name = computer.getName();
 		String introduced = String.valueOf(computer.getIntroduced());
 		String discontinued = String.valueOf(computer.getDiscontinued());
-		CompanyDTO companyDTO = CompanyMapper.getInstance().toDTO(computer.getCompany());
+		CompanyDTO companyDTO = companyMapper.toDTO(computer.getCompany());
 		
 		computerDTO = new ComputerDTO.Builder().setName(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompanyDTO(companyDTO).build();
 		

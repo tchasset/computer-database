@@ -4,13 +4,22 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.tchasset.model.Company;
 import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.model.Page;
 import com.excilys.tchasset.service.CompanyService;
 import com.excilys.tchasset.service.ComputerService;
 
+@Component
 public class Client {
+	
+	@Autowired
+	private CompanyService companyService;
+	@Autowired
+	private ComputerService computerService;
 	
 	private EnumCli enumCli;
 	
@@ -24,7 +33,7 @@ public class Client {
 			
 			switch(enumCli) {
 				case LISTALLCOMPANY:
-					System.out.println((CompanyService.getInstance().getCompanies().toString()));
+					System.out.println((companyService.getCompanies().toString()));
 					break;
 				case LISTCOMPANY:
 					menu1Company(sc);
@@ -75,7 +84,7 @@ public class Client {
 	private void menu1Company(Scanner sc) {
 		System.out.print("Saisir l'ID de la companie : ");
 		int id = sc.nextInt();
-		Optional<Company> c = CompanyService.getInstance().getById(id);
+		Optional<Company> c = companyService.getById(id);
 		if (c.isPresent())
 			System.out.println(c.get());
 		else
@@ -83,7 +92,7 @@ public class Client {
 	}
 	
 	private Optional<Computer> getComputer(int id) {
-		Optional<Computer> c = ComputerService.getInstance().getById(id);
+		Optional<Computer> c = computerService.getById(id);
 		return c;
 	}
 	
@@ -118,7 +127,7 @@ public class Client {
 				.setIntroduced(introduced)
 				.setDiscontinued(discontinued)
 				.setCompany(new Company(company_id)).build();
-		ComputerService.getInstance().addComputer(c);
+		computerService.addComputer(c);
 	}
 	
 	private void menuDelete(Scanner sc) {
@@ -126,7 +135,7 @@ public class Client {
 		int id = sc.nextInt();
 		Optional<Computer> c = getComputer(id);
 		if (c.isPresent())
-			ComputerService.getInstance().deleteComputer(c.get().getId());
+			computerService.deleteComputer(c.get().getId());
 		else
 			System.out.println("Aucun ordinateur avec cet ID");
 	}
@@ -134,9 +143,9 @@ public class Client {
 	private void menuDeleteCompany(Scanner sc) {
 		System.out.print("Saisir l'ID de la company à supprimer : ");
 		int id = sc.nextInt();
-		Optional<Company> c = CompanyService.getInstance().getById(id);
+		Optional<Company> c = companyService.getById(id);
 		if (c.isPresent())
-			CompanyService.getInstance().deleteCompany(c.get().getId());
+			companyService.deleteCompany(c.get().getId());
 		else
 			System.out.println("Aucune company avec cet ID");
 	}
@@ -146,7 +155,7 @@ public class Client {
 		int id = sc.nextInt();
 		Optional<Computer> c = getComputer(id);
 		if (c.isPresent())
-			ComputerService.getInstance().updateComputer(toModify(c.get(),sc));
+			computerService.updateComputer(toModify(c.get(),sc));
 		else
 			System.out.println("Aucun ordinateur avec cet ID");
 	}
@@ -183,12 +192,12 @@ public class Client {
 	}
 	
 	private void paginateComputer(Scanner sc) {
-		int continu=1, max=ComputerService.getInstance().getNbComputers();
+		int continu=1, max=computerService.getNbComputers();
 		Page page = new Page.Builder().setCurrentPage(0).setSizePage(20).build();
 		page.setNbPages(max);
 				
 		while(continu==1 || continu==2) {
-			System.out.println(ComputerService.getInstance().getAllComputers(page));
+			System.out.println(computerService.getAllComputers(page));
 			if(page.getCurrentPage()==0)
 				System.out.print("Page suivante (entrez 1), arreter (entrez 0)");
 			else if(page.getCurrentPage()<page.getNbPages())

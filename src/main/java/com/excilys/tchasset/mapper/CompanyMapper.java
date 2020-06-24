@@ -4,24 +4,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.tchasset.dto.CompanyDTO;
 import com.excilys.tchasset.log.Logging;
 import com.excilys.tchasset.model.Company;
 
+@Component
 public class CompanyMapper {
-	
-	private static CompanyMapper instance;
-	
-	public static final CompanyMapper getInstance() {
-		if (CompanyMapper.instance == null) {
-			synchronized(CompanyMapper.class) {
-				if (CompanyMapper.instance == null) {
-					CompanyMapper.instance = new CompanyMapper();
-	            }
-	        }
-		}
-	    return CompanyMapper.instance;
-    }
 	
 	/*
 	 * @param company	bean to convert into DTO

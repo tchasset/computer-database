@@ -9,24 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.excilys.tchasset.log.Logging;
 import com.excilys.tchasset.mapper.CompanyMapper;
 import com.excilys.tchasset.model.Company;
 
+@Repository
 public class CompanyDAO {
 	
-	private static CompanyDAO instance=null;
-	
-	public static final CompanyDAO getInstance() {
-		if (CompanyDAO.instance == null) {
-			synchronized(CompanyDAO.class) {
-				if (CompanyDAO.instance == null) {
-					CompanyDAO.instance = new CompanyDAO();
-	            }
-	        }
-		}
-	    return CompanyDAO.instance;
-    }
+	@Autowired
+	private CompanyMapper companyMapper;
 
 	public List<Company> getCompanies() {
 		List<Company> companies = new ArrayList<Company>();
@@ -36,7 +31,7 @@ public class CompanyDAO {
 			
 			ResultSet res = statement.executeQuery(query);
 			while(res.next()) {
-				companies.add(CompanyMapper.getInstance().getCompany(res));
+				companies.add(companyMapper.getCompany(res));
 			}
 			
 		} catch (SQLException e) {
@@ -54,7 +49,7 @@ public class CompanyDAO {
 			
 			ResultSet res = statement.executeQuery(query);
 			while(res.next()) {
-				companies.add(CompanyMapper.getInstance().getCompany(res));
+				companies.add(companyMapper.getCompany(res));
 			}
 			
 		} catch (SQLException e) {
@@ -73,7 +68,7 @@ public class CompanyDAO {
 			statementCompany.setInt(1,id);
 			ResultSet res = statementCompany.executeQuery();
 			while(res.next()) {
-				company = Optional.of(CompanyMapper.getInstance().getCompany(res));
+				company = Optional.of(companyMapper.getCompany(res));
 			}
 		} catch (SQLException e) {
 			Logging.writeFile(e.getMessage());
@@ -91,7 +86,7 @@ public class CompanyDAO {
 			statementCompany.setString(1,name);
 			ResultSet res = statementCompany.executeQuery();
 			while(res.next()) {
-				company = Optional.of(CompanyMapper.getInstance().getCompany(res));
+				company = Optional.of(companyMapper.getCompany(res));
 			}
 		} catch (SQLException e) {
 			Logging.error(e.getMessage());
@@ -99,6 +94,7 @@ public class CompanyDAO {
 		return company;
 	}
 	
+	@Transactional
 	public void deleteCompany(int id) {
 		String query1="DELETE computer "
 					+ "FROM computer "

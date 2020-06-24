@@ -3,67 +3,61 @@ package com.excilys.tchasset.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.model.Page;
 import com.excilys.tchasset.persistence.ComputerDAO;
 
+@Service
 public class ComputerService {
 	
-	private static ComputerService instance;
-	
-	public static final ComputerService getInstance() {
-		if (ComputerService.instance == null) {
-			synchronized(ComputerService.class) {
-				if (ComputerService.instance == null) {
-					ComputerService.instance = new ComputerService();
-	            }
-	        }
-		}
-	    return ComputerService.instance;
-    }
+	@Autowired
+	private ComputerDAO computerDAO;
 	
 	public List<Computer> getAllComputers(Page page) {
-		return ComputerDAO.getInstance().getAllComputers(page);
+		return computerDAO.getAllComputers(page);
 	}
 	
 	public List<Computer> getComputersOrderByComputer(Page page, String order) {
-		return ComputerDAO.getInstance().getComputersOrderByComputer(page, order);
+		return computerDAO.getComputersOrderByComputer(page, order);
 	}
 	
 	public List<Computer> getComputersOrderByCompany(Page page, String order){
-		return ComputerDAO.getInstance().getComputersOrderByCompany(page, order);
+		return computerDAO.getComputersOrderByCompany(page, order);
 	}
 	
 	public Optional<Computer> getById(int id) {
-		Optional<Computer> computer = ComputerDAO.getInstance().getById(id);
+		Optional<Computer> computer = computerDAO.getById(id);
 		return computer;
 	}
 	
 	public List<Computer> getByAllName(Page page, String name) {
-		return ComputerDAO.getInstance().getByAllName(page, name);
+		return computerDAO.getByAllName(page, name);
 	}
 	
 	public List<Computer> getByName(Page page, String name) {
-		return ComputerDAO.getInstance().getByName(page, name);
+		return computerDAO.getByName(page, name);
 	}
 	
 	public List<Computer> getByCompany(Page page, String name) {
-		return ComputerDAO.getInstance().getByCompany(page, name);
+		return computerDAO.getByCompany(page, name);
 	}
 	
 	public void addComputer(Computer computer) {
-		ComputerDAO.getInstance().addComputer(computer);
+		computerDAO.addComputer(computer);
 	}
 	
 	public void updateComputer(Computer computer) {
-		ComputerDAO.getInstance().updateComputer(computer);
+		computerDAO.updateComputer(computer);
 	}
 	
 	public void deleteComputer(int id) {
-		ComputerDAO.getInstance().deleteComputer(id);
+		computerDAO.deleteComputer(id);
 	}
 	
 	public int getNbComputers() {
-		return ComputerDAO.getInstance().getNbComputers();
+		return computerDAO.getNbComputers();
 	}
 }

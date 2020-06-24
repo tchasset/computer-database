@@ -12,17 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.model.Page;
 import com.excilys.tchasset.service.ComputerService;
+import com.excilys.tchasset.spring.SpringConfig;
 
 @WebServlet("/dashboard")
 public class Dashboard extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private static Page page = new Page();
-	//private static String orderCompany="", orderComputer="";
+	private static ComputerService computerService = SpringConfig.getContext().getBean(ComputerService.class);
 
 	public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-		
-		ComputerService computerService = ComputerService.getInstance();
+
 		int nb=0;
 
 		String orderComputer = request.getParameter("orderByName");
@@ -69,8 +69,7 @@ public class Dashboard extends HttpServlet {
 	}
 	
 	public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-		ComputerService computerService = ComputerService.getInstance();	
-		
+
 		String[] computersId = request.getParameter("selection").split(",");
 		
 		for(String s : computersId)
