@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 
 public class Logging {
 	
-	public static Logger LOGGER = LoggerFactory.getLogger(Logging.class);
+	private static Logger LOGGER;
 
-	public static void writeFile(String message) {
+	private static void writeFile(String message) {
 		try (FileWriter file = new FileWriter("src/main/resources/file.log",true)) {
 			file.write(Calendar.getInstance().getTime()+" : "+message+"\n");
 		} catch (IOException e) {
@@ -19,7 +19,8 @@ public class Logging {
 		}
 	}
 	
-	public static void error(String message) {
+	public static void error(String message, Class<?> _class) {
+		LOGGER = LoggerFactory.getLogger(_class);
 		LOGGER.error(message);
 		writeFile(message);
 	}

@@ -28,9 +28,17 @@
                         id:${computer.id}
                     </div>
                     <h1>Edit Computer</h1>
-
-                    <form action="editComputer" method="POST" onsubmit="return valider()">
-                        <input type="hidden" value="${computer.id}" id="id" name="id"/> <!-- TODO: Change this value with the computer id -->
+					
+					<c:if test="${error!=null}">
+						<div class="alert alert-danger" >
+						<c:forEach items="${ error }" var="err">
+							<b>${err}</b><br/>
+						</c:forEach>  
+						</div>
+					</c:if>
+					
+                    <form action="editComputer?id=${computer.id}" method="POST" onsubmit="return valider()">
+                        <input type="hidden" value="${computer.id}" id="id" name="id"/>
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>

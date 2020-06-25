@@ -83,7 +83,7 @@ public class ComputerDAO {
 				computer = Optional.of(computerMapper.getComputer(res));
 			}
 		} catch (SQLException e) {
-			Logging.error(e.getMessage());
+			Logging.error(e.getMessage(), ComputerDAO.class);
 		}
 		return computer;
 	}
@@ -117,7 +117,7 @@ public class ComputerDAO {
 				computer.add(computerMapper.getComputer(res));
 			}
 		} catch (SQLException e) {
-			Logging.error(e.getMessage());
+			Logging.error(e.getMessage(), ComputerDAO.class);
 		}
 		return computer;
 	}
@@ -149,7 +149,7 @@ public class ComputerDAO {
 				computer.add(computerMapper.getComputer(res));
 			}
 		} catch (SQLException e) {
-			Logging.error(e.getMessage());
+			Logging.error(e.getMessage(), ComputerDAO.class);
 		}
 		return computer;
 	}
@@ -181,7 +181,7 @@ public class ComputerDAO {
 				computers.add(computerMapper.getComputer(res));
 			}
 		} catch (SQLException e) {
-			Logging.error(e.getMessage());
+			Logging.error(e.getMessage(), ComputerDAO.class);
 		}
 		return computers;
 	}
@@ -213,7 +213,7 @@ public class ComputerDAO {
 				computers.add(computerMapper.getComputer(res));
 			}
 		} catch (SQLException e) {
-			Logging.error(e.getMessage());
+			Logging.error(e.getMessage(), ComputerDAO.class);
 		}
 		return computers;
 	}
@@ -238,7 +238,7 @@ public class ComputerDAO {
 				computers.add(computerMapper.getComputer(res));
 			}
 		} catch (SQLException e) {
-			Logging.error(e.getMessage());
+			Logging.error(e.getMessage(), ComputerDAO.class);
 		}
 		return computers;
 	}
@@ -295,7 +295,7 @@ public class ComputerDAO {
 			statementComputer.setInt(1,id);
 			statementComputer.executeUpdate();
 		} catch (SQLException e) {
-			Logging.error(e.getMessage());
+			Logging.error(e.getMessage(), ComputerDAO.class);
 		}
 	}
 	
@@ -313,7 +313,7 @@ public class ComputerDAO {
 				nb=res.getInt(1);
 			}
 		} catch (SQLException e) {
-			Logging.error(e.getMessage());
+			Logging.error(e.getMessage(), ComputerDAO.class);
 		}
 		return nb;
 	}
@@ -332,7 +332,7 @@ public class ComputerDAO {
 				statementComputer.setInt(5,computer.getId());
 				statementComputer.executeUpdate();
 			} catch (SQLException e) {
-				Logging.error(e.getMessage());
+				Logging.error(e.getMessage(), ComputerDAO.class);
 			}
 		}
 	}

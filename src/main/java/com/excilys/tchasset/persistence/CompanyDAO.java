@@ -35,7 +35,7 @@ public class CompanyDAO {
 			}
 			
 		} catch (SQLException e) {
-			Logging.writeFile(e.getMessage());
+			Logging.error(e.getMessage(), CompanyDAO.class);
 		}
 		return companies;
 	}
@@ -53,7 +53,7 @@ public class CompanyDAO {
 			}
 			
 		} catch (SQLException e) {
-			Logging.writeFile(e.getMessage());
+			Logging.error(e.getMessage(), CompanyDAO.class);
 		}
 		return companies;
 	}
@@ -71,7 +71,7 @@ public class CompanyDAO {
 				company = Optional.of(companyMapper.getCompany(res));
 			}
 		} catch (SQLException e) {
-			Logging.writeFile(e.getMessage());
+			Logging.error(e.getMessage(), CompanyDAO.class);
 		}
 		return company;
 	}
@@ -89,7 +89,7 @@ public class CompanyDAO {
 				company = Optional.of(companyMapper.getCompany(res));
 			}
 		} catch (SQLException e) {
-			Logging.error(e.getMessage());
+			Logging.error(e.getMessage(), CompanyDAO.class);
 		}
 		return company;
 	}
@@ -115,7 +115,7 @@ public class CompanyDAO {
 			
 			conn.commit();
 		} catch (SQLException e) {
-			Logging.error(e.getMessage());
+			Logging.error(e.getMessage(), CompanyDAO.class);
 		}
 	}
 }

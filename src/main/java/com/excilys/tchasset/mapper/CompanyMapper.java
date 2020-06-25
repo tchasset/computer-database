@@ -66,7 +66,7 @@ public class CompanyMapper {
 			comp.setId(res.getInt("id"));
 			comp.setName(res.getString("name"));
 		} catch (SQLException e) {
-			Logging.writeFile(e.getMessage());
+			Logging.error(e.getMessage(),CompanyMapper.class);
 		}
 		return comp;
 	}

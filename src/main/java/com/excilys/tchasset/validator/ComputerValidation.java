@@ -12,14 +12,14 @@ public class ComputerValidation {
 
 	public static List<String> messageError;
 	
-	public static boolean checkValidity(ComputerDTO computer) {
+	public static void checkValidity(ComputerDTO computer) {
 		messageError = new ArrayList<String>();
 		checkId(computer);
 		checkName(computer);
 		checkIntroduced(computer);
 		checkDiscontinued(computer);
+		checkDate(computer);
 		checkCompanyDTO(computer);
-		return true;
 	}
 	
 	private static void checkId(ComputerDTO computer) {
@@ -27,10 +27,10 @@ public class ComputerValidation {
 			if (computer.getId().isEmpty()) 
 				  throw new Exception("Computer id can't be empty");
 		} catch(NullPointerException e) {
-			Logging.error("Computer id can't be NULL");
+			Logging.error("Computer id can't be NULL", ComputerValidation.class);
 			messageError.add("Computer id can't be NULL");
 		} catch (Exception e) {
-			Logging.error(e.getMessage());
+			Logging.error(e.getMessage(), ComputerValidation.class);
 			messageError.add(e.getMessage());
 		}
 	}
@@ -40,28 +40,30 @@ public class ComputerValidation {
 			if (computer.getName().isEmpty()) 
 				  throw new Exception("Computer name can't be empty");
 		} catch(NullPointerException e) {
-			Logging.error("Computer name can't be NULL");
+			Logging.error("Computer name can't be NULL", ComputerValidation.class);
 			messageError.add("Computer name can't be NULL");
 		} catch (Exception e) {
-			Logging.error(e.getMessage());
+			Logging.error(e.getMessage(), ComputerValidation.class);
 			messageError.add(e.getMessage());
 		}
 	}
 	
 	private static void checkIntroduced(ComputerDTO computer) {
 		try {
-			LocalDate.parse(computer.getIntroduced());
+			if (computer.getIntroduced()!=null && !computer.getIntroduced().isEmpty())
+				LocalDate.parse(computer.getIntroduced());
 		} catch (DateTimeParseException e) {
-			Logging.error("Introduced date is not in format (YYYY-MM-DD) or is invalid");	
+			Logging.error("Introduced date is not in format (YYYY-MM-DD) or is invalid", ComputerValidation.class);	
 			messageError.add("Introduced date is not in format (YYYY-MM-DD) or is invalid");
 		} 
 	}
 	
 	private static void checkDiscontinued(ComputerDTO computer) {
 		try {
-			LocalDate.parse(computer.getDiscontinued());
+			if (computer.getDiscontinued()!=null && !computer.getDiscontinued().isEmpty())
+				LocalDate.parse(computer.getDiscontinued());
 		} catch (DateTimeParseException e) {
-			Logging.error("Discontinued date is not in format (YYYY-MM-DD) or is invalid");		
+			Logging.error("Discontinued date is not in format (YYYY-MM-DD) or is invalid", ComputerValidation.class);		
 			messageError.add("Discontinued date is not in format (YYYY-MM-DD) or is invalid");
 		} 
 	}
@@ -74,11 +76,30 @@ public class ComputerValidation {
 				}
 			}
 		} catch(NullPointerException e) {
-			Logging.error("Company id and name can't be NULL if a company is declared for a computer");
+			Logging.error("Company id and name can't be NULL if a company is declared for a computer", ComputerValidation.class);
 			messageError.add("Company id and name can't be NULL if a company is declared for a computer");
 		}catch (Exception e) {
-			Logging.error(e.getMessage());
+			Logging.error(e.getMessage(), ComputerValidation.class);
 			messageError.add(e.getMessage());
+		}
+	}
+	
+	private static void checkDate(ComputerDTO computer) {
+		String intro = computer.getIntroduced().isEmpty() ? null : computer.getIntroduced(),
+			   disco = computer.getDiscontinued().isEmpty() ? null : computer.getDiscontinued();
+				
+		if(intro!=null && disco!=null)
+			if(LocalDate.parse(disco).isBefore(LocalDate.parse(intro)))
+				messageError.add("Discontinued date can't be before introduced date");
+		
+		if(	intro!=null && 
+			(LocalDate.parse(intro).isBefore(LocalDate.of(1970,1,1)) || LocalDate.parse(intro).isAfter(LocalDate.of(2038,1,18))) ){
+			messageError.add("Introduced date can't be before 01/01/1970 or afeter 18/01/2038");
+		}
+		
+		if(	disco!=null && 
+			(LocalDate.parse(disco).isBefore(LocalDate.of(1970,1,1)) || LocalDate.parse(disco).isAfter(LocalDate.of(2038,1,18))) ) {
+			messageError.add("Discontinued date can't be before 01/01/1970 or afeter 18/01/2038");
 		}
 	}
 }

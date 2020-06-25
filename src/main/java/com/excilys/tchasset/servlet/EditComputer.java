@@ -1,7 +1,6 @@
 package com.excilys.tchasset.servlet;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,12 +19,12 @@ import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.service.CompanyService;
 import com.excilys.tchasset.service.ComputerService;
 import com.excilys.tchasset.spring.SpringConfig;
+import com.excilys.tchasset.validator.ComputerValidation;
 
 @WebServlet("/editComputer")
 public class EditComputer extends HttpServlet{
 
 	private static final long serialVersionUID = 1L;
-	private static int id;
 	private static CompanyMapper companyMapper = SpringConfig.getContext().getBean(CompanyMapper.class);
 	private static ComputerMapper computerMapper = SpringConfig.getContext().getBean(ComputerMapper.class);
 	private static ComputerService computerService = SpringConfig.getContext().getBean(ComputerService.class);
@@ -38,9 +37,9 @@ public class EditComputer extends HttpServlet{
 			getServletContext().getRequestDispatcher("/WEB-INF/views/404.html").forward(request, response);
 			
 		//Verifie que l'ordinateur possedant cet id existe
-		id = Integer.valueOf(request.getParameter("id"));
+		int id = Integer.valueOf(request.getParameter("id"));
 		Optional<Computer> computer = computerService.getById(id);
-		
+
 		if(!computer.isPresent())
 			getServletContext().getRequestDispatcher("/WEB-INF/views/404.html").forward(request, response);
 		
@@ -57,38 +56,31 @@ public class EditComputer extends HttpServlet{
 		
 		Computer computer;
 		
-		String computerId	= String.valueOf(id);
+		String computerId	= request.getParameter("id");
 		String name 		= request.getParameter("computerName");
 		String introduced 	= request.getParameter("introduced");
 		String discontinued = request.getParameter("discontinued");
 		String companyId	= request.getParameter("companyId");
 		
-		if(name.isEmpty())
-			getServletContext().getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response); 
+		Optional<Company> company = companyService.getById(Integer.valueOf(companyId));
+		CompanyDTO companyDTO = company.isPresent() ? companyMapper.toDTO(company.get()) : null;
+		ComputerDTO computerDTO = new ComputerDTO.Builder()	.setId(computerId)
+															.setName(name)
+														   	.setIntroduced(introduced)
+															.setDiscontinued(discontinued)
+															.setCompanyDTO(companyDTO).build();
 		
-		else {
-			Optional<Company> company = companyService.getById(Integer.valueOf(companyId));
-			CompanyDTO companyDTO = company.isPresent() ? companyMapper.toDTO(company.get()) : null;
-			ComputerDTO computerDTO = new ComputerDTO.Builder()	.setId(computerId)
-																.setName(name)
-															   	.setIntroduced(introduced)
-																.setDiscontinued(discontinued)
-																.setCompanyDTO(companyDTO).build();
-			
+		ComputerValidation.checkValidity(computerDTO);
+		if(ComputerValidation.messageError.isEmpty()) {
 			computer = computerMapper.fromDTO(computerDTO);
 			
-			if(computer.getDiscontinued()!=null && computer.getIntroduced()!=null)
-				if(computer.getDiscontinued().isBefore(computer.getIntroduced()))
-					getServletContext().getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
-			
-			if(computer.getIntroduced()!=null && computer.getIntroduced().isBefore(LocalDate.of(1970,1,1)) )
-				getServletContext().getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
-			
-			if(computer.getDiscontinued()!=null && computer.getDiscontinued().isBefore(LocalDate.of(1970,1,1)))
-				getServletContext().getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
-			
 			computerService.updateComputer(computer);
-			response.sendRedirect("dashboard");
+			response.sendRedirect("dashboard?editSuccess=1");
+		}
+		else {
+			request.setAttribute("error", ComputerValidation.messageError);
+			request.setAttribute("id", computerId);
+			doGet(request, response);
 		}
 	}
 }

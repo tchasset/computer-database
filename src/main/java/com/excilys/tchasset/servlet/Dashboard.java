@@ -24,6 +24,8 @@ public class Dashboard extends HttpServlet {
 	public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
 		int nb=0;
+		request.setAttribute("addSuccess", request.getParameter("addSuccess"));
+		request.setAttribute("editSuccess", request.getParameter("editSuccess"));
 
 		String orderComputer = request.getParameter("orderByName");
 		String orderCompany  = request.getParameter("orderByCompany");

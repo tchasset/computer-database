@@ -27,6 +27,13 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
+                    <c:if test="${error!=null}">
+						<div class="alert alert-danger" >
+						<c:forEach items="${ error }" var="err">
+							<b>${err}</b><br/>
+						</c:forEach>  
+						</div>
+					</c:if>
                     <form action="addComputer" method="POST"  name="form" onsubmit="return valider()">
                         <fieldset>
                             <div class="form-group">

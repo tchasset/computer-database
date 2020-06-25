@@ -12,7 +12,7 @@ public class Dao implements AutoCloseable {
     	try {
 			Class.forName(driver);
 		} catch (Exception sqle) {
-        	Logging.writeFile(sqle.getMessage());;
+        	Logging.error(sqle.getMessage(), Dao.class);;
         }
     }
 
@@ -31,7 +31,7 @@ public class Dao implements AutoCloseable {
 		try {
 			conn = HikariCP.getConnection();
 		} catch (SQLException e) {
-			Logging.writeFile(e.getMessage());
+			Logging.error(e.getMessage(),Dao.class);
 		}
     	return conn;
 	}

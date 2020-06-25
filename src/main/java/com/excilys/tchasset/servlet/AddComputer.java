@@ -1,7 +1,6 @@
 package com.excilys.tchasset.servlet;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +19,7 @@ import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.service.CompanyService;
 import com.excilys.tchasset.service.ComputerService;
 import com.excilys.tchasset.spring.SpringConfig;
+import com.excilys.tchasset.validator.ComputerValidation;
 
 @WebServlet("/addComputer")
 public class AddComputer extends HttpServlet{
@@ -48,32 +48,24 @@ public class AddComputer extends HttpServlet{
 		String discontinued = request.getParameter("discontinued");
 		String companyId	= request.getParameter("companyId");
 
-		if(name.isEmpty())
-			getServletContext().getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response); 
+		Optional<Company> company = companyService.getById(Integer.valueOf(companyId));
+		CompanyDTO companyDTO = company.isPresent() ? companyMapper.toDTO(company.get()) : null;
+		ComputerDTO computerDTO = new ComputerDTO.Builder()	.setId("0")
+															.setName(name)
+														   	.setIntroduced(introduced)
+															.setDiscontinued(discontinued)
+															.setCompanyDTO(companyDTO).build();
 		
-		else {
-			Optional<Company> company = companyService.getById(Integer.valueOf(companyId));
-			CompanyDTO companyDTO = company.isPresent() ? companyMapper.toDTO(company.get()) : null;
-			ComputerDTO computerDTO = new ComputerDTO.Builder()	.setId("0")
-																.setName(name)
-															   	.setIntroduced(introduced)
-																.setDiscontinued(discontinued)
-																.setCompanyDTO(companyDTO).build();
-			
+		ComputerValidation.checkValidity(computerDTO);
+		if(ComputerValidation.messageError.isEmpty()) {
 			computer = computerMapper.fromDTO(computerDTO);
-
-			if(computer.getDiscontinued()!=null && computer.getIntroduced()!=null)
-				if(computer.getDiscontinued().isBefore(computer.getIntroduced()))
-					getServletContext().getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
-			
-			if(computer.getIntroduced()!=null && computer.getIntroduced().isBefore(LocalDate.of(1970,1,1)) )
-				getServletContext().getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
-			
-			if(computer.getDiscontinued()!=null && computer.getDiscontinued().isBefore(LocalDate.of(1970,1,1)))
-				getServletContext().getRequestDispatcher("/WEB-INF/views/500.html").forward(request, response);
 			
 			computerService.addComputer(computer);
-			response.sendRedirect("dashboard");
+			response.sendRedirect("dashboard?addSuccess=1");
+		}
+		else {
+			request.setAttribute("error", ComputerValidation.messageError);
+			doGet(request, response);	
 		}
 	}
 }

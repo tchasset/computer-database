@@ -23,6 +23,16 @@
 
     <section id="main">
         <div class="container">
+	        <c:if test="${addSuccess!=null}">
+				<div class="alert alert-success" >
+					<b>Computer added successfully</b><br/>
+				</div>
+			</c:if>
+			<c:if test="${editSuccess!=null}">
+				<div class="alert alert-success" >
+					<b>Computer edited successfully</b><br/>
+				</div>
+			</c:if>
             <h1 id="homeTitle">
                 ${nbComputer} Computers found
             </h1>

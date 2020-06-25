@@ -47,12 +47,13 @@ public class ComputerMapper {
 	public ComputerDTO toDTO(Computer computer) {
 		ComputerDTO computerDTO;
 		
+		String id = String.valueOf(computer.getId());
 		String name = computer.getName();
 		String introduced = String.valueOf(computer.getIntroduced());
 		String discontinued = String.valueOf(computer.getDiscontinued());
 		CompanyDTO companyDTO = companyMapper.toDTO(computer.getCompany());
 		
-		computerDTO = new ComputerDTO.Builder().setName(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompanyDTO(companyDTO).build();
+		computerDTO = new ComputerDTO.Builder().setId(id).setName(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompanyDTO(companyDTO).build();
 		
 		return computerDTO;
 	}
@@ -79,7 +80,7 @@ public class ComputerMapper {
 				comp.setDiscontinued(res.getDate("discontinued").toLocalDate());
 			comp.setCompany(new Company.Builder().setId(res.getInt("company.id")).setName(res.getString("company.name")).build());
 		} catch (SQLException e) {
-			Logging.error(e.getMessage());
+			Logging.error(e.getMessage(), ComputerMapper.class);
 		}
 		return comp;
 	}
