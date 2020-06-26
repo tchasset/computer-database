@@ -6,7 +6,7 @@
 
   <groupId>com.excilys.tchasset</groupId>
   <artifactId>computer-database</artifactId>
-  <version>4.0.2</version>
+  <version>5.0.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
   <name>computer-database Maven Webapp</name>

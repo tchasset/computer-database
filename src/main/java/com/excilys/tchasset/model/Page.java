@@ -62,10 +62,10 @@ public class Page {
 	}
 	
 	public void nextPage() {
-		this.currentPage += this.sizePage;
+		this.currentPage += 1;
 	}
 	
 	public void previousPage() {
-		this.currentPage -= this.sizePage;
+		this.currentPage -= 1;
 	}
 }

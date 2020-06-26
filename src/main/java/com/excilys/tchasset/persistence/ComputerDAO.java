@@ -1,11 +1,9 @@
 package com.excilys.tchasset.persistence;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -13,35 +11,56 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.tchasset.log.Logging;
-import com.excilys.tchasset.mapper.ComputerMapper;
+import com.excilys.tchasset.model.Company;
 import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.model.Page;
 
 @Repository
 public class ComputerDAO {
 
+	private static class ComputerRowMapper implements RowMapper<Computer> {
+		@Override
+		public Computer mapRow(final ResultSet rs, final int rowNum) throws SQLException {
+			Company company = new Company.Builder().setId(rs.getInt("company.id")).setName(rs.getString("company.name")).build();
+			LocalDate intro = null;
+			LocalDate disco = null;
+			if(rs.getDate("introduced")!=null)
+				intro = rs.getDate("introduced").toLocalDate();
+			if(rs.getDate("discontinued")!=null)
+				disco = rs.getDate("discontinued").toLocalDate();
+			return new Computer.Builder()	.setId(rs.getInt("id"))
+											.setName(rs.getString("name"))
+											.setIntroduced(intro)
+											.setDiscontinued(disco)
+											.setCompany(company)
+											.build();
+		}
+	}
+	
 	@Autowired
-	private ComputerMapper computerMapper;
+	private JdbcTemplate jdbcTemplate;
+	private ComputerRowMapper rowMapper = new ComputerRowMapper();
 
-	/*
-	 * @param page 		paginate request if not null
-	 * 
+	/* @param page 		paginate request if not null
 	 * @return			ALL computers with/without pagination
 	 */
 	public List<Computer> getAllComputers(Page page){
 		String query = EnumQuery.SELECTCOMPUTER.toString();
-		if(page!=null)
-			return getComputersPaginate(query, page.getCurrentPage(), page.getSizePage());
+		if(page!=null) {
+			Object[] obj = {(page.getCurrentPage()-1)*page.getSizePage(), page.getSizePage()};
+			return getComputersPaginate(query, obj);
+		}
 		return getComputers(query);
 	}
 
-	/*
-	 * @param page 		paginate request if not null
+	/* @param page 		paginate request if not null
 	 * @param order 	choose order type (ASC or DESC)
-	 * 
 	 * @return			ALL computers alphebetical ordered by name ASC or DESC
 	 */
 	public List<Computer> getComputersOrderByComputer(Page page, String order){
@@ -51,10 +70,8 @@ public class ComputerDAO {
 		return getComputers(page, query);
 	}
 
-	/*
-	 * @param page 		paginate request if not null
-	 * @param order 	choose order type (ASC or DESC)
-	 * 
+	/* @param page 		paginate request if not null
+	 * @param order 	choose order type (ASC or DESC) 
 	 * @return 			ALL computers alphebetical ordered by company name ASC or DESC
 	 */
 	public List<Computer> getComputersOrderByCompany(Page page, String order){
@@ -64,206 +81,124 @@ public class ComputerDAO {
 		return getComputers(page, query);
 	}
 
-	/*
-	 * @param id	searching computer by it
-	 *  
+	/* @param id	searching computer by it 
 	 * @return 		computer with given ID if it exists
 	 */
 	public Optional<Computer> getById(int id) {
-		Optional<Computer> computer = Optional.empty();
 		String query = EnumQuery.SELECTCOMPUTER
 				+ " WHERE computer.id=?;";
-
-		try(Connection conn = Dao.getInstance().getConn();
-			PreparedStatement statementComputer = conn.prepareStatement(query)) {
-
-			statementComputer.setInt(1,id);
-			ResultSet res = statementComputer.executeQuery();
-			while(res.next()) {
-				computer = Optional.of(computerMapper.getComputer(res));
-			}
-		} catch (SQLException e) {
-			Logging.error(e.getMessage(), ComputerDAO.class);
+		try {
+			return Optional.of(jdbcTemplate.queryForObject(query, rowMapper, id));
+		} catch (DataAccessException e) {
+			return Optional.empty();
 		}
-		return computer;
 	}
 
-	/*
-	 * @param page 		paginate request if not null
-	 * @param name		searching computer by it
-	 *  
+	/* @param page 		paginate request if not null
+	 * @param name		searching computer by it  
 	 * @return 			computers with given name (company or computer name)
-	 */
+	 */	
 	public List<Computer> getByAllName(Page page, String name) {
-		List<Computer> computer = new ArrayList<>();
 		String query = EnumQuery.SELECTCOMPUTER
 				+ " WHERE computer.name LIKE ?"
 				+ " OR company.name LIKE ?";
-		if(page!=null)
-		    query+=EnumQuery.LIMIT;
-		try(Connection conn = Dao.getInstance().getConn();
-			PreparedStatement statementComputer = conn.prepareStatement(query)) {
-
-			statementComputer.setString(1,"%"+name+"%");
-			statementComputer.setString(2,"%"+name+"%");
-			if(page!=null) {
-				return getComputersPaginateWithParam(statementComputer,
-						statementComputer.getParameterMetaData().getParameterCount(),
-						page.getCurrentPage(),
-						page.getSizePage());
-			}
-			ResultSet res = statementComputer.executeQuery();
-			while(res.next()) {
-				computer.add(computerMapper.getComputer(res));
-			}
-		} catch (SQLException e) {
-			Logging.error(e.getMessage(), ComputerDAO.class);
-		}
-		return computer;
+		Object[] obj;
+		if(page!=null) {
+			query+=EnumQuery.LIMIT;
+			obj = new Object[] {"%"+name+"%", "%"+name+"%", (page.getCurrentPage()-1)*page.getSizePage(), page.getSizePage()};
+			return getComputersPaginate(query, obj);
+		}   
+		obj = new Object[] {"%"+name+"%", "%"+name+"%"};
+		return getComputersWithParam(query, obj);
 	}
 	
-	/*
-	 * @param page 		paginate request if not null
-	 * @param name		searching computer by it
-	 *  
+	/* @param page 		paginate request if not null
+	 * @param name		searching computer by it  
 	 * @return 			computers with given name
 	 */
 	public List<Computer> getByName(Page page, String name) {
-		List<Computer> computer = new ArrayList<>();
 		String query = EnumQuery.SELECTCOMPUTER
 				+ " WHERE computer.name LIKE ?";
-		if(page!=null)
-		    query+=EnumQuery.LIMIT;
-		try(Connection conn = Dao.getInstance().getConn();
-			PreparedStatement statementComputer = conn.prepareStatement(query)) {
-
-			statementComputer.setString(1,"%"+name+"%");
-			if(page!=null) {
-				return getComputersPaginateWithParam(statementComputer,
-						statementComputer.getParameterMetaData().getParameterCount(),
-						page.getCurrentPage(),
-						page.getSizePage());
-			}
-			ResultSet res = statementComputer.executeQuery();
-			while(res.next()) {
-				computer.add(computerMapper.getComputer(res));
-			}
-		} catch (SQLException e) {
-			Logging.error(e.getMessage(), ComputerDAO.class);
-		}
-		return computer;
+		Object[] obj;
+		if(page!=null) {
+			query+=EnumQuery.LIMIT;
+			obj = new Object[] {"%"+name+"%", (page.getCurrentPage()-1)*page.getSizePage(), page.getSizePage()};
+			return getComputersPaginate(query, obj);
+		} 
+		obj = new Object[] {"%"+name+"%"};
+		return getComputersWithParam(query, obj);
 	}
 
-	/*
-	 * @param page 		paginate request if not null
-	 * @param name		searching computer by it
-	 *  
+	/* @param page 		paginate request if not null
+	 * @param name		searching computer by it  
 	 * @return 			computers with given company name
 	 */
 	public List<Computer> getByCompany(Page page, String name){
-		List<Computer> computers = new ArrayList<Computer>();
 		String query = EnumQuery.SELECTCOMPUTER
 				+ " WHERE company.name=?";
-		if(page!=null)
+		Object[] obj;
+		if(page!=null) {
 			query+=EnumQuery.LIMIT;
-		try(Connection conn = Dao.getInstance().getConn();
-			PreparedStatement statementComputer = conn.prepareStatement(query)) {
-
-			statementComputer.setString(1,name);
-			if(page!=null) {
-				return getComputersPaginateWithParam(statementComputer,
-						statementComputer.getParameterMetaData().getParameterCount(),
-						page.getCurrentPage(),
-						page.getSizePage());
-			}
-			ResultSet res = statementComputer.executeQuery();
-			while(res.next()) {
-				computers.add(computerMapper.getComputer(res));
-			}
-		} catch (SQLException e) {
-			Logging.error(e.getMessage(), ComputerDAO.class);
-		}
-		return computers;
+			obj = new Object[] {"%"+name+"%", (page.getCurrentPage()-1)*page.getSizePage(), page.getSizePage()};
+			return getComputersPaginate(query, obj);
+		} 
+		obj = new Object[] {"%"+name+"%"};
+		return getComputersWithParam(query, obj);
 	}
 
-	/*
-	 * Check if the request should be paginate or not
+	/* Check if the request should be paginate or not
 	 * 
 	 * @param page 		paginate request if not null
 	 * @param query		query of the desired SQL request 
 	 */
 	private List<Computer> getComputers(Page page, String query){
-		if(page!=null)
-			return getComputersPaginate(query, page.getCurrentPage(), page.getSizePage());
+		if(page!=null) {
+			Object[] obj = {(page.getCurrentPage()-1)*page.getSizePage(), page.getSizePage()};
+			return getComputersPaginate(query, obj);
+		}
 		return getComputers(query);
 	}
 
-	/*
-	 * @param query		query of the desired SQL request 
-	 *  
+	/* @param query		query of the desired SQL request  
 	 * @return 			computers for the given query
 	 */
 	private List<Computer> getComputers(String query) {
-		List<Computer> computers = new ArrayList<>();
-		try(Connection conn = Dao.getInstance().getConn();
-			Statement statement = conn.createStatement() ) {
-
-			ResultSet res = statement.executeQuery(query);
-			while(res.next()) {
-				computers.add(computerMapper.getComputer(res));
-			}
-		} catch (SQLException e) {
-			Logging.error(e.getMessage(), ComputerDAO.class);
+		try {
+			return jdbcTemplate.query(query, rowMapper);
+		} catch (DataAccessException e) {
+		    Logging.error(e.getMessage(), ComputerDAO.class);
+		    return new ArrayList<>();
 		}
-		return computers;
 	}
-
-	/*
-	 * @param query			query of the desired SQL request 
-	 * @param current		index of the first computer of the page
-	 * @param sizeByPage	size of computers to take by page
-	 * 
-	 * @return 				computers for the given query (paginated)
-	 */
-	private List<Computer> getComputersPaginate(String query, int current, int sizeByPage) {
-		List<Computer> computers = new ArrayList<>();
-		query += EnumQuery.LIMIT;
-		try(Connection conn = Dao.getInstance().getConn();
-			PreparedStatement statementComputer = conn.prepareStatement(query)) {
-
-			statementComputer.setInt(1,(current-1)*sizeByPage);
-			statementComputer.setInt(2,sizeByPage);
-			ResultSet res = statementComputer.executeQuery();
-			while(res.next()) {
-				computers.add(computerMapper.getComputer(res));
-			}
-		} catch (SQLException e) {
-			Logging.error(e.getMessage(), ComputerDAO.class);
-		}
-		return computers;
-	}
-
-	/*
-	 * @param statement		statement with parameters already prepared
-	 * @param nbParam		number of desired parameters  
-	 * @param current		index of the first computer of the page
-	 * @param sizeByPage	size of computers to take by page
-	 * 
-	 * @return 				computers for the given statement (paginated)
-	 */
-    private List<Computer> getComputersPaginateWithParam(PreparedStatement statement, int nbParam, int current, int sizeByPage) throws SQLException {
-		List<Computer> computers = new ArrayList<>();
-		statement.setInt(nbParam-1,(current-1)*sizeByPage);
-		statement.setInt(nbParam,sizeByPage);
-		ResultSet res = statement.executeQuery();
-		while(res.next()) {
-			computers.add(computerMapper.getComputer(res));
-		}
-        return computers;
-    }
 	
-    /*
-     * Add the computer to the Database
+	/* @param query		query of the desired SQL request 
+	 * @param obj		list of parameters for the query
+	 * @return 			computers for the given query
+	 */
+	private List<Computer> getComputersWithParam(String query, Object[] obj) {
+		try {
+			return jdbcTemplate.query(query, obj, rowMapper);
+		} catch (DataAccessException e) {
+		    Logging.error(e.getMessage(), ComputerDAO.class);
+		    return new ArrayList<>();
+		}
+	}
+
+	/* @param query		query of the desired SQL request 
+	 * @param obj		list of parameters for the query
+	 * @return 			computers for the given query (paginated)
+	 */
+	private List<Computer> getComputersPaginate(String query, Object[] obj) {
+		query += EnumQuery.LIMIT;
+		try {
+			return jdbcTemplate.query(query, obj, rowMapper);
+		} catch (DataAccessException e) {
+		    Logging.error(e.getMessage(), ComputerDAO.class);
+		    return new ArrayList<>();
+		}
+	}
+	
+    /* Add the computer to the Database
      * 
      * @param computer		computer to add
      */
@@ -272,8 +207,7 @@ public class ComputerDAO {
 		manageComputer(computer, query);
 	}
 	
-	/*
-	 * Update the computer 
+	/* Update the computer 
 	 * 
 	 * @param computer		computer to update
 	 */
@@ -282,86 +216,58 @@ public class ComputerDAO {
 		manageComputer(computer, query);
 	}
 	
-	/*
-	 * Delete the computer with given ID
+	/* Delete the computer with given ID
 	 * 
 	 * @param id 			id of the computer to delete
 	 */
 	public void deleteComputer(int id) {
 		String query = EnumQuery.DELETECOMPUTER.toString();
-		try(Connection conn = Dao.getInstance().getConn();
-			PreparedStatement statementComputer = conn.prepareStatement(query) ) {
-			
-			statementComputer.setInt(1,id);
-			statementComputer.executeUpdate();
-		} catch (SQLException e) {
+		try {
+			jdbcTemplate.update(query, id);
+		} catch (DataAccessException e) {
 			Logging.error(e.getMessage(), ComputerDAO.class);
 		}
 	}
 	
-	/*
-	 * @return	Number of computers in the database
+	/* @return	Number of computers in the database
 	 */
 	public int getNbComputers() {
-		int nb=0;
-		String query = EnumQuery.COUNTCOMPUTER.toString(); 
-		try(Connection conn = Dao.getInstance().getConn();
-			Statement statement = conn.createStatement() ) {
-
-			ResultSet res = statement.executeQuery(query);
-			while(res.next()) {
-				nb=res.getInt(1);
-			}
-		} catch (SQLException e) {
-			Logging.error(e.getMessage(), ComputerDAO.class);
-		}
-		return nb;
+		String query = EnumQuery.COUNTCOMPUTER.toString();
+		return jdbcTemplate.queryForObject(query, Integer.class);
 	}
 	
-	/*
-	 * Manage cases where fields are NULL
+
+	/* Manage paramater for INSERT/UPDATE queries
 	 */
 	private void manageComputer(Computer computer, String query) {
 		if(!computer.getName().isEmpty()) {
-			try(Connection conn = Dao.getInstance().getConn();
-				PreparedStatement statementComputer = conn.prepareStatement(query)) {
-				
-				statementComputer.setString(1,computer.getName());
-				manageDate(statementComputer, computer);
-				manageCompany(statementComputer, computer);
-				statementComputer.setInt(5,computer.getId());
-				statementComputer.executeUpdate();
-			} catch (SQLException e) {
-				Logging.error(e.getMessage(), ComputerDAO.class);
+			Object[] obj = new Object[5];
+			obj[0] = computer.getName();
+			manageNull(obj,computer);
+			obj[4] = computer.getId();
+			try {
+				jdbcTemplate.update(query, obj);
+			} catch (DataAccessException e) {
+				e.getMessage();
 			}
 		}
 	}
-	
-	/*
-	 * Check if dates are NULL to execute the good function
+
+	/* Manage cases where fields are NULL
 	 */
-	private void manageDate(PreparedStatement statementComputer, Computer computer) throws SQLException {
+	private void manageNull(Object[] obj, Computer computer) {
+		obj[1]=null;
 		if (computer.getIntroduced()!=null) {
 			Timestamp intro = Timestamp.valueOf(LocalDateTime.of(computer.getIntroduced(),LocalTime.of(12, 0)));
-			statementComputer.setTimestamp(2, intro);
+			obj[1] = intro;
 		}
-		else
-			statementComputer.setNull(2, java.sql.Types.TIMESTAMP);
-		if (computer.getDiscontinued()!=null) {	
+		obj[2]=null;
+		if (computer.getDiscontinued()!=null) {
 			Timestamp disco = Timestamp.valueOf(LocalDateTime.of(computer.getDiscontinued(),LocalTime.of(12, 0)));
-			statementComputer.setTimestamp(3, disco);
+			obj[2] = disco;
 		}
-		else
-			statementComputer.setNull(3, java.sql.Types.TIMESTAMP);
-	}
-	
-	/*
-	 * Check if company is NULL to execute the good function
-	 */
-	private void manageCompany(PreparedStatement statementComputer, Computer computer) throws SQLException {
-		if(computer.getCompany()!=null)
-			statementComputer.setInt(4,computer.getCompany().getId());
-		else
-			statementComputer.setNull(4, java.sql.Types.BIGINT);
+		obj[3]=null;
+		if (computer.getCompany()!=null)
+			obj[3] = computer.getCompany().getId();
 	}
 }

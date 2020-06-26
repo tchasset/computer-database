@@ -193,12 +193,12 @@ public class Client {
 	
 	private void paginateComputer(Scanner sc) {
 		int continu=1, max=computerService.getNbComputers();
-		Page page = new Page.Builder().setCurrentPage(0).setSizePage(20).build();
+		Page page = new Page.Builder().setCurrentPage(1).setSizePage(20).build();
 		page.setNbPages(max);
 				
 		while(continu==1 || continu==2) {
 			System.out.println(computerService.getAllComputers(page));
-			if(page.getCurrentPage()==0)
+			if(page.getCurrentPage()==1)
 				System.out.print("Page suivante (entrez 1), arreter (entrez 0)");
 			else if(page.getCurrentPage()<page.getNbPages())
 				System.out.print("Page suivante (entrez 1), page précédente (entrez 2), arreter (entrez 0) ");

@@ -55,11 +55,10 @@ public class CompanyMapper {
 		return company;
 	}
 	
-	/*
-	 * @param res	result of a SQL request
-	 * 
+	/* @param res	result of a SQL request 
 	 * @return 		The company found by the request
 	 */
+	@Deprecated
 	public Company getCompany(ResultSet res) {
 		Company comp=new Company();
 		try {
