@@ -1,14 +1,14 @@
 package com.excilys.tchasset.servlet;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.tchasset.dto.CompanyDTO;
 import com.excilys.tchasset.dto.ComputerDTO;
@@ -18,35 +18,43 @@ import com.excilys.tchasset.model.Company;
 import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.service.CompanyService;
 import com.excilys.tchasset.service.ComputerService;
-import com.excilys.tchasset.spring.SpringConfig;
 import com.excilys.tchasset.validator.ComputerValidation;
 
-@WebServlet("/addComputer")
-public class AddComputer extends HttpServlet{
+@Controller
+@RequestMapping("/addComputer")
+public class AddComputer {
 
-	private static final long serialVersionUID = 1L;
-	private static CompanyMapper companyMapper = SpringConfig.getContext().getBean(CompanyMapper.class);
-	private static ComputerMapper computerMapper = SpringConfig.getContext().getBean(ComputerMapper.class);
-	private static ComputerService computerService = SpringConfig.getContext().getBean(ComputerService.class);
-	private static CompanyService companyService = SpringConfig.getContext().getBean(CompanyService.class);
+	@Autowired
+	private CompanyMapper companyMapper;
+	@Autowired
+	private ComputerMapper computerMapper;
+	@Autowired
+	private ComputerService computerService;
+	@Autowired
+	private CompanyService companyService;
 
-	public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-
-		List<Company> companies = companyService.getCompanies();
+	@GetMapping
+	public ModelAndView addComputer() {
+		ModelAndView view = new ModelAndView("addComputer");
 		
-		request.setAttribute("companyName", companies);
-			
-		getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request,response);
+		view.addObject("companyName", companyService.getCompanies());
+		
+		return view;
 	}
 
-	public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+	@PostMapping
+	public ModelAndView addComputer(@RequestParam (name = "computerName", required = true) String computerName,
+									@RequestParam (name = "introduced", required = false) String intro,
+									@RequestParam (name = "discontinued", required = false) String disco,
+									@RequestParam (name = "companyId", required = false) String compId) {
+		ModelAndView view = new ModelAndView();
 		
 		Computer computer;
 		
-		String name 		= request.getParameter("computerName");
-		String introduced 	= request.getParameter("introduced");
-		String discontinued = request.getParameter("discontinued");
-		String companyId	= request.getParameter("companyId");
+		String name 		= computerName;
+		String introduced 	= intro;
+		String discontinued = disco;
+		String companyId	= compId;
 
 		Optional<Company> company = companyService.getById(Integer.valueOf(companyId));
 		CompanyDTO companyDTO = company.isPresent() ? companyMapper.toDTO(company.get()) : null;
@@ -61,11 +69,12 @@ public class AddComputer extends HttpServlet{
 			computer = computerMapper.fromDTO(computerDTO);
 			
 			computerService.addComputer(computer);
-			response.sendRedirect("dashboard?addSuccess=1");
+			view.setViewName("redirect:dashboard?addSuccess=1");
 		}
 		else {
-			request.setAttribute("error", ComputerValidation.messageError);
-			doGet(request, response);	
+			view.addObject("error", ComputerValidation.messageError);	
+			view.setViewName("redirect:addComputer");
 		}
+		return view;
 	}
 }

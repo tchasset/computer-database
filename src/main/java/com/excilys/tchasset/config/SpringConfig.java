@@ -1,25 +1,16 @@
-package com.excilys.tchasset.spring;
+package com.excilys.tchasset.config;
 
 import javax.sql.DataSource;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
-
 import com.excilys.tchasset.persistence.HikariCP;
 
 @Configuration
 @ComponentScan(basePackages = "com.excilys.tchasset")
-public class SpringConfig{
-	
-	private static ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
-
-	public static ApplicationContext getContext() {
-		return context;
-	}
+public class SpringConfig {
 	
 	@Bean
 	public DataSource dataSource() {

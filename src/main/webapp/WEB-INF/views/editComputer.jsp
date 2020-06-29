@@ -5,13 +5,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="css/main.css" rel="stylesheet" media="screen">
-<script type="text/javascript" src="js/validate.js"></script>
+	<title>Computer Database</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Bootstrap -->
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="css/font-awesome.css" rel="stylesheet" media="screen">
+	<link href="css/main.css" rel="stylesheet" media="screen">
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/validate.js"></script>
 </head>
 
 <body>
@@ -28,7 +29,7 @@
                         id:${computer.id}
                     </div>
                     <h1>Edit Computer</h1>
-					
+					<div class="ici"></div>
 					<c:if test="${error!=null}">
 						<div class="alert alert-danger" >
 						<c:forEach items="${ error }" var="err">
@@ -37,7 +38,7 @@
 						</div>
 					</c:if>
 					
-                    <form action="editComputer?id=${computer.id}" method="POST" onsubmit="return valider()">
+                    <form action="editComputer?id=${computer.id}" method="POST" name="form" onsubmit="return valider()">
                         <input type="hidden" value="${computer.id}" id="id" name="id"/>
                         <fieldset>
                             <div class="form-group">

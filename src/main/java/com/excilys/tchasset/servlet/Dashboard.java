@@ -1,51 +1,54 @@
 package com.excilys.tchasset.servlet;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.model.Page;
 import com.excilys.tchasset.service.ComputerService;
-import com.excilys.tchasset.spring.SpringConfig;
 
-@WebServlet("/dashboard")
-public class Dashboard extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
-	private static Page page = new Page();
-	private static ComputerService computerService = SpringConfig.getContext().getBean(ComputerService.class);
+@Controller
+@RequestMapping("/dashboard")
+public class Dashboard {
 
-	public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+	@Autowired
+	private Page page;
+	@Autowired
+	private ComputerService computerService;
+	
+	@GetMapping
+	public ModelAndView dashboard(	@RequestParam (name="addSuccess", required = false) String success,
+									@RequestParam (name="editSuccess", required = false) String edit,
+									@RequestParam (name="orderByName", required = false) String orderComputer,
+									@RequestParam (name="orderByCompany", required = false) String orderCompany,
+									@RequestParam (name="size", required = false, defaultValue = "10") String size,
+									@RequestParam (name="page", required = false, defaultValue = "1") String currentPage,
+									@RequestParam (name="search", required = false, defaultValue = "") String search) {
 
+		ModelAndView view = new ModelAndView("dashboard");
+		
+		view.addObject("addSuccess", success);
+		view.addObject("editSuccess", edit);
+		view.addObject("orderByName", orderComputer);
+		view.addObject("orderByCompany", orderCompany);
+		
+		List<Computer> computerList = new ArrayList<>();
 		int nb=0;
-		request.setAttribute("addSuccess", request.getParameter("addSuccess"));
-		request.setAttribute("editSuccess", request.getParameter("editSuccess"));
-
-		String orderComputer = request.getParameter("orderByName");
-		String orderCompany  = request.getParameter("orderByCompany");
-		request.setAttribute("orderByName", orderComputer);
-		request.setAttribute("orderByCompany", orderCompany);
 		
-		List<Computer> computerList = new ArrayList<Computer>();
+		page.setSizePage(Integer.valueOf(size));
+		view.addObject("size", page.getSizePage());
+		page.setCurrentPage(Integer.valueOf(currentPage));
+		view.addObject("currentPage", page.getCurrentPage());
 		
-		//Gère le nombre de pc afficher sur la page
-		if(request.getParameter("size")!=null)
-			page.setSizePage(Integer.valueOf(request.getParameter("size")));
-		
-		//Gère le changement de page (affiche la suite des pc)
-		if(request.getParameter("page")!=null)
-			page.setCurrentPage(Integer.valueOf(request.getParameter("page")));
-			
-		request.setAttribute("currentPage", page.getCurrentPage());
-		
-		String search = request.getParameter("search")==null ? "":request.getParameter("search");
-		request.setAttribute("search", search);
+		view.addObject("search", search);
 		
 		if(!search.isEmpty()) {
 			nb = computerService.getByAllName(null,search).size();
@@ -63,20 +66,20 @@ public class Dashboard extends HttpServlet {
 		}
 		
 		page.setNbPages(nb);
-		request.setAttribute("maxPage", page.getNbPages());				
-		request.setAttribute("nbComputer", nb);
-		request.setAttribute("computerList", computerList);
-			
-		getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request,response);
+		view.addObject("maxPage", page.getNbPages());
+		view.addObject("nbComputer", nb);
+		view.addObject("computerList", computerList);
+		
+		return view;
 	}
 	
-	public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-
-		String[] computersId = request.getParameter("selection").split(",");
+	@PostMapping
+	public ModelAndView dashboard(@RequestParam (name="selection", required = false) String select) {
+		ModelAndView view = new ModelAndView("redirect:dashboard");
+		String[] computersId = select.split(",");
 		
 		for(String s : computersId)
 			computerService.deleteComputer(Integer.parseInt(s));
-		
-		doGet(request, response);
+		return view;
 	}
 }

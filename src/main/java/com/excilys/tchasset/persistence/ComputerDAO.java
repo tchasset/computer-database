@@ -104,7 +104,6 @@ public class ComputerDAO {
 				+ " OR company.name LIKE ?";
 		Object[] obj;
 		if(page!=null) {
-			query+=EnumQuery.LIMIT;
 			obj = new Object[] {"%"+name+"%", "%"+name+"%", (page.getCurrentPage()-1)*page.getSizePage(), page.getSizePage()};
 			return getComputersPaginate(query, obj);
 		}   
@@ -121,7 +120,6 @@ public class ComputerDAO {
 				+ " WHERE computer.name LIKE ?";
 		Object[] obj;
 		if(page!=null) {
-			query+=EnumQuery.LIMIT;
 			obj = new Object[] {"%"+name+"%", (page.getCurrentPage()-1)*page.getSizePage(), page.getSizePage()};
 			return getComputersPaginate(query, obj);
 		} 
@@ -138,7 +136,6 @@ public class ComputerDAO {
 				+ " WHERE company.name=?";
 		Object[] obj;
 		if(page!=null) {
-			query+=EnumQuery.LIMIT;
 			obj = new Object[] {"%"+name+"%", (page.getCurrentPage()-1)*page.getSizePage(), page.getSizePage()};
 			return getComputersPaginate(query, obj);
 		} 
