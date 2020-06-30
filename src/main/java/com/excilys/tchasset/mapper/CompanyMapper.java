@@ -4,13 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.excilys.tchasset.dto.CompanyDTO;
 import com.excilys.tchasset.log.Logging;
 import com.excilys.tchasset.model.Company;
 
-@Component
 public class CompanyMapper {
 	
 	/*
@@ -18,7 +15,7 @@ public class CompanyMapper {
 	 * 
 	 * @return 			The company bean to a company DTO
 	 */
-	public CompanyDTO toDTO(Company company) {
+	public static CompanyDTO toDTO(Company company) {
 		CompanyDTO companyDTO=new CompanyDTO();
 		
 		if(company!=null) {
@@ -36,7 +33,7 @@ public class CompanyMapper {
 	 * 
 	 * @return 				The company bean from a company DTO
 	 */
-	public Company fromDTO(CompanyDTO companyDTO) {
+	public static Company fromDTO(CompanyDTO companyDTO) {
 		Company company = null;
 		
 		if(companyDTO!=null) {

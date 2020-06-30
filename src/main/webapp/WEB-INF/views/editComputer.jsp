@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-    
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%> 
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <!DOCTYPE html>
 <html>
@@ -18,7 +18,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
+            <a class="navbar-brand" href="dashboard"> <spring:message code="label.title"/> </a>
         </div>
     </header>
     <section id="main">
@@ -28,7 +28,7 @@
                     <div class="label label-default pull-right">
                         id:${computer.id}
                     </div>
-                    <h1>Edit Computer</h1>
+                    <h1><spring:message code="label.editComputer"/></h1>
 					<div class="ici"></div>
 					<c:if test="${error!=null}">
 						<div class="alert alert-danger" >
@@ -42,19 +42,19 @@
                         <input type="hidden" value="${computer.id}" id="id" name="id"/>
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" name="computerName" id="computerName" placeholder="Computer name" value="${computer.getName()}">
+                                <label for="computerName"><spring:message code="label.computerName"/></label>
+                                <input type="text" class="form-control" name="computerName" id="computerName" placeholder="<spring:message code="label.computerName"/>" value="${computer.getName()}">
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date</label>
+                                <label for="introduced"><spring:message code="label.introduced"/></label>
                                 <input type="date" class="form-control" name="introduced" id="introduced" placeholder="Introduced date" value="${computer.getIntroduced()}">
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date</label>
+                                <label for="discontinued"><spring:message code="label.discontinued"/></label>
                                 <input type="date" class="form-control" name="discontinued" id="discontinued" placeholder="Discontinued date" value="${computer.getDiscontinued()}">
                             </div>  
                             <div class="form-group">
-                                <label for="companyId">Company</label>
+                                <label for="companyId"><spring:message code="label.company"/></label>
                                 <select class="form-control" id="companyId" name="companyId" >
                                     <option value="${computer.getCompanyDTO().getId() }">${computer.getCompanyDTO().getName() }</option>
                                   	<c:forEach items="${ companyName }" var="company">
@@ -65,14 +65,36 @@
                             </div>          
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Edit" class="btn btn-primary">
+                            <input type="submit" value="<spring:message code="label.edit"/>" class="btn btn-primary">
                             or
-                            <a href="dashboard" class="btn btn-default">Cancel</a>
+                            <a href="dashboard" class="btn btn-default"><spring:message code="label.cancel"/></a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </section>
+    <footer class="navbar-fixed-bottom">
+    	<div class="container text-center">
+		    <div class="btn-group btn-group-sm pull-right" role="group" >
+	            <select id="locales">
+				    <option><spring:message code="lang.change"/></option>
+				    <option value="en"> <spring:message code="lang.en"/></option>
+				    <option value="fr"> <spring:message code="lang.fr"/></option>
+				</select>
+	        </div>
+		</div>
+    </footer>
+    
+    <script type="text/javascript">
+	$(document).ready(function() {
+	    $("#locales").change(function () {
+	        var selectedOption = $('#locales').val();
+	        if (selectedOption != ''){
+	            window.location.replace('?lang=' + selectedOption);
+	        }
+	    });
+	});
+	</script>
 </body>
 </html>

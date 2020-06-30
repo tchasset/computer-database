@@ -5,34 +5,27 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.excilys.tchasset.dto.CompanyDTO;
 import com.excilys.tchasset.dto.ComputerDTO;
 import com.excilys.tchasset.log.Logging;
 import com.excilys.tchasset.model.Company;
 import com.excilys.tchasset.model.Computer;
 
-@Component
 public class ComputerMapper {
-	
-	@Autowired
-	private CompanyMapper companyMapper;
 	
 	/*
 	 * @param computerDTO	DTO to convert into bean
 	 * 
 	 * @return 				The computer bean from a computer DTO
 	 */
-	public Computer fromDTO(ComputerDTO computerDTO) {
+	public static Computer fromDTO(ComputerDTO computerDTO) {
 		Computer computer;
 		
 		int id = Integer.valueOf(computerDTO.getId());
 		String name = computerDTO.getName();
 		LocalDate introduced   = (computerDTO.getIntroduced() == "" ? null : LocalDate.parse(computerDTO.getIntroduced()));
 		LocalDate discontinued = (computerDTO.getDiscontinued() == "" ? null : LocalDate.parse(computerDTO.getDiscontinued()));
-		Company company = companyMapper.fromDTO(computerDTO.getCompanyDTO());
+		Company company = CompanyMapper.fromDTO(computerDTO.getCompanyDTO());
 		
 		computer = new Computer.Builder().setId(id).setName(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(company).build();
 		
@@ -44,14 +37,14 @@ public class ComputerMapper {
 	 * 
 	 * @return 				The computer DTO from a computer bean
 	 */
-	public ComputerDTO toDTO(Computer computer) {
+	public static ComputerDTO toDTO(Computer computer) {
 		ComputerDTO computerDTO;
 		
 		String id = String.valueOf(computer.getId());
 		String name = computer.getName();
 		String introduced = String.valueOf(computer.getIntroduced());
 		String discontinued = String.valueOf(computer.getDiscontinued());
-		CompanyDTO companyDTO = companyMapper.toDTO(computer.getCompany());
+		CompanyDTO companyDTO = CompanyMapper.toDTO(computer.getCompany());
 		
 		computerDTO = new ComputerDTO.Builder().setId(id).setName(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompanyDTO(companyDTO).build();
 		

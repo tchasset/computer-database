@@ -1,4 +1,4 @@
-package com.excilys.tchasset.servlet;
+package com.excilys.tchasset.controller;
 
 import java.util.ArrayList;
 import java.util.List;
