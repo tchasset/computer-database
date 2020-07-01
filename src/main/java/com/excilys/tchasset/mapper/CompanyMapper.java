@@ -21,8 +21,8 @@ public class CompanyMapper {
 		if(company!=null) {
 			String id = String.valueOf(company.getId());
 			String name = company.getName();
-			companyDTO = new CompanyDTO.Builder()	.setId(id)
-													.setName(name).build();
+			companyDTO = new CompanyDTO.Builder()	.setCompanyId(id)
+													.setCompanyName(name).build();
 		}
 		
 		return companyDTO;
@@ -37,8 +37,8 @@ public class CompanyMapper {
 		Company company = null;
 		
 		if(companyDTO!=null) {
-			int id = Integer.valueOf(companyDTO.getId());
-			String name = companyDTO.getName();
+			int id = Integer.valueOf(companyDTO.getCompanyId());
+			String name = companyDTO.getCompanyName();
 			company = new Company.Builder()	.setId(id)
 											.setName(name).build();
 		}

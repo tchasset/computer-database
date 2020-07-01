@@ -37,7 +37,7 @@ public class ComputerValidation {
 	
 	private static void checkName(ComputerDTO computer) {
 		try {
-			if (computer.getName().isEmpty()) 
+			if (computer.getComputerName().isEmpty()) 
 				  throw new Exception("Computer name can't be empty");
 		} catch(NullPointerException e) {
 			Logging.error("Computer name can't be NULL", ComputerValidation.class);
@@ -71,7 +71,7 @@ public class ComputerValidation {
 	private static void checkCompanyDTO(ComputerDTO computer) {
 		try {
 			if(computer.getCompanyDTO()!=null) {
-				if(computer.getCompanyDTO().getId().isEmpty() || computer.getCompanyDTO().getName().isEmpty()) {
+				if(computer.getCompanyDTO().getCompanyId().isEmpty() || computer.getCompanyDTO().getCompanyName().isEmpty()) {
 					throw new Exception("Company id and name can't be empty if a company is declared for a computer");
 				}
 			}

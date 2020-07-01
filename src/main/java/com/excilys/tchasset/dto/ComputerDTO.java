@@ -1,19 +1,16 @@
 package com.excilys.tchasset.dto;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class ComputerDTO {
 
 	private String 	id="0",
-				   	name="",
+				   	computerName="",
 				   	introduced="",
 				   	discontinued="";
 	private CompanyDTO companyDTO;
 	
 	public static class Builder {
 		private String 	id="0",
-						name="",
+						computerName="",
 						introduced="",
 						discontinued="";
 		private CompanyDTO companyDTO;
@@ -23,8 +20,8 @@ public class ComputerDTO {
 			return this;
 		}
 		
-		public Builder setName(String name) {
-			this.name = name;
+		public Builder setComputerName(String computerName) {
+			this.computerName = computerName;
 			return this;
 		}
 		
@@ -52,18 +49,18 @@ public class ComputerDTO {
 	
 	public ComputerDTO(Builder builder) {
 		this.setId(builder.id);
-		this.name = builder.name;
+		this.computerName = builder.computerName;
 		this.introduced = builder.introduced;
 		this.discontinued = builder.discontinued;
 		this.companyDTO = builder.companyDTO;
 	}
 
-	public String getName() {
-		return name;
+	public String getComputerName() {
+		return computerName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setComputerName(String computerName) {
+		this.computerName = computerName;
 	}
 
 	public String getIntroduced() {

@@ -3,9 +3,6 @@ package com.excilys.tchasset.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Computer {
 	
 	private int id;

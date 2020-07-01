@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.excilys.tchasset.dto.PaginationDTO;
 import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.model.Page;
 import com.excilys.tchasset.service.ComputerService;
@@ -19,48 +20,45 @@ import com.excilys.tchasset.service.ComputerService;
 @RequestMapping("/dashboard")
 public class Dashboard {
 
-	@Autowired
-	private Page page;
-	@Autowired
 	private ComputerService computerService;
+	private Page page;
 	
+	@Autowired
+	public Dashboard(ComputerService computerService, Page page) {
+		this.computerService = computerService;
+		this.page = page;
+	}
+
 	@GetMapping
-	public ModelAndView dashboard(	@RequestParam (name="addSuccess", required = false) String success,
-									@RequestParam (name="editSuccess", required = false) String edit,
-									@RequestParam (name="orderByName", required = false) String orderComputer,
-									@RequestParam (name="orderByCompany", required = false) String orderCompany,
-									@RequestParam (name="size", required = false, defaultValue = "10") String size,
-									@RequestParam (name="page", required = false, defaultValue = "1") String currentPage,
-									@RequestParam (name="search", required = false, defaultValue = "") String search) {
+	public ModelAndView dashboard(PaginationDTO paginationDTO) {
 
 		ModelAndView view = new ModelAndView("dashboard");
 		
-		view.addObject("addSuccess", success);
-		view.addObject("editSuccess", edit);
-		view.addObject("orderByName", orderComputer);
-		view.addObject("orderByCompany", orderCompany);
+		page.setSize(Integer.valueOf(paginationDTO.getSize()));
+		page.setCurrentPage(Integer.valueOf(paginationDTO.getCurrentPage()));
+		
+		view.addObject("addSuccess", paginationDTO.getAddSuccess());
+		view.addObject("editSuccess", paginationDTO.getEditSuccess());
+		view.addObject("orderByName", paginationDTO.getOrderByName());
+		view.addObject("orderByCompany", paginationDTO.getOrderByCompany());
+		view.addObject("size", page.getSize());
+		view.addObject("currentPage", page.getCurrentPage());
+		view.addObject("search", paginationDTO.getSearch());
 		
 		List<Computer> computerList = new ArrayList<>();
 		int nb=0;
 		
-		page.setSizePage(Integer.valueOf(size));
-		view.addObject("size", page.getSizePage());
-		page.setCurrentPage(Integer.valueOf(currentPage));
-		view.addObject("currentPage", page.getCurrentPage());
-		
-		view.addObject("search", search);
-		
-		if(!search.isEmpty()) {
-			nb = computerService.getByAllName(null,search).size();
+		if(!paginationDTO.getSearch().isEmpty()) {
+			nb = computerService.getByAllName(null,paginationDTO.getSearch()).size();
 			
-			computerList.addAll(computerService.getByAllName(page,search));
+			computerList.addAll(computerService.getByAllName(page,paginationDTO.getSearch()));
 		}
 		else {
 			nb = computerService.getNbComputers();
-			if(orderComputer!=null && (orderComputer.equals("ASC") || orderComputer.equals("DESC")))
-				computerList.addAll(computerService.getComputersOrderByComputer(page, orderComputer));
-			else if(orderCompany!=null && (orderCompany.equals("ASC") || orderCompany.equals("DESC")))
-				computerList.addAll(computerService.getComputersOrderByCompany(page, orderCompany));
+			if(paginationDTO.getOrderByName()!=null && (paginationDTO.getOrderByName().equals("ASC") || paginationDTO.getOrderByName().equals("DESC")))
+				computerList.addAll(computerService.getComputersOrderByComputer(page, paginationDTO.getOrderByName()));
+			else if(paginationDTO.getOrderByCompany()!=null && (paginationDTO.getOrderByCompany().equals("ASC") || paginationDTO.getOrderByCompany().equals("DESC")))
+				computerList.addAll(computerService.getComputersOrderByCompany(page, paginationDTO.getOrderByCompany()));
 			else
 				computerList.addAll(computerService.getAllComputers(page));
 		}

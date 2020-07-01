@@ -39,11 +39,10 @@
 					</c:if>
 					
                     <form action="editComputer?id=${computer.id}" method="POST" name="form" onsubmit="return valider()">
-                        <input type="hidden" value="${computer.id}" id="id" name="id"/>
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName"><spring:message code="label.computerName"/></label>
-                                <input type="text" class="form-control" name="computerName" id="computerName" placeholder="<spring:message code="label.computerName"/>" value="${computer.getName()}">
+                                <input type="text" class="form-control" name="computerName" id="computerName" placeholder="<spring:message code="label.computerName"/>" value="${computer.getComputerName()}">
                             </div>
                             <div class="form-group">
                                 <label for="introduced"><spring:message code="label.introduced"/></label>
@@ -56,7 +55,7 @@
                             <div class="form-group">
                                 <label for="companyId"><spring:message code="label.company"/></label>
                                 <select class="form-control" id="companyId" name="companyId" >
-                                    <option value="${computer.getCompanyDTO().getId() }">${computer.getCompanyDTO().getName() }</option>
+                                    <option value="${computer.getCompanyDTO().getCompanyId() }">${computer.getCompanyDTO().getCompanyName() }</option>
                                   	<c:forEach items="${ companyName }" var="company">
 										<option value="${ company.getId() }">
 											<c:out value="${ company.getName() }" /> </option>

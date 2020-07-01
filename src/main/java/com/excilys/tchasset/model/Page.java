@@ -4,21 +4,22 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Page {
-	private int currentPage;
-	private int sizePage;
+	
+	private int currentPage=1;
+	private int size=10;
 	private int nbPages;
 	
 	public static class Builder{
 		private int currentPage;
-		private int sizePage;
+		private int size;
 		
 		public Builder setCurrentPage(int currentPage) {
 			this.currentPage=currentPage;
 			return this;
 		}
 		
-		public Builder setSizePage(int sizePage) {
-			this.sizePage=sizePage;
+		public Builder setSize(int size) {
+			this.size=size;
 			return this;
 		}
 		
@@ -29,12 +30,12 @@ public class Page {
 	
 	public Page() {
 		this.currentPage = 1;
-		this.sizePage = 10;
+		this.size = 10;
 	}
 	
 	private Page(Builder builder) {
 		this.currentPage = builder.currentPage;
-		this.sizePage = builder.sizePage;
+		this.size = builder.size;
 	}
 
 	public int getCurrentPage() {
@@ -45,16 +46,16 @@ public class Page {
 		this.currentPage = currentPage;
 	}
 
-	public int getSizePage() {
-		return sizePage;
+	public int getSize() {
+		return size;
 	}
 
-	public void setSizePage(int sizePage) {
-		this.sizePage = sizePage;
+	public void setSize(int size) {
+		this.size = size;
 	}
 	
 	public void setNbPages(int nb) {
-		this.nbPages = (int) Math.ceil((double) nb/(double) this.sizePage);
+		this.nbPages = (int) Math.ceil((double) nb/(double) this.size);
 	}
 
 	public int getNbPages() {

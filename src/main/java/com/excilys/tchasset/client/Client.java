@@ -193,7 +193,7 @@ public class Client {
 	
 	private void paginateComputer(Scanner sc) {
 		int continu=1, max=computerService.getNbComputers();
-		Page page = new Page.Builder().setCurrentPage(1).setSizePage(20).build();
+		Page page = new Page.Builder().setCurrentPage(1).setSize(20).build();
 		page.setNbPages(max);
 				
 		while(continu==1 || continu==2) {

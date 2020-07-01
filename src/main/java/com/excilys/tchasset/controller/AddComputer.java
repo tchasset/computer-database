@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.tchasset.dto.CompanyDTO;
@@ -24,10 +23,14 @@ import com.excilys.tchasset.validator.ComputerValidation;
 @RequestMapping("/addComputer")
 public class AddComputer {
 
-	@Autowired
 	private ComputerService computerService;
-	@Autowired
 	private CompanyService companyService;
+
+	@Autowired
+	public AddComputer(ComputerService computerService, CompanyService companyService) {
+		this.computerService = computerService;
+		this.companyService = companyService;
+	}
 
 	@GetMapping
 	public ModelAndView addComputer() {
@@ -39,30 +42,18 @@ public class AddComputer {
 	}
 
 	@PostMapping
-	public ModelAndView addComputer(@RequestParam (name = "computerName", required = true) String computerName,
-									@RequestParam (name = "introduced", required = false) String intro,
-									@RequestParam (name = "discontinued", required = false) String disco,
-									@RequestParam (name = "companyId", required = false) String compId) {
+	public ModelAndView addComputer(ComputerDTO computerDTO, CompanyDTO companyDTO) {
 		ModelAndView view = new ModelAndView();
 		
-		Computer computer;
-		
-		String name 		= computerName;
-		String introduced 	= intro;
-		String discontinued = disco;
-		String companyId	= compId;
-
-		Optional<Company> company = companyService.getById(Integer.valueOf(companyId));
-		CompanyDTO companyDTO = company.isPresent() ? CompanyMapper.toDTO(company.get()) : null;
-		ComputerDTO computerDTO = new ComputerDTO.Builder()	.setId("0")
-															.setName(name)
-														   	.setIntroduced(introduced)
-															.setDiscontinued(discontinued)
-															.setCompanyDTO(companyDTO).build();
+		if (companyDTO.getCompanyId() != null){
+			Optional<Company> company = companyService.getById(Integer.valueOf(companyDTO.getCompanyId()));
+			companyDTO = company.isPresent() ? CompanyMapper.toDTO(company.get()) : null;
+			computerDTO.setCompanyDTO(companyDTO);
+        }
 		
 		ComputerValidation.checkValidity(computerDTO);
 		if(ComputerValidation.messageError.isEmpty()) {
-			computer = ComputerMapper.fromDTO(computerDTO);
+			Computer computer = ComputerMapper.fromDTO(computerDTO);
 			
 			computerService.addComputer(computer);
 			view.setViewName("redirect:dashboard?addSuccess=1");

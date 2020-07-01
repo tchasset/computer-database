@@ -1,23 +1,20 @@
 package com.excilys.tchasset.dto;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class CompanyDTO {
-	private String id;
-	private String name;
+	private String companyId;
+	private String companyName;
 	
 	public static class Builder {
-		private String id;
-		private String name;
+		private String companyId;
+		private String companyName;
 		
-		public Builder setId(String id) {
-			this.id = id;
+		public Builder setCompanyId(String companyId) {
+			this.companyId = companyId;
 			return this;
 		}
 		
-		public Builder setName(String name) {
-			this.name = name;
+		public Builder setCompanyName(String companyName) {
+			this.companyName = companyName;
 			return this;
 		}
 		
@@ -29,20 +26,20 @@ public class CompanyDTO {
 	public CompanyDTO() {}
 	
 	public CompanyDTO(Builder builder) {
-		this.id = builder.id;
-		this.name = builder.name;
+		this.companyId = builder.companyId;
+		this.companyName = builder.companyName;
 	}
 
-	public String getName() {
-		return name;
+	public String getCompanyName() {
+		return companyName;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
-	public String getId() {
-		return id;
+	public String getCompanyId() {
+		return companyId;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
 	}
 }

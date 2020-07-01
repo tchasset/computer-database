@@ -53,7 +53,7 @@ public class ComputerDAO {
 	public List<Computer> getAllComputers(Page page){
 		String query = EnumQuery.SELECTCOMPUTER.toString();
 		if(page!=null) {
-			Object[] obj = {(page.getCurrentPage()-1)*page.getSizePage(), page.getSizePage()};
+			Object[] obj = {(page.getCurrentPage()-1)*page.getSize(), page.getSize()};
 			return getComputersPaginate(query, obj);
 		}
 		return getComputers(query);
@@ -104,7 +104,7 @@ public class ComputerDAO {
 				+ " OR company.name LIKE ?";
 		Object[] obj;
 		if(page!=null) {
-			obj = new Object[] {"%"+name+"%", "%"+name+"%", (page.getCurrentPage()-1)*page.getSizePage(), page.getSizePage()};
+			obj = new Object[] {"%"+name+"%", "%"+name+"%", (page.getCurrentPage()-1)*page.getSize(), page.getSize()};
 			return getComputersPaginate(query, obj);
 		}   
 		obj = new Object[] {"%"+name+"%", "%"+name+"%"};
@@ -120,7 +120,7 @@ public class ComputerDAO {
 				+ " WHERE computer.name LIKE ?";
 		Object[] obj;
 		if(page!=null) {
-			obj = new Object[] {"%"+name+"%", (page.getCurrentPage()-1)*page.getSizePage(), page.getSizePage()};
+			obj = new Object[] {"%"+name+"%", (page.getCurrentPage()-1)*page.getSize(), page.getSize()};
 			return getComputersPaginate(query, obj);
 		} 
 		obj = new Object[] {"%"+name+"%"};
@@ -136,7 +136,7 @@ public class ComputerDAO {
 				+ " WHERE company.name=?";
 		Object[] obj;
 		if(page!=null) {
-			obj = new Object[] {"%"+name+"%", (page.getCurrentPage()-1)*page.getSizePage(), page.getSizePage()};
+			obj = new Object[] {"%"+name+"%", (page.getCurrentPage()-1)*page.getSize(), page.getSize()};
 			return getComputersPaginate(query, obj);
 		} 
 		obj = new Object[] {"%"+name+"%"};
@@ -150,7 +150,7 @@ public class ComputerDAO {
 	 */
 	private List<Computer> getComputers(Page page, String query){
 		if(page!=null) {
-			Object[] obj = {(page.getCurrentPage()-1)*page.getSizePage(), page.getSizePage()};
+			Object[] obj = {(page.getCurrentPage()-1)*page.getSize(), page.getSize()};
 			return getComputersPaginate(query, obj);
 		}
 		return getComputers(query);

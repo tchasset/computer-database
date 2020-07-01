@@ -22,7 +22,7 @@ public class ComputerMapper {
 		Computer computer;
 		
 		int id = Integer.valueOf(computerDTO.getId());
-		String name = computerDTO.getName();
+		String name = computerDTO.getComputerName();
 		LocalDate introduced   = (computerDTO.getIntroduced() == "" ? null : LocalDate.parse(computerDTO.getIntroduced()));
 		LocalDate discontinued = (computerDTO.getDiscontinued() == "" ? null : LocalDate.parse(computerDTO.getDiscontinued()));
 		Company company = CompanyMapper.fromDTO(computerDTO.getCompanyDTO());
@@ -46,7 +46,7 @@ public class ComputerMapper {
 		String discontinued = String.valueOf(computer.getDiscontinued());
 		CompanyDTO companyDTO = CompanyMapper.toDTO(computer.getCompany());
 		
-		computerDTO = new ComputerDTO.Builder().setId(id).setName(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompanyDTO(companyDTO).build();
+		computerDTO = new ComputerDTO.Builder().setId(id).setComputerName(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompanyDTO(companyDTO).build();
 		
 		return computerDTO;
 	}

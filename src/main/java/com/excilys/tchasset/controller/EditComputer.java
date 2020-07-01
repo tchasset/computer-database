@@ -23,17 +23,21 @@ import com.excilys.tchasset.validator.ComputerValidation;
 @RequestMapping("/editComputer")
 public class EditComputer {
 
-	@Autowired
 	private ComputerService computerService;
-	@Autowired
 	private CompanyService companyService;
-	private static int id;
+	//private static int id;
+	
+	@Autowired
+	public EditComputer(ComputerService computerService, CompanyService companyService) {
+		this.computerService = computerService;
+		this.companyService = companyService;
+	}
 	
 	@GetMapping
 	public ModelAndView editComputer(@RequestParam (name = "id", required = true) String ID) {
 		ModelAndView view = new ModelAndView("editComputer");
 		
-		id = Integer.valueOf(ID);
+		int id = Integer.valueOf(ID);
 		Optional<Computer> computer = computerService.getById(id);
 		if(!computer.isPresent()) {
 			view.setViewName("redirect:dashboard");
@@ -48,38 +52,25 @@ public class EditComputer {
 	}
 
 	@PostMapping
-	public ModelAndView editComputer(/*@RequestParam (name = "id", required = true) String ID,*/
-									@RequestParam (name = "computerName", required = true) String computerName,
-									@RequestParam (name = "introduced", required = false) String intro,
-									@RequestParam (name = "discontinued", required = false) String disco,
-									@RequestParam (name = "companyId", required = false) String compId) {
+	public ModelAndView editComputer(ComputerDTO computerDTO, CompanyDTO companyDTO) {
 		ModelAndView view = new ModelAndView("editComputer");
 		
-		Computer computer;
-		
-		String name 		= computerName;
-		String introduced 	= intro;
-		String discontinued = disco;
-		String companyId	= compId;
-
-		Optional<Company> company = companyService.getById(Integer.valueOf(companyId));
-		CompanyDTO companyDTO = company.isPresent() ? CompanyMapper.toDTO(company.get()) : null;
-		ComputerDTO computerDTO = new ComputerDTO.Builder()	.setId(String.valueOf(id))
-															.setName(name)
-														   	.setIntroduced(introduced)
-															.setDiscontinued(discontinued)
-															.setCompanyDTO(companyDTO).build();
+		if (companyDTO.getCompanyId() != null){
+			Optional<Company> company = companyService.getById(Integer.valueOf(companyDTO.getCompanyId()));
+			companyDTO = company.isPresent() ? CompanyMapper.toDTO(company.get()) : null;
+			computerDTO.setCompanyDTO(companyDTO);
+        }
 		
 		ComputerValidation.checkValidity(computerDTO);
 		if(ComputerValidation.messageError.isEmpty()) {
-			computer = ComputerMapper.fromDTO(computerDTO);
+			Computer computer = ComputerMapper.fromDTO(computerDTO);
 			
 			computerService.updateComputer(computer);
 			view.setViewName("redirect:dashboard?editSuccess=1");
 		}
 		else {
 			view.setViewName("redirect:editComputer");
-			view.addObject("id",id);
+			view.addObject("id",computerDTO.getId());
 			view.addObject("error", ComputerValidation.messageError);	
 		}
 		return view;

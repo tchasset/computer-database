@@ -17,7 +17,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard?page=1"> <spring:message code="label.title"/></a>
+            <a class="navbar-brand" href="dashboard?currentPage=1&size=${size}"> <spring:message code="label.title"/></a>
         </div>
     </header>
 
@@ -74,8 +74,8 @@
 						
                         <th id="computerName">
                             <spring:message code="label.computerName"/>
-                            <a href="dashboard?page=1&orderByName=ASC"><i class="fa fa-arrow-up"></i></a>
-                            <a href="dashboard?page=1&orderByName=DESC"><i class="fa fa-arrow-down"></i></a>
+                            <a href="dashboard?currentPage=1&size=${size}&orderByName=ASC"><i class="fa fa-arrow-up"></i></a>
+                            <a href="dashboard?currentPage=1&size=${size}&orderByName=DESC"><i class="fa fa-arrow-down"></i></a>
                         </th>
                         <th>
                             <spring:message code="label.introduced"/>
@@ -87,8 +87,8 @@
                         <!-- Table header for Company -->
                         <th id="companyName">
                             <spring:message code="label.company"/> 
-                            <a href="dashboard?page=1&orderByCompany=ASC"><i class="fa fa-arrow-up"></i></a>
-                            <a href="dashboard?page=1&orderByCompany=DESC"><i class="fa fa-arrow-down"></i></a>
+                            <a href="dashboard?currentPage=1&size=${size}&orderByCompany=ASC"><i class="fa fa-arrow-up"></i></a>
+                            <a href="dashboard?currentPage=1&size=${size}&orderByCompany=DESC"><i class="fa fa-arrow-down"></i></a>
                         </th>
 
                     </tr>
@@ -117,54 +117,54 @@
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
         	<div class="btn-group btn-group-sm pull-left" role="group" >
-	            <a href="dashboard?page=1&search=${search}&${orderByName}&${orderByCompany}#"><spring:message code="label.begin"/></a>
+	            <a href="dashboard?currentPage=1&&size=${size}search=${search}&${orderByName}&${orderByCompany}#"><spring:message code="label.begin"/></a>
 	        </div>
             <ul class="pagination">
             
 				<c:set var="orderByName" value="orderByName=${orderByName}"/>  
 				<c:set var="orderByCompany" value="orderByCompany=${orderByCompany}"/>  
             
-            	<c:set var="page" value="${currentPage}"/>
+            	<c:set var="currentPage" value="${currentPage}"/>
             	<li>
-                    <c:if test="${page!=1}"><a href="dashboard?page=${page-1}&search=${search}&${orderByName}&${orderByCompany}#" aria-label="Previous">
+                    <c:if test="${currentPage!=1}"><a href="dashboard?currentPage=${currentPage-1}&size=${size}&search=${search}&${orderByName}&${orderByCompany}#" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   	</a></c:if>
              	</li>
             	
             	<c:choose>
 				    <c:when test="${maxPage > 5}">
-				    	<c:if test="${page<=maxPage-5}">
-					    	<li><a href="dashboard?page=${page}&search=${search}&${orderByName}&${orderByCompany}#">${page}</a></li>
-				            <li><a href="dashboard?page=${page+1}&search=${search}&${orderByName}&${orderByCompany}#">${page+1}</a></li>
+				    	<c:if test="${currentPage<=maxPage-5}">
+					    	<li><a href="dashboard?currentPage=${currentPage}&size=${size}&search=${search}&${orderByName}&${orderByCompany}#">${currentPage}</a></li>
+				            <li><a href="dashboard?currentPage=${currentPage+1}&size=${size}&search=${search}&${orderByName}&${orderByCompany}#">${currentPage+1}</a></li>
 				            <li><a >...</a></li>
-				            <li><a href="dashboard?page=${maxPage-1}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage-1}</a></li>
-				            <li><a href="dashboard?page=${maxPage}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage}</a></li>
+				            <li><a href="dashboard?currentPage=${maxPage-1}&size=${size}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage-1}</a></li>
+				            <li><a href="dashboard?currentPage=${maxPage}&size=${size}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage}</a></li>
 				        </c:if> 
-				        <c:if test="${page>maxPage-5}">
-					    	<li><a href="dashboard?page=${maxPage-4}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage-4}</a></li>
-				            <li><a href="dashboard?page=${maxPage-3}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage-3}</a></li>
-				            <li><a href="dashboard?page=${maxPage-2}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage-2}</a></li>
-				            <li><a href="dashboard?page=${maxPage-1}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage-1}</a></li>
-				            <li><a href="dashboard?page=${maxPage}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage}</a></li>
+				        <c:if test="${currentPage>maxPage-5}">
+					    	<li><a href="dashboard?currentPage=${maxPage-4}&size=${size}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage-4}</a></li>
+				            <li><a href="dashboard?currentPage=${maxPage-3}&size=${size}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage-3}</a></li>
+				            <li><a href="dashboard?currentPage=${maxPage-2}&size=${size}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage-2}</a></li>
+				            <li><a href="dashboard?currentPage=${maxPage-1}&size=${size}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage-1}</a></li>
+				            <li><a href="dashboard?currentPage=${maxPage}&size=${size}&search=${search}&${orderByName}&${orderByCompany}#">${maxPage}</a></li>
 				        </c:if>   
 				    </c:when>
 				    <c:otherwise>
 				        <c:forEach var="i" begin="1" end="${maxPage}" >
-				        	<li><a href="dashboard?page=${i}&search=${search}&${orderByName}&${orderByCompany}#">${i}</a></li>
+				        	<li><a href="dashboard?currentPage=${i}&size=${size}&search=${search}&${orderByName}&${orderByCompany}#">${i}</a></li>
 				        </c:forEach>
 				    </c:otherwise>
 				</c:choose>
             
               <li>
-                <c:if test="${page!=maxPage}"><a href="dashboard?page=${page+1}&search=${search}&${orderByName}&${orderByCompany}#" aria-label="Next">
+                <c:if test="${currentPage!=maxPage}"><a href="dashboard?currentPage=${currentPage+1}&size=${size}&search=${search}&${orderByName}&${orderByCompany}#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a></c:if>
             </li>
         </ul>
         <div class="btn-group btn-group-sm pull-right" role="group" >
-            <a href="dashboard?size=10&page=1#"><button  type="button" class="btn btn-default">10</button></a>
-            <a href="dashboard?size=50&page=1#"><button type="button" class="btn btn-default">50</button></a>
-            <a href="dashboard?size=100&page=1#"><button type="button" class="btn btn-default">100</button></a>
+            <a href="dashboard?size=10&currentPage=1#"><button  type="button" class="btn btn-default">10</button></a>
+            <a href="dashboard?size=50&currentPage=1#"><button type="button" class="btn btn-default">50</button></a>
+            <a href="dashboard?size=100&currentPage=1#"><button type="button" class="btn btn-default">100</button></a>
             <select id="locales">
 			    <option><spring:message code="lang.change"/></option>
 			    <option value="en"> <spring:message code="lang.en"/></option>
