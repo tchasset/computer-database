@@ -27,11 +27,11 @@ function checkDate() {
 	var introduced   = document.form.introduced.value,
 		discontinued = document.form.discontinued.value;
 
-	if(introduced != "" && (introduced<"1970-01-01" || introduced>"2038-01-18")) {
-		error += "<b>Introduced date should be between 01-01-1970 and 18-01-2038.</b><br/>";
+	if(introduced != "" && (introduced<"1970-01-02" || introduced>"2038-01-18")) {
+		error += "<b>Introduced date should be between 02-01-1970 and 18-01-2038.</b><br/>";
 	}
-	if(discontinued != "" && (discontinued<"1970-01-01" || discontinued>"2038-01-18")) {
-		error += "<b>Discontinued date should be between 01-01-1970 and 18-01-2038.</b><br/>";
+	if(discontinued != "" && (discontinued<"1970-01-02" || discontinued>"2038-01-18")) {
+		error += "<b>Discontinued date should be between 02-01-1970 and 18-01-2038.</b><br/>";
 	}
 	if(introduced != "" && discontinued != "") {
 		if (introduced > discontinued) {

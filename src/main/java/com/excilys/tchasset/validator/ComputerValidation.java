@@ -93,13 +93,13 @@ public class ComputerValidation {
 				messageError.add("Discontinued date can't be before introduced date");
 		
 		if(	intro!=null && 
-			(LocalDate.parse(intro).isBefore(LocalDate.of(1970,1,1)) || LocalDate.parse(intro).isAfter(LocalDate.of(2038,1,18))) ){
-			messageError.add("Introduced date can't be before 01/01/1970 or afeter 18/01/2038");
+			(LocalDate.parse(intro).isBefore(LocalDate.of(1970,1,2)) || LocalDate.parse(intro).isAfter(LocalDate.of(2038,1,18))) ){
+			messageError.add("Introduced date can't be before 02/01/1970 or afeter 18/01/2038");
 		}
 		
 		if(	disco!=null && 
-			(LocalDate.parse(disco).isBefore(LocalDate.of(1970,1,1)) || LocalDate.parse(disco).isAfter(LocalDate.of(2038,1,18))) ) {
-			messageError.add("Discontinued date can't be before 01/01/1970 or afeter 18/01/2038");
+			(LocalDate.parse(disco).isBefore(LocalDate.of(1970,1,2)) || LocalDate.parse(disco).isAfter(LocalDate.of(2038,1,18))) ) {
+			messageError.add("Discontinued date can't be before 02/01/1970 or afeter 18/01/2038");
 		}
 	}
 }

@@ -25,6 +25,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
+                	<input id="id" type="hidden" value="${computer.id}"/>
                     <div class="label label-default pull-right">
                         id:${computer.id}
                     </div>
@@ -89,8 +90,9 @@
 	$(document).ready(function() {
 	    $("#locales").change(function () {
 	        var selectedOption = $('#locales').val();
+	        var id = $('#id').val();
 	        if (selectedOption != ''){
-	            window.location.replace('?lang=' + selectedOption);
+	            window.location.replace('?id='+id+'&lang=' + selectedOption);
 	        }
 	    });
 	});

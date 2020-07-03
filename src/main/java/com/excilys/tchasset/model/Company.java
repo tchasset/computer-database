@@ -1,8 +1,15 @@
 package com.excilys.tchasset.model;
 
+import javax.annotation.Nonnull;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity(name ="company")
 public class Company {
 
+	@Id
 	private int id;
+	@Nonnull
 	private String name;
 	
 	public static class Builder {

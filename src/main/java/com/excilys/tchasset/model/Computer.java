@@ -3,12 +3,27 @@ package com.excilys.tchasset.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
+@Entity(name="computer")
 public class Computer {
 	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Nonnull
 	private String name;
+	@Nullable
 	private LocalDate introduced;
+	@Nullable
 	private LocalDate discontinued;
+	@OneToOne(optional = true)
 	private Company company;
 	
 	public static class Builder {

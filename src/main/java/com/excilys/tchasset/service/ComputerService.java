@@ -57,6 +57,10 @@ public class ComputerService {
 		computerDAO.deleteComputer(id);
 	}
 	
+	public int getNbBySearch(String name) {
+		return computerDAO.getNbBySearch(name);
+	}
+	
 	public int getNbComputers() {
 		return computerDAO.getNbComputers();
 	}

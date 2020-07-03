@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Page {
 	
-	private int currentPage=1;
+	private int currentPage=0;
 	private int size=10;
 	private int nbPages;
 	

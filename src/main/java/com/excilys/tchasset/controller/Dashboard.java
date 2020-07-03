@@ -49,7 +49,7 @@ public class Dashboard {
 		int nb=0;
 		
 		if(!paginationDTO.getSearch().isEmpty()) {
-			nb = computerService.getByAllName(null,paginationDTO.getSearch()).size();
+			nb = computerService.getNbBySearch(paginationDTO.getSearch());
 			
 			computerList.addAll(computerService.getByAllName(page,paginationDTO.getSearch()));
 		}
