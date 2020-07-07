@@ -47,7 +47,7 @@ public class AddComputer {
 		
 		if (companyDTO.getCompanyId() != null){
 			Optional<Company> company = companyService.getById(Integer.valueOf(companyDTO.getCompanyId()));
-			companyDTO = company.isPresent() ? CompanyMapper.toDTO(company.get()) : null;
+			companyDTO = company.isPresent() ? CompanyMapper.toDTO(company.get()).get() : null;
 			computerDTO.setCompanyDTO(companyDTO);
         }
 		

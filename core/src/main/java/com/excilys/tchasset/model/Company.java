@@ -58,5 +58,15 @@ public class Company {
 	@Override
 	public String toString() {
 		return "Company n°"+id+": "+name+"\n";
-	}	
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Company company = (Company) o;
+		return id == company.id &&
+				name.equals(company.name);
+	}
+	
 }

@@ -1,5 +1,7 @@
 package com.excilys.tchasset.dto;
 
+import com.google.common.base.Objects;
+
 public class ComputerDTO {
 
 	private String 	id="0",
@@ -95,6 +97,16 @@ public class ComputerDTO {
 		this.id = id;
 	}
 	
-	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ComputerDTO computer = (ComputerDTO) o;
+		return id.equals(computer.id) &&
+				computerName.equals(computer.computerName) &&
+				introduced.equals(computer.introduced) &&
+				discontinued.equals(computer.discontinued) &&
+				Objects.equal(companyDTO, computer.companyDTO);
+	}
 	
 }
