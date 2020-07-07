@@ -23,7 +23,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableJpaRepositories(basePackages = "com.excilys.tchasset")
 @EnableTransactionManagement
 public class SpringConfig {
-	
+
 	@Bean
 	public DataSource dataSource() {
 		HikariConfig config = new HikariConfig("/hikari.properties");

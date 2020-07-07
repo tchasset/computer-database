@@ -33,14 +33,14 @@ public class CompanyDAO {
 	}
 	
 	public List<Company> getCompaniesOrderBy(String order) {
-		Iterable<Company> iterable;
+		Iterable<Company> iterable=null;
 		if(order.equals("ASC")) {
 			iterable = repo.findAll(Sort.by("name").ascending());
 		}
 		if(order.equals("DESC")) {
 			iterable = repo.findAll(Sort.by("name").ascending());
 		}
-		else {
+		if(iterable==null) {
 			return new ArrayList<>();
 		}
 		List<Company> companies = StreamSupport.stream(iterable.spliterator(), false)

@@ -47,7 +47,7 @@ public class ComputerDAO {
 		if(order.equals("DESC")) {
 			p = PageRequest.of(page.getCurrentPage()-1,page.getSize(),Sort.by("name").descending());
 		}
-		else {
+		if(p==null) {
 			return new ArrayList<>();
 		}
 		return repo.findAll(p).getContent();
@@ -65,7 +65,7 @@ public class ComputerDAO {
 		if(order.equals("DESC")) {
 			p = PageRequest.of(page.getCurrentPage()-1,page.getSize(),Sort.by("company.name").descending());
 		}
-		else {
+		if (p==null){
 			return new ArrayList<>();
 		}
 		return repo.findAll(p).getContent();

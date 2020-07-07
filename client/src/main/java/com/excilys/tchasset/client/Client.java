@@ -20,8 +20,8 @@ public class Client {
 	private CompanyService companyService;
 	@Autowired
 	private ComputerService computerService;
-	
-	private EnumCli enumCli;
+	@Autowired
+	private Page page;
 	
 	public void affiche() {
 		Scanner sc = new Scanner(System.in);
@@ -29,11 +29,11 @@ public class Client {
 		while(option>0 && option<8) {
 			menu();
 			option = sc.nextInt();
-			enumCli = EnumCli.value(option);
+			EnumCli enumCli = EnumCli.value(option);
 			
 			switch(enumCli) {
 				case LISTALLCOMPANY:
-					System.out.println((companyService.getCompanies().toString()));
+					System.out.println(companyService.getCompanies());
 					break;
 				case LISTCOMPANY:
 					menu1Company(sc);
@@ -193,7 +193,6 @@ public class Client {
 	
 	private void paginateComputer(Scanner sc) {
 		int continu=1, max=computerService.getNbComputers();
-		Page page = new Page.Builder().setCurrentPage(1).setSize(20).build();
 		page.setNbPages(max);
 				
 		while(continu==1 || continu==2) {

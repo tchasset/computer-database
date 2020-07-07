@@ -6,13 +6,14 @@
 
   <groupId>com.excilys.tchasset</groupId>
   <artifactId>computer-database</artifactId>
-  <version>6.0.0</version>
-  <packaging>war</packaging>
+  <version>${project.version}</version>
+  <packaging>pom</packaging>
 
   <name>computer-database Maven Webapp</name>
   <url>http://www.localhost:TMTC.com</url>
 
   <properties>
+  	<project.version>6.0.2</project.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -189,18 +190,12 @@
     </pluginManagement>
   </build>
   
-    <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>3.1.1</version>
-          <configuration>
-            <configLocation>config/checkstyle.xml</configLocation>
-            <suppressionsLocation>config/suppressions.xml</suppressionsLocation>
-            <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
-          </configuration>
-        </plugin>
-    </plugins>
-  </reporting>
+    <modules>
+    	<module>client</module>
+    	<module>core</module>
+    	<module>persistence</module>
+    	<module>service</module>
+    	<module>binding</module>
+    	<module>webapp</module>
+    </modules>
 </project>
