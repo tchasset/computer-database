@@ -72,40 +72,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-	
-//	@Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//            http.addFilter(digestAuthenticationFilter())              // register digest entry point
-//            .exceptionHandling().authenticationEntryPoint(digestEntryPoint())       // on exception ask for digest authentication
-//            .and()
-//            .httpBasic()                      // it indicate basic authentication is requires
-//            .and()
-//            .authorizeRequests()
-//            .antMatchers( "/dashboar").permitAll() // /home will be accessible directly, no need of any authentication
-//            .anyRequest().authenticated();
-//    }
-	
-//    DigestAuthenticationFilter digestAuthenticationFilter() throws Exception {
-//        DigestAuthenticationFilter digestAuthenticationFilter = new DigestAuthenticationFilter();
-//        digestAuthenticationFilter.setUserDetailsService(userDetailsServiceBean());
-//        digestAuthenticationFilter.setAuthenticationEntryPoint(digestEntryPoint());
-//        return digestAuthenticationFilter;
-//    }
-//    
-
-    
-    
-//    
-//    @Bean
-//    DigestAuthenticationEntryPoint digestEntryPoint() {
-//        DigestAuthenticationEntryPoint bauth = new DigestAuthenticationEntryPoint();
-//        bauth.setRealmName("Digest WF Realm");
-//        bauth.setKey("MySecureKey");
-//        return bauth;
-//    }
-//    
-//    @Bean
-//    public AuthenticationManager customAuthenticationManager() throws Exception {
-//        return authenticationManager();
-//    }
 }
