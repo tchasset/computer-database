@@ -1,4 +1,4 @@
-package com.excilys.tchasset.persistence;
+package com.excilys.tchasset.persistence.interfaces;
 
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;

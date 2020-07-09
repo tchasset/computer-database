@@ -18,6 +18,9 @@
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <a class="navbar-brand" href="dashboard?currentPage=1&size=${size}"> <spring:message code="label.title"/></a>
+            <div class="btn-group btn-group-sm pull-right">
+	        	<a class="navbar-brand" href="logout"> <spring:message code="label.logout"/></a>
+	        </div>
         </div>
     </header>
 

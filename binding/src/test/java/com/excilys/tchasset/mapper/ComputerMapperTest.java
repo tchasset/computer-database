@@ -60,10 +60,8 @@ public class ComputerMapperTest {
 															.setIntroduced("2000-01-01")
 															.setDiscontinued("2010-06-15")
 															.build();
-		ComputerDTO c = ComputerMapper.toDTO(computer);
-		System.out.println(computerDTO.getId()+" "+computerDTO.getComputerName()+" "+computerDTO.getIntroduced()+" "+computerDTO.getDiscontinued()+" "+computerDTO.getCompanyDTO());
-		System.out.println(c.getId()+" "+c.getComputerName()+" "+c.getIntroduced()+" "+c.getDiscontinued()+" "+c.getCompanyDTO());
-		assertEquals(computerDTO, c);
+
+		assertEquals(computerDTO, ComputerMapper.toDTO(computer));
 	}
 	
 	@Test

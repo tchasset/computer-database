@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.model.Page;
 import com.excilys.tchasset.model.QComputer;
+import com.excilys.tchasset.persistence.interfaces.ComputerRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 @Repository
