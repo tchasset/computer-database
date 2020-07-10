@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%> 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>   
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html>
@@ -48,10 +49,12 @@
                         class="btn btn-primary" />
                     </form>
                 </div>
-                <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="addComputer"><spring:message code="label.addComputer"/></a> 
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="label.edit"/></a>
-                </div>
+                <sec:authorize access="hasAuthority('ADMIN')">
+	                <div class="pull-right">
+	                    <a class="btn btn-success" id="addComputer" href="addComputer"><spring:message code="label.addComputer"/></a> 
+	                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="label.edit"/></a>
+	                </div>
+                </sec:authorize>
             </div>
         </div>
 
@@ -65,15 +68,16 @@
                     <tr>
                         <!-- Variable declarations for passing labels as parameters -->
                         <!-- Table header for Computer Name -->
-
-                        <th class="editMode" style="width: 60px; height: 22px;">
-                            <input type="checkbox" id="selectall" /> 
-                            <span style="vertical-align: top;">
-                                 -  <a href="#" id="deleteSelected" onclick="$.fn.deleteSelected();">
-                                        <i class="fa fa-trash-o fa-lg"></i>
-                                    </a>
-                            </span>
-                        </th>
+						<sec:authorize access="hasAuthority('ADMIN')">
+	                        <th class="editMode" style="width: 60px; height: 22px;">
+	                            <input type="checkbox" id="selectall" /> 
+	                            <span style="vertical-align: top;">
+	                                 -  <a href="#" id="deleteSelected" onclick="$.fn.deleteSelected();">
+	                                        <i class="fa fa-trash-o fa-lg"></i>
+	                                    </a>
+	                            </span>
+	                        </th>
+                        </sec:authorize>
 						
                         <th id="computerName">
                             <spring:message code="label.computerName"/>
@@ -104,7 +108,12 @@
 	                            <input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
 	                        </td>
 	                        <td>
-	                            <a href="editComputer?id=${computer.getId()}" onclick="">${computer.getName()}</a>
+	                            <sec:authorize access="hasAuthority('ADMIN')">
+	                            	<a href="editComputer?id=${computer.getId()}" onclick="">${computer.getName()}</a>
+	                           	</sec:authorize>
+	                           	<sec:authorize access="hasAuthority('USER')">
+	                            	${computer.getName()}
+	                           	</sec:authorize>
 	                        </td>
 	                        <td>${computer.getIntroduced()}</td>
 	                        <td>${computer.getDiscontinued()}</td>
