@@ -20,6 +20,7 @@ import com.excilys.tchasset.persistence.interfaces.ComputerRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 @Repository
+@Transactional
 public class CompanyDAO {
 
 	@Autowired
@@ -64,7 +65,6 @@ public class CompanyDAO {
 		return company;
 	}
 	
-	@Transactional
 	public void deleteCompany(int id) {
 		Iterable<Computer> computers = repoComputer.findAll(QComputer.computer.company.id.eq(id));
 		repoComputer.deleteAll(computers);

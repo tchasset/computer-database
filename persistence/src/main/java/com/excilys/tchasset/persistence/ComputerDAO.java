@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.model.Page;
@@ -18,6 +19,7 @@ import com.excilys.tchasset.persistence.interfaces.ComputerRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 @Repository
+@Transactional
 public class ComputerDAO {
 	
 	@Autowired
