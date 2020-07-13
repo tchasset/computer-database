@@ -10,24 +10,9 @@
   <packaging>jar</packaging>
   
   <dependencies>
-  	<dependency>
-		<groupId>com.excilys.tchasset</groupId>
-		<artifactId>core</artifactId>
-		<version>${project.version}</version>
-	</dependency>
 	<dependency>
 		<groupId>com.excilys.tchasset</groupId>
 		<artifactId>service</artifactId>
-		<version>${project.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>com.excilys.tchasset</groupId>
-		<artifactId>persistence</artifactId>
-		<version>${project.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>com.excilys.tchasset</groupId>
-		<artifactId>webapp</artifactId>
 		<version>${project.version}</version>
 	</dependency>
   </dependencies>

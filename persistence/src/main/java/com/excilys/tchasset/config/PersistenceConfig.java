@@ -22,7 +22,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @ComponentScan(basePackages = "com.excilys.tchasset")
 @EnableJpaRepositories(basePackages = "com.excilys.tchasset")
 @EnableTransactionManagement
-public class SpringConfig {
+public class PersistenceConfig {
 
 	@Bean
 	public DataSource dataSource() {

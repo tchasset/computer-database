@@ -42,4 +42,13 @@ public class CompanyDTO {
 	public void setCompanyId(String companyId) {
 		this.companyId = companyId;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		CompanyDTO company = (CompanyDTO) o;
+		return companyId.equals(company.companyId) &&
+				companyName.equals(company.companyName);
+	}
 }
