@@ -17,9 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint;
-import org.springframework.security.web.authentication.www.DigestAuthenticationFilter;
-
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -45,11 +42,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			        + "from authorities "
 			        + "where username = ?");
 	}
-
+	
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 		.csrf().disable()
-		.addFilter(digestAuthenticationFilter(digestEntryPoint()))
+		/*.exceptionHandling()
+	        .authenticationEntryPoint(digestEntryPoint())
+	        .and()
+		.addFilter(digestAuthenticationFilter())*/
 		.authorizeRequests()
 			.antMatchers("/addComputer","/editComputer").hasAuthority("ADMIN")
 			.antMatchers("/dashboard").hasAnyAuthority("USER", "ADMIN")
@@ -71,23 +71,43 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 		.sessionManagement().maximumSessions(1).expiredUrl("/login");
 	}
-    
+	
 	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+	
+	/*
+	 * Uncomment for digest config (but don't do it)
+	 */
+	/*@Bean
 	public DigestAuthenticationEntryPoint digestEntryPoint () {
 		DigestAuthenticationEntryPoint digestAuthenticationEntryPoint = new DigestAuthenticationEntryPoint();
-		digestAuthenticationEntryPoint.setKey("mykey");
 		digestAuthenticationEntryPoint.setRealmName("Digest WF Realm");
+		digestAuthenticationEntryPoint.setKey("keh");
+		digestAuthenticationEntryPoint.setNonceValiditySeconds(300);
 		return digestAuthenticationEntryPoint;
 	}
 
-	public DigestAuthenticationFilter digestAuthenticationFilter (DigestAuthenticationEntryPoint digestAuthenticationEntryPoint) {
+	@Bean
+	public DigestAuthenticationFilter digestAuthenticationFilter () {
 		DigestAuthenticationFilter digestAuthenticationFilter = new DigestAuthenticationFilter();
 		digestAuthenticationFilter.setAuthenticationEntryPoint(digestEntryPoint());
+		digestAuthenticationFilter.setUserDetailsService(userDetailsService());
 		return digestAuthenticationFilter;
 	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+	    return new PasswordEncoder() {
+	        @Override
+	        public String encode(CharSequence rawPassword) {
+	            return rawPassword.toString();
+	        }
+	        @Override
+	        public boolean matches(CharSequence rawPassword, String encodedPassword) {
+	            return rawPassword.toString().equals(encodedPassword);
+	        }
+	    };
+	}*/
 }
