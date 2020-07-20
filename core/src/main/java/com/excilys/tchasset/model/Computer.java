@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 @Entity(name="computer")
 public class Computer {
@@ -23,7 +23,7 @@ public class Computer {
 	private LocalDate introduced;
 	@Nullable
 	private LocalDate discontinued;
-	@OneToOne(optional = true)
+	@ManyToOne(optional = true)
 	private Company company;
 	
 	public static class Builder {

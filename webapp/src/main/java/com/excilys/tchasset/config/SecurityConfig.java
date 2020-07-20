@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 			.antMatchers("/addComputer","/editComputer").hasAuthority("ADMIN")
 			.antMatchers("/dashboard").hasAnyAuthority("USER", "ADMIN")
-			.anyRequest().authenticated()
+			.anyRequest().permitAll()//.authenticated()
 			.and()
 		.formLogin()
 		//disconnect user after 60 seconds if inactive
