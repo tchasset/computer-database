@@ -8,7 +8,7 @@ public class App {
 
 	public static void main(String[] args) {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(PersistenceConfig.class);
-		 context.getBean(Client.class).affiche();
-		 context.close();
+		context.getBean(Client.class).affiche();
+		context.close();
 	}
 }

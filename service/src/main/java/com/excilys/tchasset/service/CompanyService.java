@@ -19,10 +19,6 @@ public class CompanyService {
 		return companyDAO.getCompanies();
 	}
 	
-	public List<Company> getCompaniesOrderBy(String order) {
-		return companyDAO.getCompaniesOrderBy(order);
-	}
-	
 	public Optional<Company> getById(int id) {
 		Optional<Company> company = companyDAO.getById(id);
 		return company;

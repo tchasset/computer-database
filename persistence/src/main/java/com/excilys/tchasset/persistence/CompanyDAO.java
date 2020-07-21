@@ -1,13 +1,11 @@
 package com.excilys.tchasset.persistence;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,22 +30,6 @@ public class CompanyDAO {
 		Iterable<Company> iterable = repo.findAll();
 		List<Company> companies = StreamSupport.stream(iterable.spliterator(), false)
 	                                      		.collect(Collectors.toList());
-		return companies;
-	}
-	
-	public List<Company> getCompaniesOrderBy(String order) {
-		Iterable<Company> iterable=null;
-		if(order.equals("ASC")) {
-			iterable = repo.findAll(Sort.by("name").ascending());
-		}
-		if(order.equals("DESC")) {
-			iterable = repo.findAll(Sort.by("name").ascending());
-		}
-		if(iterable==null) {
-			return new ArrayList<>();
-		}
-		List<Company> companies = StreamSupport.stream(iterable.spliterator(), false)
-          										.collect(Collectors.toList());
 		return companies;
 	}
 	

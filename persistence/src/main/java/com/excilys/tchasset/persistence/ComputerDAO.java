@@ -24,7 +24,7 @@ public class ComputerDAO {
 	
 	@Autowired
 	private ComputerRepository repo;
-
+	
 	/* @param page 		paginate request if not null
 	 * @return			ALL computers with/without pagination
 	 */
@@ -107,7 +107,7 @@ public class ComputerDAO {
 	 * @return 			computers with given name
 	 */
 	public List<Computer> getByName(Page page, String name) {
-		BooleanExpression bool = QComputer.computer.name.eq(name);
+		BooleanExpression bool = QComputer.computer.name.containsIgnoreCase(name);
 
 		return repo.findAll(bool,PageRequest.of(page.getCurrentPage()-1,page.getSize())).getContent();
 	}
@@ -117,7 +117,7 @@ public class ComputerDAO {
 	 * @return 			computers with given company name
 	 */
 	public List<Computer> getByCompany(Page page, String name){
-		BooleanExpression bool = QComputer.computer.company.name.eq(name);
+		BooleanExpression bool = QComputer.computer.company.name.containsIgnoreCase(name);
 
 		return repo.findAll(bool,PageRequest.of(page.getCurrentPage()-1,page.getSize())).getContent();
 	}
