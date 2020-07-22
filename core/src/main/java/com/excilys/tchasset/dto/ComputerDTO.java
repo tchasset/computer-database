@@ -11,8 +11,8 @@ public class ComputerDTO {
 	private CompanyDTO companyDTO;
 	
 	public static class Builder {
+		private final String computerName;
 		private String 	id="0",
-						computerName="",
 						introduced="",
 						discontinued="";
 		private CompanyDTO companyDTO;
@@ -22,9 +22,8 @@ public class ComputerDTO {
 			return this;
 		}
 		
-		public Builder setComputerName(String computerName) {
+		public Builder (String computerName) {
 			this.computerName = computerName;
-			return this;
 		}
 		
         public Builder setIntroduced(String introduced) {

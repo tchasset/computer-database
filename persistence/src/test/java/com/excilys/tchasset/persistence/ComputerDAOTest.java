@@ -38,9 +38,9 @@ public class ComputerDAOTest {
 
 	@Test
 	public void getById() {
-		Computer computer =  new Computer.Builder().setId(1)
-				.setName("MacBook Pro 15.4 inch")
-				.setCompany(new Company.Builder().setId(1).setName("Apple Inc.").build())
+		Computer computer =  new Computer.Builder("MacBook Pro 15.4 inch")
+				.setId(1)
+				.setCompany(new Company.Builder("Apple Inc.").setId(1).build())
 				.build();
 		assertEquals(computer, computerDAO.getById(1).get());
 	}
@@ -77,7 +77,7 @@ public class ComputerDAOTest {
 
 	@Test
 	public void addComputer() {
-		Computer computer = new Computer.Builder().setName("test").build();
+		Computer computer = new Computer.Builder("test").build();
 		assertEquals(30, computerDAO.getNbComputers());
 		computerDAO.addComputer(computer);
 		assertEquals(31, computerDAO.getNbComputers());
@@ -86,11 +86,11 @@ public class ComputerDAOTest {
 
 	@Test
 	public void updateComputer() {
-		Computer computerNotEdited =  new Computer.Builder().setId(1)
-				.setName("MacBook Pro 15.4 inch")
-				.setCompany(new Company.Builder().setId(1).setName("Apple Inc.").build())
+		Computer computerNotEdited =  new Computer.Builder("MacBook Pro 15.4 inch")
+				.setId(1)
+				.setCompany(new Company.Builder("Apple Inc.").setId(1).build())
 				.build();
-		Computer computerEdited = new Computer.Builder().setId(1).setName("test").build();
+		Computer computerEdited = new Computer.Builder("test").setId(1).build();
 		assertEquals(computerNotEdited, computerDAO.getAllComputers(null).get(0));
 		computerDAO.updateComputer(computerEdited);
 		assertEquals(computerEdited, computerDAO.getAllComputers(null).get(0));
@@ -98,13 +98,13 @@ public class ComputerDAOTest {
 
 	@Test
 	public void deleteCompany() {
-		Computer computerNumberOneBeforeDelete =  new Computer.Builder().setId(1)
-				.setName("MacBook Pro 15.4 inch")
-				.setCompany(new Company.Builder().setId(1).setName("Apple Inc.").build())
+		Computer computerNumberOneBeforeDelete =  new Computer.Builder("MacBook Pro 15.4 inch")
+				.setId(1)
+				.setCompany(new Company.Builder("Apple Inc.").setId(1).build())
 				.build();
-		Computer computerNumberOneAfterDelete =  new Computer.Builder().setId(2)
-				.setName("CM-2a")
-				.setCompany(new Company.Builder().setId(2).setName("Thinking Machines").build())
+		Computer computerNumberOneAfterDelete =  new Computer.Builder("CM-2a")
+				.setId(2)
+				.setCompany(new Company.Builder("Thinking Machines").setId(2).build())
 				.build();
 		
 		assertEquals(computerNumberOneBeforeDelete, computerDAO.getAllComputers(null).get(0));

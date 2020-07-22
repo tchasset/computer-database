@@ -6,15 +6,14 @@ public class CompanyDTO {
 	
 	public static class Builder {
 		private String companyId;
-		private String companyName;
+		private final String companyName;
+		
+		public Builder(String companyName) {
+			this.companyName = companyName;
+		}
 		
 		public Builder setCompanyId(String companyId) {
 			this.companyId = companyId;
-			return this;
-		}
-		
-		public Builder setCompanyName(String companyName) {
-			this.companyName = companyName;
 			return this;
 		}
 		

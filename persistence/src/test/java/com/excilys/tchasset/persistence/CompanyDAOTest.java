@@ -31,13 +31,13 @@ public class CompanyDAOTest {
 	@Test
 	public void getById() {
 		Optional<Company> company = companyDAO.getById(1);
-		assertEquals(company.get(), new Company.Builder().setId(1).setName("Apple Inc.").build());
+		assertEquals(company.get(), new Company.Builder("Apple Inc.").setId(1).build());
 	}
 	
 	@Test
 	public void getByName() {
 		Optional<Company> company = companyDAO.getByName("Apple Inc.");
-		assertEquals(company.get(), new Company.Builder().setId(1).setName("Apple Inc.").build());
+		assertEquals(company.get(), new Company.Builder("Apple Inc.").setId(1).build());
 	}
 	
 	@Test

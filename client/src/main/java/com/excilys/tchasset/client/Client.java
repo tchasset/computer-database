@@ -123,10 +123,10 @@ public class Client {
 		System.out.print("Entrez l'ID de la companie : ");
 		int company_id = sc.nextInt();
 		
-		Computer c = new Computer.Builder().setName(name)
+		Computer c = new Computer.Builder(name)
 				.setIntroduced(introduced)
 				.setDiscontinued(discontinued)
-				.setCompany(new Company(company_id)).build();
+				.build();
 		computerService.addComputer(c);
 	}
 	
@@ -181,12 +181,6 @@ public class Client {
 		jour = sc.next(); 	mois=sc.next(); 	annee=sc.next(); 
 		if(!jour.isEmpty() && !mois.isEmpty() && (!annee.isEmpty()&&Integer.valueOf(annee)>=1970))
 			computer.setDiscontinued(LocalDate.of(Integer.valueOf(annee), Integer.valueOf(mois), Integer.valueOf(jour)));
-		
-		System.out.println("Ancien id de compagnie : "+computer.getCompany().getId());
-		System.out.print("Nouvel id de compagnie : ");
-		String company_id = sc.next();
-		if(!name.isEmpty())
-			computer.setCompany(new Company(Integer.valueOf(company_id)));
 		
 		return computer;
 	}

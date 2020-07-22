@@ -14,15 +14,14 @@ public class Company {
 	
 	public static class Builder {
 		private int id;
-		private String name;
+		private final String name;
+		
+		public Builder(String name) {
+			this.name = name;
+		}
 		
 		public Builder setId(int id) {
 			this.id = id;
-			return this;
-		}
-		
-		public Builder setName(String name) {
-			this.name = name;
 			return this;
 		}
 		
@@ -36,10 +35,6 @@ public class Company {
 	public Company(Builder builder) {
 		this.id = builder.id;
 		this.name = builder.name;
-	}
-	
-	public Company(int id) {
-		this.id = id;
 	}
 
 	public String getName() {

@@ -25,7 +25,7 @@ public class ComputerMapper {
 		Optional<Company> comp = CompanyMapper.fromDTO(computerDTO.getCompanyDTO());
 		Company company = comp.isPresent() ? comp.get() : null;
 		
-		computer = new Computer.Builder().setId(id).setName(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(company).build();
+		computer = new Computer.Builder(name).setId(id).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(company).build();
 		
 		return computer;
 	}
@@ -45,7 +45,7 @@ public class ComputerMapper {
 		Optional<CompanyDTO> comp = CompanyMapper.toDTO(computer.getCompany());
 		CompanyDTO companyDTO = comp.isPresent() ? comp.get() : null;
 
-		computerDTO = new ComputerDTO.Builder().setId(id).setComputerName(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompanyDTO(companyDTO).build();
+		computerDTO = new ComputerDTO.Builder(name).setId(id).setIntroduced(introduced).setDiscontinued(discontinued).setCompanyDTO(companyDTO).build();
 		
 		return computerDTO;
 	}

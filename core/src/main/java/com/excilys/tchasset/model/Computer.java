@@ -28,18 +28,17 @@ public class Computer {
 	
 	public static class Builder {
 		private int id;
-		private String name;
+		private final String name;
 		private LocalDate introduced;
 		private LocalDate discontinued;
 		private Company company;
 		
-		public Builder setId(int id) {
-			this.id = id;
-			return this;
+		public Builder(String name) {
+			this.name = name;
 		}
 		
-		public Builder setName(String name) {
-			this.name = name;
+		public Builder setId(int id) {
+			this.id = id;
 			return this;
 		}
 		
