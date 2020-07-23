@@ -15,6 +15,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -67,6 +68,11 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
     public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/login");
     }
+	
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		 registry.addMapping("/**").allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
+	}
 	
 	@Bean
 	public MessageSource messageSource() {
