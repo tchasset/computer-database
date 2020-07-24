@@ -13,8 +13,6 @@ public class User {
 	@Nonnull
 	private Role role;
 	
-	public enum Role{ADMIN, USER}
-	
 	public static class Builder {
 		private String username;
 		private String password;

@@ -24,5 +24,11 @@ public class Logging {
 		LOGGER.error(message);
 		writeFile(message);
 	}
+	
+	public static void info(String message, Class<?> _class) {
+		LOGGER = LoggerFactory.getLogger(_class);
+		LOGGER.info(message);
+		writeFile(message);
+	}
 }
 
