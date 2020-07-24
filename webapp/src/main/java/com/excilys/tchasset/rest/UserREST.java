@@ -2,6 +2,7 @@ package com.excilys.tchasset.rest;
 
 import java.util.HashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -9,11 +10,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.excilys.tchasset.model.User;
+import com.excilys.tchasset.service.UserService;
+
 @RestController
 @RequestMapping(value = "/user")
-public class UserDataREST {
+public class UserREST {
 
-	@GetMapping
+	private UserService userService;
+	
+	@Autowired
+	public UserREST(UserService useServ) {
+		this.userService = useServ;
+	}
+	
+	@GetMapping(path = "/getUser")
+	public ResponseEntity<User> getUser(){
+		
+		return new ResponseEntity<>(new User.Builder().build(), HttpStatus.OK);
+	}
+	
+	@GetMapping(path = "/connectInfo")
 	public ResponseEntity<HashMap<String, String>> getCompanies(Authentication authentication) {
 		HashMap<String, String> return_value = new HashMap<String, String>();
 		if (!(authentication == null)) {
@@ -26,5 +43,4 @@ public class UserDataREST {
 			return new ResponseEntity<>(return_value, HttpStatus.OK);
 		}
 	}
-
 }
