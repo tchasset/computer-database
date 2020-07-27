@@ -19,7 +19,7 @@ public class ComputerMapper {
 		Computer computer;
 		
 		int id = Integer.valueOf(computerDTO.getId());
-		String name = computerDTO.getComputerName();
+		String name = computerDTO.getName();
 		LocalDate introduced   = (computerDTO.getIntroduced() == "" ? null : LocalDate.parse(computerDTO.getIntroduced()));
 		LocalDate discontinued = (computerDTO.getDiscontinued() == "" ? null : LocalDate.parse(computerDTO.getDiscontinued()));
 		Optional<Company> comp = CompanyMapper.fromDTO(computerDTO.getCompanyDTO());
@@ -40,8 +40,8 @@ public class ComputerMapper {
 		
 		String id = String.valueOf(computer.getId());
 		String name = computer.getName();
-		String introduced = String.valueOf(computer.getIntroduced());
-		String discontinued = String.valueOf(computer.getDiscontinued());
+		String introduced = computer.getIntroduced()!=null ? String.valueOf(computer.getIntroduced()) : null;
+		String discontinued = computer.getDiscontinued()!=null ? String.valueOf(computer.getDiscontinued()) : null;
 		Optional<CompanyDTO> comp = CompanyMapper.toDTO(computer.getCompany());
 		CompanyDTO companyDTO = comp.isPresent() ? comp.get() : null;
 

@@ -45,16 +45,16 @@ public class ComputerService {
 		return computerDAO.getByCompany(page, name);
 	}
 	
-	public void addComputer(Computer computer) {
-		computerDAO.addComputer(computer);
+	public boolean addComputer(Computer computer) {
+		return computerDAO.addComputer(computer);
 	}
 	
-	public void updateComputer(Computer computer) {
-		computerDAO.updateComputer(computer);
+	public boolean updateComputer(Computer computer) {
+		return computerDAO.updateComputer(computer);
 	}
 	
-	public void deleteComputer(int id) {
-		computerDAO.deleteComputer(id);
+	public boolean deleteComputer(int id) {
+		return computerDAO.deleteComputer(id);
 	}
 	
 	public int getNbBySearch(String name) {

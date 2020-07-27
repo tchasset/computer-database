@@ -1,19 +1,19 @@
 package com.excilys.tchasset.dto;
 
 public class CompanyDTO {
-	private String companyId;
-	private String companyName;
+	private String id;
+	private String name;
 	
 	public static class Builder {
-		private String companyId;
-		private final String companyName;
+		private String id;
+		private final String name;
 		
-		public Builder(String companyName) {
-			this.companyName = companyName;
+		public Builder(String name) {
+			this.name = name;
 		}
 		
-		public Builder setCompanyId(String companyId) {
-			this.companyId = companyId;
+		public Builder setId(String id) {
+			this.id = id;
 			return this;
 		}
 		
@@ -25,21 +25,21 @@ public class CompanyDTO {
 	public CompanyDTO() {}
 	
 	public CompanyDTO(Builder builder) {
-		this.companyId = builder.companyId;
-		this.companyName = builder.companyName;
+		this.id = builder.id;
+		this.name = builder.name;
 	}
 
-	public String getCompanyName() {
-		return companyName;
+	public String getName() {
+		return name;
 	}
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
+	public void setName(String name) {
+		this.name = name;
 	}
-	public String getCompanyId() {
-		return companyId;
+	public String getId() {
+		return id;
 	}
-	public void setCompanyId(String companyId) {
-		this.companyId = companyId;
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 	@Override
@@ -47,7 +47,7 @@ public class CompanyDTO {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		CompanyDTO company = (CompanyDTO) o;
-		return companyId.equals(company.companyId) &&
-				companyName.equals(company.companyName);
+		return id.equals(company.id) &&
+				name.equals(company.name);
 	}
 }

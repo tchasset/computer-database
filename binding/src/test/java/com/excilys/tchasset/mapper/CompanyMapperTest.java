@@ -14,7 +14,7 @@ public class CompanyMapperTest {
 	public void companyFromDTO_true() {
 		Company company = new Company.Builder("UneCompanie").setId(69).build();
 		
-		CompanyDTO companyDTO = new CompanyDTO.Builder("UneCompanie").setCompanyId("69").build();
+		CompanyDTO companyDTO = new CompanyDTO.Builder("UneCompanie").setId("69").build();
 														
 		assertEquals(company, CompanyMapper.fromDTO(companyDTO).get());
 	}
@@ -23,7 +23,7 @@ public class CompanyMapperTest {
 	public void companyFromDTO_false() {
 		Company company = new Company.Builder("UneFausseCompanie").setId(70).build();
 		
-		CompanyDTO companyDTO = new CompanyDTO.Builder("UneCompanie").setCompanyId("69").build();
+		CompanyDTO companyDTO = new CompanyDTO.Builder("UneCompanie").setId("69").build();
 								
 		assertNotEquals(company, CompanyMapper.fromDTO(companyDTO).get());
 	}
@@ -32,7 +32,7 @@ public class CompanyMapperTest {
 	public void companyToDTO_true() {
 		Company company = new Company.Builder("UneCompanie").setId(69).build();
 		
-		CompanyDTO companyDTO = new CompanyDTO.Builder("UneCompanie").setCompanyId("69").build();
+		CompanyDTO companyDTO = new CompanyDTO.Builder("UneCompanie").setId("69").build();
 														
 		assertEquals(companyDTO, CompanyMapper.toDTO(company).get());
 	}
@@ -41,7 +41,7 @@ public class CompanyMapperTest {
 	public void companyToDTO_false() {
 		Company company = new Company.Builder("UneFausseCompanie").setId(70).build();
 		
-		CompanyDTO companyDTO = new CompanyDTO.Builder("UneCompanie").setCompanyId("69").build();
+		CompanyDTO companyDTO = new CompanyDTO.Builder("UneCompanie").setId("69").build();
 								
 		assertNotEquals(companyDTO, CompanyMapper.toDTO(company).get());
 	}

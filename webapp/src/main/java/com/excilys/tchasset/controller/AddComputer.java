@@ -45,8 +45,8 @@ public class AddComputer {
 	public ModelAndView addComputer(ComputerDTO computerDTO, CompanyDTO companyDTO) {
 		ModelAndView view = new ModelAndView();
 		
-		if (companyDTO.getCompanyId() != null){
-			Optional<Company> company = companyService.getById(Integer.valueOf(companyDTO.getCompanyId()));
+		if (companyDTO.getId() != null){
+			Optional<Company> company = companyService.getById(Integer.valueOf(companyDTO.getId()));
 			companyDTO = company.isPresent() ? CompanyMapper.toDTO(company.get()).get() : null;
 			computerDTO.setCompanyDTO(companyDTO);
         }

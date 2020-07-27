@@ -4,6 +4,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -30,8 +32,23 @@ import com.google.common.collect.ImmutableList;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
+<<<<<<< HEAD
 	@Autowired
 	private UserDetailsService userDetailService;
+=======
+	@Autowired	
+	public void configureGlobal(AuthenticationManagerBuilder auth, DataSource datasource) throws Exception {
+		auth
+			.jdbcAuthentication()
+			.dataSource(datasource)
+			.usersByUsernameQuery("select username,password,enabled "
+			        + "from users "
+			        + "where username = ?")
+			.authoritiesByUsernameQuery("select username,authority "
+			        + "from authorities "
+			        + "where username = ?");
+	}
+>>>>>>> origin/develop
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
