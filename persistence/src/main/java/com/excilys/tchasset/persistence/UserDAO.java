@@ -8,6 +8,7 @@ import java.util.stream.StreamSupport;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.tchasset.log.Logging;
@@ -17,6 +18,7 @@ import com.excilys.tchasset.persistence.interfaces.UserRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 @Repository
+@Transactional
 public class UserDAO {
 	
 	@Autowired
@@ -30,10 +32,17 @@ public class UserDAO {
 	}
 	
 	public Optional<User> getUser (String username, String password){
-		BooleanExpression testPassword = QUser.user.password.eq(password);
-		BooleanExpression testGlobal = QUser.user.username.eq(username).and(testPassword);
-		Optional<User> res = repo.findOne(testGlobal);
-		Logging.info("User "+ username +" with pass starting by "+ password.substring(0,3) +" found and fetch from the db", this.getClass());
+		BooleanExpression testUsername = QUser.user.username.eq(username);
+		Optional<User> res = repo.findOne(testUsername);
+		if(!res.isPresent()) {
+			Logging.info("no User found with username : " + username, this.getClass());
+			return res;
+		}
+		if(BCrypt.checkpw(password, res.get().getPassword())) {
+			Logging.info("User "+ username +" with pass starting by "+ password +" found and fetch from the db", this.getClass());
+			return res;
+		}
+		Logging.info("Found user with username : " + username + " but wrong password", this.getClass());
 		return res;
 	}
 	
@@ -42,7 +51,6 @@ public class UserDAO {
 	 * @param user
 	 * @return user correctly added or not
 	 */
-	@Transactional
 	public boolean addUser(User user) {
 		try {
 			repo.save(user);
