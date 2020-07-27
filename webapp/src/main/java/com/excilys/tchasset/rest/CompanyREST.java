@@ -2,6 +2,7 @@ package com.excilys.tchasset.rest;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -23,25 +24,27 @@ import com.excilys.tchasset.service.CompanyService;
 public class CompanyREST {
 
 	private CompanyService companyService;
-	
+
 	@Autowired
 	public CompanyREST(CompanyService companyService) {
 		this.companyService = companyService;
 	}
-	
+
 	@GetMapping
-	public ResponseEntity<List<Company>> getCompanies () {
+	public ResponseEntity<List<CompanyDTO>> getCompanies () {
 		try {
-			List<Company> companies = companyService.getCompanies();
-	        if (!companies.isEmpty()) {
-	            return new ResponseEntity<>(companies, HttpStatus.OK);
-	        }
-	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			List<CompanyDTO> companies = companyService.getCompanies().stream()
+					.map(company -> CompanyMapper.toDTO(company).get())
+					.collect(Collectors.toList());
+			if (!companies.isEmpty()) {
+				return new ResponseEntity<>(companies, HttpStatus.OK);
+			}
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (DataAccessException ex) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}	
-    }
-	
+	}
+
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<CompanyDTO> getCompanyById (@PathVariable("id") int id) {
 
@@ -55,9 +58,9 @@ public class CompanyREST {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}		
 	}
-	
+
 	@DeleteMapping(path = "/{id}")
-    public ResponseEntity<Company> deleteCompany (@PathVariable("id") int id) {
+	public ResponseEntity<Company> deleteCompany (@PathVariable("id") int id) {
 		try {
 			if(companyService.deleteCompany(id)) {
 				return new ResponseEntity<>(HttpStatus.OK);
@@ -66,5 +69,5 @@ public class CompanyREST {
 		} catch (DataAccessException ex) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}	
-    }
+	}
 }
