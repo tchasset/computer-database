@@ -12,7 +12,7 @@ public class ComputerValidation {
 
 	public static List<String> messageError;
 	
-	public static void checkValidity(ComputerDTO computer) {
+	public static boolean checkValidity(ComputerDTO computer) {
 		messageError = new ArrayList<String>();
 		checkId(computer);
 		checkName(computer);
@@ -20,6 +20,10 @@ public class ComputerValidation {
 		checkDiscontinued(computer);
 		checkDate(computer);
 		checkCompanyDTO(computer);
+		if(messageError.isEmpty()) {
+			return true;
+		}
+		return false;
 	}
 	
 	private static void checkId(ComputerDTO computer) {
@@ -37,7 +41,7 @@ public class ComputerValidation {
 	
 	private static void checkName(ComputerDTO computer) {
 		try {
-			if (computer.getComputerName().isEmpty()) 
+			if (computer.getName().isEmpty()) 
 				  throw new Exception("Computer name can't be empty");
 		} catch(NullPointerException e) {
 			Logging.error("Computer name can't be NULL", ComputerValidation.class);
@@ -71,7 +75,7 @@ public class ComputerValidation {
 	private static void checkCompanyDTO(ComputerDTO computer) {
 		try {
 			if(computer.getCompanyDTO()!=null) {
-				if(computer.getCompanyDTO().getCompanyId().isEmpty() || computer.getCompanyDTO().getCompanyName().isEmpty()) {
+				if(computer.getCompanyDTO().getId().isEmpty() || computer.getCompanyDTO().getName().isEmpty()) {
 					throw new Exception("Company id and name can't be empty if a company is declared for a computer");
 				}
 			}

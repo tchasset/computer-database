@@ -2,10 +2,12 @@ package com.excilys.tchasset.rest;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +24,7 @@ import com.excilys.tchasset.mapper.ComputerMapper;
 import com.excilys.tchasset.model.Computer;
 import com.excilys.tchasset.model.Page;
 import com.excilys.tchasset.service.ComputerService;
+import com.excilys.tchasset.validator.ComputerValidation;
 
 @RestController
 @RequestMapping(value = "/computers")
@@ -37,55 +40,103 @@ public class ComputerREST {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Computer>> getComputers (@QueryParam("page") int page) {
+	public ResponseEntity<List<ComputerDTO>> getComputers (@QueryParam("page") int page) {
 
 		pages.setCurrentPage(page);
-		List<Computer> computers = computerService.getAllComputers(pages);
-		if (!computers.isEmpty()) {
-			return new ResponseEntity<>(computers, HttpStatus.OK);
-		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		try {
+			List<ComputerDTO> computers = computerService.getAllComputers(pages).stream()
+					.map(computer -> ComputerMapper.toDTO(computer))
+					.collect(Collectors.toList());
+			if (!computers.isEmpty()) {
+				return new ResponseEntity<>(computers, HttpStatus.OK);
+			}
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} catch (DataAccessException ex) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}			
 	}
 
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<Computer> getComputerById (@PathVariable("id") int id) {
+	public ResponseEntity<ComputerDTO> getComputerById (@PathVariable("id") int id) {
 
-		Optional<Computer> computer = computerService.getById(id);
-		if (computer.isPresent()) {
-			return new ResponseEntity<>(computer.get(), HttpStatus.OK);
-		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		try {
+			Optional<Computer> computer = computerService.getById(id);
+			if (computer.isPresent()) {
+				return new ResponseEntity<>(ComputerMapper.toDTO(computer.get()), HttpStatus.OK);
+			}
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} catch (DataAccessException ex) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}		
 	}
 	
 	@GetMapping(path = "/search")
-	public ResponseEntity<List<Computer>> getComputerByName (@QueryParam("name") String name, @QueryParam("page") int page) {
+	public ResponseEntity<List<ComputerDTO>> getComputerByName (@QueryParam("name") String name, @QueryParam("page") int page) {
 
 		pages.setCurrentPage(page);
-		List<Computer> computers = computerService.getByName(pages, name);
-		if (!computers.isEmpty()) {
-			return new ResponseEntity<>(computers, HttpStatus.OK);
+		try {
+			List<ComputerDTO> computers = computerService.getByAllName(pages, name).stream()
+					.map(computer -> ComputerMapper.toDTO(computer))
+					.collect(Collectors.toList());
+			if (!computers.isEmpty()) {
+				return new ResponseEntity<>(computers, HttpStatus.OK);
+			}
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} catch (DataAccessException ex) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		
+	}
+	
+	@GetMapping(path = "/nb")
+	public ResponseEntity<Integer> getNbComputers () {
+		try {
+			int nb = computerService.getNbComputers();
+			return new ResponseEntity<>(nb, HttpStatus.OK);
+		} catch (DataAccessException ex) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@PostMapping
-	public ResponseEntity<Computer> addComputer (@RequestBody ComputerDTO computerDTO) {
+	public ResponseEntity<ComputerDTO> addComputer (@RequestBody ComputerDTO computerDTO) {
 
-		computerService.addComputer(ComputerMapper.fromDTO(computerDTO));
-		return new ResponseEntity<>(HttpStatus.OK);
+		if(ComputerValidation.checkValidity(computerDTO)) {
+			try {
+				if ( computerService.addComputer(ComputerMapper.fromDTO(computerDTO)) ) {
+					return new ResponseEntity<>(HttpStatus.OK);
+				}
+			} catch (DataAccessException ex) {
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);	
 	}
 
 	@PutMapping
-	public ResponseEntity<Computer> editComputer (@RequestBody ComputerDTO computerDTO) {
+	public ResponseEntity<ComputerDTO> editComputer (@RequestBody ComputerDTO computerDTO) {
 
-		computerService.updateComputer(ComputerMapper.fromDTO(computerDTO));
-		return new ResponseEntity<>(HttpStatus.OK);
+		if(ComputerValidation.checkValidity(computerDTO)) {
+			try {
+				if( computerService.updateComputer(ComputerMapper.fromDTO(computerDTO)) ) {
+					return new ResponseEntity<>(HttpStatus.OK);
+				}
+			} catch (DataAccessException ex) {
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
 	@DeleteMapping(path = "/{id}")
-	public ResponseEntity<Computer> deleteComputer (@PathVariable("id") int id) {
-
-		computerService.deleteComputer(id);
-		return new ResponseEntity<>(HttpStatus.OK);
+	public ResponseEntity<ComputerDTO> deleteComputer (@PathVariable("id") int id) {
+		try {
+			if(computerService.deleteComputer(id)) {
+				return new ResponseEntity<>(HttpStatus.OK);
+			}
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} catch (DataAccessException ex) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 }

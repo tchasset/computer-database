@@ -5,13 +5,13 @@ import com.google.common.base.Objects;
 public class ComputerDTO {
 
 	private String 	id="0",
-				   	computerName="",
+				   	name="",
 				   	introduced="",
 				   	discontinued="";
 	private CompanyDTO companyDTO;
 	
 	public static class Builder {
-		private final String computerName;
+		private final String name;
 		private String 	id="0",
 						introduced="",
 						discontinued="";
@@ -22,8 +22,8 @@ public class ComputerDTO {
 			return this;
 		}
 		
-		public Builder (String computerName) {
-			this.computerName = computerName;
+		public Builder (String name) {
+			this.name = name;
 		}
 		
         public Builder setIntroduced(String introduced) {
@@ -50,18 +50,18 @@ public class ComputerDTO {
 	
 	public ComputerDTO(Builder builder) {
 		this.setId(builder.id);
-		this.computerName = builder.computerName;
+		this.name = builder.name;
 		this.introduced = builder.introduced;
 		this.discontinued = builder.discontinued;
 		this.companyDTO = builder.companyDTO;
 	}
 
-	public String getComputerName() {
-		return computerName;
+	public String getName() {
+		return name;
 	}
 
-	public void setComputerName(String computerName) {
-		this.computerName = computerName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getIntroduced() {
@@ -102,10 +102,18 @@ public class ComputerDTO {
 		if (o == null || getClass() != o.getClass()) return false;
 		ComputerDTO computer = (ComputerDTO) o;
 		return id.equals(computer.id) &&
-				computerName.equals(computer.computerName) &&
+				name.equals(computer.name) &&
 				introduced.equals(computer.introduced) &&
 				discontinued.equals(computer.discontinued) &&
 				Objects.equal(companyDTO, computer.companyDTO);
 	}
+
+	@Override
+	public String toString() {
+		return "ComputerDTO [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued="
+				+ discontinued + ", companyDTO=" + companyDTO + "]";
+	}
+	
+	
 	
 }

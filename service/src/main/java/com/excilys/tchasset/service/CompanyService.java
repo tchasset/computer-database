@@ -29,7 +29,7 @@ public class CompanyService {
 		return company;
 	}
 	
-	public void deleteCompany(int id) {
-		companyDAO.deleteCompany(id);
+	public boolean deleteCompany(int id) {
+		return companyDAO.deleteCompany(id);
 	}
 }
