@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,35 +25,27 @@ public class CustomUserDetailService implements UserDetailsService {
 	UserService userService;
 	
 	@Transactional
-	public UserDetails loadUserByUsername(String username, String password) throws UsernameNotFoundException{
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
 		
-		Logging.info("LoadUser "+ username +" With password " + password, CustomUserDetailService.class);
+		Logging.info("LoadUser "+ username, CustomUserDetailService.class);
 		
 		if (username.trim().isEmpty()) {
 			throw new UsernameNotFoundException("username is empty");
 		}
-		
-		Optional<User> userOpt = userService.getUser(new UserDTO.Builder().setUsername(username).setPassword(password).build());
-		
-		if(!userOpt.isPresent()) {
-			throw new UsernameNotFoundException("User " + username + " not found");
+
+		User user;
+		try {
+			user = userService.findByUsername(username);
+		} catch(DataAccessException ex) {
+			user = null;
 		}
-		
-		User user = userOpt.get();
 		
 		return user;
 	}
-	
-	@Transactional
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Logging.info("LoadUser "+ username +" Without passwordGiven", CustomUserDetailService.class);
-		
-		throw new UsernameNotFoundException("no password given => no username searched");
-	}
 
 	private List<GrantedAuthority> getGrantedAuthorities(User user) {
-		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		String role = user.getRole().toString();
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		String role = user.getRole();
 		authorities.add(new SimpleGrantedAuthority(role));
 		return authorities;
 	}

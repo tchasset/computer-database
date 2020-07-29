@@ -41,8 +41,8 @@
                     <form action="addComputer" method="POST"  name="form" onsubmit="return valider()">
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName"><spring:message code="label.computerName"/></label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="<spring:message code="label.computerName"/>" required>
+                                <label for="name"><spring:message code="label.computerName"/></label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="<spring:message code="label.computerName"/>" required>
                             </div>
                             <div class="form-group">
                                 <label for="introduced"><spring:message code="label.introduced"/></label>
@@ -53,10 +53,10 @@
                                 <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date">
                             </div>
                             <div class="form-group">
-                                <label for="companyId"><spring:message code="label.company"/></label>
-                                <select class="form-control" id="companyId" name="companyId" >
+                                <label for="companyDTO.id"><spring:message code="label.company"/></label>
+                                <select class="form-control" id="companyDTO.id" name="companyDTO.id" >
                                     <option value="0">--</option>
-                                  	<c:forEach items="${ companyName }" var="company">
+                                  	<c:forEach items="${ companies }" var="company">
 										<option value="${ company.getId() }">
 											<c:out value="${ company.getName() }" /> </option>
 									</c:forEach>          

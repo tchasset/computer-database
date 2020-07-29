@@ -8,6 +8,7 @@ import java.util.stream.StreamSupport;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 
@@ -59,6 +60,15 @@ public class UserDAO {
 		} catch (Exception e) {
 			Logging.info("Error when inserting a new user in the db for : "+ user.toString(), this.getClass());
 			return false;
+		}
+	}
+
+	public User findByUsername(String username) {
+		try {
+			return repo.findByUsername(username);
+		} catch (DataAccessException ex) {
+			Logging.error("Error with db", getClass());
+			throw ex;
 		}
 	}
 }

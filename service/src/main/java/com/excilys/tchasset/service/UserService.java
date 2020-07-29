@@ -3,6 +3,8 @@ package com.excilys.tchasset.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.excilys.tchasset.model.QUser;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +28,9 @@ public class UserService {
 	
 	public void addUser(User user) {
 		userDAO.addUser(user);
+	}
+
+	public User findByUsername(String username) {
+		return userDAO.findByUsername(username);
 	}
 }

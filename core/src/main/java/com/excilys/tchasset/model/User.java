@@ -21,7 +21,7 @@ public class User implements UserDetails{
 	@Nonnull 
 	private String password;
 	@Nonnull
-	private Boolean enabled;
+	private Boolean enabled=true;
 	@Nonnull
 	private String role;
 	
@@ -95,17 +95,17 @@ public class User implements UserDetails{
 
 	@Override
 	public boolean isAccountNonExpired() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return false;
+		return true;
 	}
 
 	@Override

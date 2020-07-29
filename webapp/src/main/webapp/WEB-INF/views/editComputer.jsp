@@ -45,8 +45,8 @@
                     <form action="editComputer?id=${computer.id}" method="POST" name="form" onsubmit="return valider()">
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName"><spring:message code="label.computerName"/></label>
-                                <input type="text" class="form-control" name="computerName" id="computerName" placeholder="<spring:message code="label.computerName"/>" value="${computer.getComputerName()}">
+                                <label for="name"><spring:message code="label.computerName"/></label>
+                                <input type="text" class="form-control" name="name" id="name" placeholder="<spring:message code="label.computerName"/>" value="${computer.getName()}">
                             </div>
                             <div class="form-group">
                                 <label for="introduced"><spring:message code="label.introduced"/></label>
@@ -57,10 +57,10 @@
                                 <input type="date" class="form-control" name="discontinued" id="discontinued" placeholder="Discontinued date" value="${computer.getDiscontinued()}">
                             </div>  
                             <div class="form-group">
-                                <label for="companyId"><spring:message code="label.company"/></label>
-                                <select class="form-control" id="companyId" name="companyId" >
-                                    <option value="${computer.getCompanyDTO().getCompanyId() }">${computer.getCompanyDTO().getCompanyName() }</option>
-                                  	<c:forEach items="${ companyName }" var="company">
+                                <label for="companyDTO.id"><spring:message code="label.company"/></label>
+                                <select class="form-control" id="companyDTO.id" name="companyDTO.id" >
+                                    <option value="${computer.companyDTO.id }">${computer.companyDTO.name }</option>
+                                  	<c:forEach items="${ companies }" var="company">
 										<option value="${ company.getId() }">
 											<c:out value="${ company.getName() }" /> </option>
 									</c:forEach>          

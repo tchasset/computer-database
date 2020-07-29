@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.tchasset.dto.CompanyDTO;
@@ -36,21 +37,23 @@ public class AddComputer {
 	public ModelAndView addComputer() {
 		ModelAndView view = new ModelAndView("addComputer");
 		
-		view.addObject("companyName", companyService.getCompanies());
+		view.addObject("companies", companyService.getCompanies());
 		
 		return view;
 	}
 
 	@PostMapping
-	public ModelAndView addComputer(ComputerDTO computerDTO, CompanyDTO companyDTO) {
+	@ResponseBody
+	public ModelAndView addComputer(ComputerDTO computerDTO) {
 		ModelAndView view = new ModelAndView();
-		
+
+		CompanyDTO companyDTO = computerDTO.getCompanyDTO();
 		if (companyDTO.getId() != null){
-			Optional<Company> company = companyService.getById(Integer.valueOf(companyDTO.getId()));
-			companyDTO = company.isPresent() ? CompanyMapper.toDTO(company.get()).get() : null;
+			Optional<Company> company = companyService.getById(Integer.parseInt(companyDTO.getId()));
+			companyDTO = company.map(value -> CompanyMapper.toDTO(value).get()).orElse(null);
 			computerDTO.setCompanyDTO(companyDTO);
         }
-		
+
 		ComputerValidation.checkValidity(computerDTO);
 		if(ComputerValidation.messageError.isEmpty()) {
 			Computer computer = ComputerMapper.fromDTO(computerDTO);

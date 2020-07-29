@@ -49,7 +49,7 @@
                         class="btn btn-primary" />
                     </form>
                 </div>
-                <sec:authorize access="hasAuthority('ADMIN')">
+                <sec:authorize access="hasRole('ADMIN')">
 	                <div class="pull-right">
 	                    <a class="btn btn-success" id="addComputer" href="addComputer"><spring:message code="label.addComputer"/></a> 
 	                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="label.edit"/></a>
@@ -68,7 +68,7 @@
                     <tr>
                         <!-- Variable declarations for passing labels as parameters -->
                         <!-- Table header for Computer Name -->
-						<sec:authorize access="hasAuthority('ADMIN')">
+						<sec:authorize access="hasRole('ADMIN')">
 	                        <th class="editMode" style="width: 60px; height: 22px;">
 	                            <input type="checkbox" id="selectall" /> 
 	                            <span style="vertical-align: top;">
@@ -108,10 +108,10 @@
 	                            <input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
 	                        </td>
 	                        <td>
-	                            <sec:authorize access="hasAuthority('ADMIN')">
+	                            <sec:authorize access="hasRole('ADMIN')">
 	                            	<a href="editComputer?id=${computer.getId()}" onclick="">${computer.getName()}</a>
 	                           	</sec:authorize>
-	                           	<sec:authorize access="hasAuthority('USER')">
+	                           	<sec:authorize access="hasRole('USER')">
 	                            	${computer.getName()}
 	                           	</sec:authorize>
 	                        </td>
