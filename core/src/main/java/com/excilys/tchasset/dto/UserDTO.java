@@ -4,12 +4,12 @@ public class UserDTO {
 	private String username;
 	private String password;
 	private String role;
-	
+
 	public static class Builder {
 		private String username;
 		private String password;
 		private String role;
-		
+
 		public Builder setUsername(String username) {
 			this.username = username;
 			return this;
@@ -20,16 +20,16 @@ public class UserDTO {
 			return this;
 		}
 
-		public Builder serRole(String role) {
+		public Builder setRole(String role) {
 			this.role = role;
 			return this;
 		}
-		
+
 		public UserDTO build() {
 			return new UserDTO(this);
 		}
 	}
-	
+
 	public UserDTO(Builder builder) {
 		this.setUsername(builder.username);
 		this.setPassword(builder.password);

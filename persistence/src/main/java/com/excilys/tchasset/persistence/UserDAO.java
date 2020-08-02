@@ -21,17 +21,17 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 @Repository
 @Transactional
 public class UserDAO {
-	
+
 	@Autowired
 	private UserRepository repo;
-	
+
 	public List<User> getUsers() {
 		Iterable<User> iterable = repo.findAll();
 		List<User> users = StreamSupport.stream(iterable.spliterator(), false)
 	                                      		.collect(Collectors.toList());
 		return users;
 	}
-	
+
 	public Optional<User> getUser (String username, String password){
 		BooleanExpression testUsername = QUser.user.username.eq(username);
 		Optional<User> res = repo.findOne(testUsername);
@@ -46,7 +46,7 @@ public class UserDAO {
 		Logging.info("Found user with username : " + username + " but wrong password", this.getClass());
 		return res;
 	}
-	
+
 	/**
 	 * Add a User with the given caracteristics to the db
 	 * @param user
@@ -54,6 +54,7 @@ public class UserDAO {
 	 */
 	public boolean addUser(User user) {
 		try {
+			user.setEnabled(true);
 			repo.save(user);
 			Logging.info("User added on the db : "+ user.toString(), this.getClass());
 			return true;

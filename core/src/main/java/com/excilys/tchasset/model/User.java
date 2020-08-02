@@ -15,27 +15,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity(name="users")
 public class User implements UserDetails{
 	private static final long serialVersionUID = -2968690769265534724L;
-	
+
 	@Id @Nonnull
 	private String username;
-	@Nonnull 
-	private String password;
 	@Nonnull
+	private String password;
 	private Boolean enabled=true;
 	@Nonnull
 	private String role;
-	
+
 	public static class Builder {
 		private String username;
 		private String password;
 		private Boolean enabled;
 		private String role;
-		
+
 		public Builder setUsername(String username) {
 			this.username = username;
 			return this;
 		}
-		
+
 		public Builder setEnabled(Boolean bool) {
 			this.enabled = bool;
 			return this;
@@ -46,25 +45,25 @@ public class User implements UserDetails{
 			return this;
 		}
 
-		public Builder serRole(String role) {
+		public Builder setRole(String role) {
 			this.role = role;
 			return this;
 		}
-		
+
 		public User build() {
 			return new User(this);
 		}
 	}
-	
+
 	public User() {}
-	
+
 	public User(Builder builder) {
 		this.username = builder.username;
 		this.password = builder.password;
 		this.enabled = builder.enabled == null ? false : builder.enabled;
 		this.role = builder.role;
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
@@ -84,12 +83,16 @@ public class User implements UserDetails{
 		this.role = role;
 	}
 
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
 		GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + this.role);
 		grantList.add(authority);
-		
+
 		return grantList;
 	}
 
@@ -111,5 +114,15 @@ public class User implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		return this.enabled;
+	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+				"username='" + username + '\'' +
+				", password='" + password + '\'' +
+				", enabled=" + enabled +
+				", role='" + role + '\'' +
+				'}';
 	}
 }
