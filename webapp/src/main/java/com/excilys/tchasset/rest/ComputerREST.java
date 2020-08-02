@@ -1,5 +1,6 @@
 package com.excilys.tchasset.rest;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -89,10 +90,24 @@ public class ComputerREST {
 	}
 	
 	@GetMapping(path = "/nb")
-	public ResponseEntity<Integer> getNbComputers () {
+	public ResponseEntity<HashMap<String, Integer>> getNbComputers () {
 		try {
 			int nb = computerService.getNbComputers();
-			return new ResponseEntity<>(nb, HttpStatus.OK);
+			HashMap<String, Integer> mappy = new HashMap<String, Integer>(1);
+			mappy.put("nb", nb);
+			return new ResponseEntity<>(mappy, HttpStatus.OK);
+		} catch (DataAccessException ex) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping(path = "/nbsearch")
+	public ResponseEntity<HashMap<String, Integer>> getNbBySearch(String name) {
+		try {
+			int nb = computerService.getNbBySearch(name);
+			HashMap<String, Integer> mappy = new HashMap<String, Integer>(1);
+			mappy.put("nb", nb);
+			return new ResponseEntity<>(mappy, HttpStatus.OK);
 		} catch (DataAccessException ex) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}

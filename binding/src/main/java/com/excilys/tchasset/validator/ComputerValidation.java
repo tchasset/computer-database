@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.excilys.tchasset.dto.ComputerDTO;
 import com.excilys.tchasset.log.Logging;
@@ -11,7 +13,7 @@ import com.excilys.tchasset.log.Logging;
 public class ComputerValidation {
 
 	public static List<String> messageError;
-	
+
 	public static boolean checkValidity(ComputerDTO computer) {
 		messageError = new ArrayList<String>();
 		checkId(computer);
@@ -25,11 +27,11 @@ public class ComputerValidation {
 		}
 		return false;
 	}
-	
+
 	private static void checkId(ComputerDTO computer) {
 		try {
 			if (computer.getId().isEmpty()) 
-				  throw new Exception("Computer id can't be empty");
+				throw new Exception("Computer id can't be empty");
 		} catch(NullPointerException e) {
 			Logging.error("Computer id can't be NULL", ComputerValidation.class);
 			messageError.add("Computer id can't be NULL");
@@ -38,11 +40,17 @@ public class ComputerValidation {
 			messageError.add(e.getMessage());
 		}
 	}
-	
+
 	private static void checkName(ComputerDTO computer) {
 		try {
 			if (computer.getName().isEmpty()) 
-				  throw new Exception("Computer name can't be empty");
+				throw new Exception("Computer name can't be empty");
+			
+			Pattern p = Pattern.compile("^[a-zA-Z0-9 \\-/_+]+$");
+			Matcher match = p.matcher(computer.getName());
+			if(!match.matches())
+				throw new Exception("Computer name contains invalid character");
+			
 		} catch(NullPointerException e) {
 			Logging.error("Computer name can't be NULL", ComputerValidation.class);
 			messageError.add("Computer name can't be NULL");
@@ -51,7 +59,7 @@ public class ComputerValidation {
 			messageError.add(e.getMessage());
 		}
 	}
-	
+
 	private static void checkIntroduced(ComputerDTO computer) {
 		try {
 			if (computer.getIntroduced()!=null && !computer.getIntroduced().isEmpty())
@@ -61,7 +69,7 @@ public class ComputerValidation {
 			messageError.add("Introduced date is not in format (YYYY-MM-DD) or is invalid");
 		} 
 	}
-	
+
 	private static void checkDiscontinued(ComputerDTO computer) {
 		try {
 			if (computer.getDiscontinued()!=null && !computer.getDiscontinued().isEmpty())
@@ -71,7 +79,7 @@ public class ComputerValidation {
 			messageError.add("Discontinued date is not in format (YYYY-MM-DD) or is invalid");
 		} 
 	}
-	
+
 	private static void checkCompanyDTO(ComputerDTO computer) {
 		try {
 			if(computer.getCompanyDTO()!=null) {
@@ -87,22 +95,26 @@ public class ComputerValidation {
 			messageError.add(e.getMessage());
 		}
 	}
-	
+
 	private static void checkDate(ComputerDTO computer) {
-		String intro = computer.getIntroduced().isEmpty() ? null : computer.getIntroduced(),
-			   disco = computer.getDiscontinued().isEmpty() ? null : computer.getDiscontinued();
-				
+		String intro=null,disco=null;
+
+		if(computer.getIntroduced() != null)
+			intro = computer.getIntroduced().isEmpty() ? null : computer.getIntroduced();
+		if(computer.getDiscontinued() != null)
+			disco = computer.getDiscontinued().isEmpty() ? null : computer.getDiscontinued();
+
 		if(intro!=null && disco!=null)
 			if(LocalDate.parse(disco).isBefore(LocalDate.parse(intro)))
 				messageError.add("Discontinued date can't be before introduced date");
-		
+
 		if(	intro!=null && 
-			(LocalDate.parse(intro).isBefore(LocalDate.of(1970,1,2)) || LocalDate.parse(intro).isAfter(LocalDate.of(2038,1,18))) ){
+				(LocalDate.parse(intro).isBefore(LocalDate.of(1970,1,2)) || LocalDate.parse(intro).isAfter(LocalDate.of(2038,1,18))) ){
 			messageError.add("Introduced date can't be before 02/01/1970 or afeter 18/01/2038");
 		}
-		
+
 		if(	disco!=null && 
-			(LocalDate.parse(disco).isBefore(LocalDate.of(1970,1,2)) || LocalDate.parse(disco).isAfter(LocalDate.of(2038,1,18))) ) {
+				(LocalDate.parse(disco).isBefore(LocalDate.of(1970,1,2)) || LocalDate.parse(disco).isAfter(LocalDate.of(2038,1,18))) ) {
 			messageError.add("Discontinued date can't be before 02/01/1970 or afeter 18/01/2038");
 		}
 	}
