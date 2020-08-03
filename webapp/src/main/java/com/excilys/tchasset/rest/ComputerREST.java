@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.ws.rs.QueryParam;
 
+import com.excilys.tchasset.log.Logging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,6 @@ public class ComputerREST {
 
 	@GetMapping
 	public ResponseEntity<List<ComputerDTO>> getComputers (@QueryParam("page") int page) {
-
 		pages.setCurrentPage(page);
 		try {
 			List<ComputerDTO> computers = computerService.getAllComputers(pages).stream()
@@ -48,7 +48,7 @@ public class ComputerREST {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (DataAccessException ex) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}			
+		}
 	}
 
 	@GetMapping(path = "/{id}")
@@ -62,9 +62,9 @@ public class ComputerREST {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (DataAccessException ex) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}		
+		}
 	}
-	
+
 	@GetMapping(path = "/search")
 	public ResponseEntity<List<ComputerDTO>> getComputerByName (@QueryParam("name") String name, @QueryParam("page") int page) {
 
@@ -80,9 +80,9 @@ public class ComputerREST {
 		} catch (DataAccessException ex) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 	}
-	
+
 	@GetMapping(path = "/nb")
 	public ResponseEntity<HashMap<String, Integer>> getNbComputers () {
 		try {
@@ -94,7 +94,7 @@ public class ComputerREST {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping(path = "/nbsearch")
 	public ResponseEntity<HashMap<String, Integer>> getNbBySearch(String name) {
 		try {
@@ -119,7 +119,7 @@ public class ComputerREST {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);	
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
 	@PutMapping

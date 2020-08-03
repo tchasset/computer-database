@@ -3,7 +3,8 @@ package com.excilys.tchasset.config;
 import com.excilys.tchasset.log.Logging;
 import com.excilys.tchasset.token.JwtAuthenticationEntryPoint;
 import com.excilys.tchasset.token.JwtRequestFilter;
-import com.google.common.collect.ImmutableList;
+
+import org.springframework.http.HttpMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,12 +19,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.Filter;
-import javax.ws.rs.HttpMethod;
 
 @Configuration
 @EnableWebSecurity
@@ -54,7 +51,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					.antMatchers(HttpMethod.POST, "/computers/**").hasRole("ADMIN")
 					.antMatchers(HttpMethod.PUT, "/computers/**").hasRole("ADMIN")
 					.antMatchers(HttpMethod.DELETE, "/computers/**").hasRole("ADMIN")
-					.anyRequest().permitAll()
 					.and()
 				.sessionManagement() .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
