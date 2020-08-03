@@ -113,10 +113,15 @@ public class ComputerDAO {
 	}
 
 	public int getNbBySearch(String name) {
-		BooleanExpression bool = QComputer.computer.name.containsIgnoreCase(name)
-				.or(QComputer.computer.company.name.containsIgnoreCase(name));
-		long nb = repo.count(bool);
-		return (int) nb;
+		try {
+			BooleanExpression bool = QComputer.computer.name.containsIgnoreCase(name)
+					.or(QComputer.computer.company.name.containsIgnoreCase(name));
+			long nb = repo.count(bool);
+			return (int) nb;
+		} catch (DataAccessException ex) {
+			Logging.error("Problem with db", getClass());
+			throw ex;
+		}	
 	}
 
 	/* @param page 		paginate request if not null
