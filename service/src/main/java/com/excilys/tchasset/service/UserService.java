@@ -3,8 +3,6 @@ package com.excilys.tchasset.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.excilys.tchasset.model.QUser;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +13,12 @@ import com.excilys.tchasset.persistence.UserDAO;
 @Service
 public class UserService {
 
+	private final UserDAO userDAO;
+
 	@Autowired
-	private UserDAO userDAO;
+	public UserService(UserDAO userDAO) {
+		this.userDAO = userDAO;
+	}
 
 	public List<User> getUsers() {
 		return userDAO.getUsers();

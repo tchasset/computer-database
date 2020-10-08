@@ -7,12 +7,10 @@ import com.excilys.tchasset.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.QueryParam;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +19,7 @@ import java.util.stream.Collectors;
 @CrossOrigin
 public class UserREST {
 
-	private UserService userService;
+	private final UserService userService;
 
 	@Autowired
 	public UserREST(UserService userService) {
@@ -33,7 +31,7 @@ public class UserREST {
 		List<UserDTO> usersList = userService.getUsers().stream()
 				.map(UserMapper::toDTO)
 				.collect(Collectors.toList());
-		return new ResponseEntity(usersList,HttpStatus.OK);
+		return new ResponseEntity<>(usersList,HttpStatus.OK);
 	}
 
 	@GetMapping("login")
@@ -55,23 +53,12 @@ public class UserREST {
 				.setPassword(BCrypt.hashpw(password,BCrypt.gensalt()))
 				.setRole("USER")
 				.build();
-		if(userService.addUser(user)) {
-			return new ResponseEntity<>(HttpStatus.OK);
+		if(userService.getUser(UserMapper.toDTO(user)).isPresent()) {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
+		else if(userService.addUser(user)) {
+			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	}
-
-	@GetMapping(path = "/connectInfo")
-	public ResponseEntity<HashMap<String, String>> getCompanies(Authentication authentication) {
-		HashMap<String, String> return_value = new HashMap<String, String>();
-		if (!(authentication == null)) {
-			return_value.put("name", authentication.getName());
-			return_value.put("authority", authentication.getAuthorities().toString());
-			return new ResponseEntity<>(return_value, HttpStatus.OK);
-		} else {
-			return_value.put("name", "guest");
-			return_value.put("authority", "[NONE]");
-			return new ResponseEntity<>(return_value, HttpStatus.OK);
-		}
 	}
 }

@@ -60,7 +60,7 @@ public class User implements UserDetails{
 	public User(Builder builder) {
 		this.username = builder.username;
 		this.password = builder.password;
-		this.enabled = builder.enabled == null ? false : builder.enabled;
+		this.enabled = builder.enabled != null && builder.enabled;
 		this.role = builder.role;
 	}
 

@@ -12,34 +12,37 @@ public class ComputerMapper {
 
 	/*
 	 * @param computerDTO	DTO to convert into bean
-	 * 
+	 *
 	 * @return 				The computer bean from a computer DTO
 	 */
 	public static Computer fromDTO(ComputerDTO computerDTO) {
 		Computer computer;
 
-		int id = Integer.valueOf(computerDTO.getId());
+		int id = Integer.parseInt(computerDTO.getId());
 		String name = computerDTO.getName();
-		
-		LocalDate introduced = null;
-		if(computerDTO.getIntroduced() != null) 
-			introduced = computerDTO.getIntroduced().isEmpty() ? null : LocalDate.parse(computerDTO.getIntroduced());
-		
-		LocalDate discontinued = null;
-		if(computerDTO.getDiscontinued() != null) 
-			discontinued = computerDTO.getDiscontinued().isEmpty() ? null : LocalDate.parse(computerDTO.getDiscontinued());
-		
-		Optional<Company> comp = CompanyMapper.fromDTO(computerDTO.getCompanyDTO());
-		Company company = comp.isPresent() ? comp.get() : null;
 
-		computer = new Computer.Builder(name).setId(id).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(company).build();
+		LocalDate introduced = null;
+		if(computerDTO.getIntroduced() != null)
+			introduced = computerDTO.getIntroduced().isEmpty() ? null : LocalDate.parse(computerDTO.getIntroduced());
+
+		LocalDate discontinued = null;
+		if(computerDTO.getDiscontinued() != null)
+			discontinued = computerDTO.getDiscontinued().isEmpty() ? null : LocalDate.parse(computerDTO.getDiscontinued());
+
+		Optional<Company> comp = CompanyMapper.fromDTO(computerDTO.getCompanyDTO());
+		Company company = comp.orElse(null);
+
+		computer = new Computer.Builder(name)
+				.setId(id).setIntroduced(introduced)
+				.setDiscontinued(discontinued)
+				.setCompany(company).build();
 
 		return computer;
 	}
 
 	/*
 	 * @param computerDTO	Bean to convert into DTO
-	 * 
+	 *
 	 * @return 				The computer DTO from a computer bean
 	 */
 	public static ComputerDTO toDTO(Computer computer) {
@@ -50,9 +53,13 @@ public class ComputerMapper {
 		String introduced = computer.getIntroduced()!=null ? String.valueOf(computer.getIntroduced()) : null;
 		String discontinued = computer.getDiscontinued()!=null ? String.valueOf(computer.getDiscontinued()) : null;
 		Optional<CompanyDTO> comp = CompanyMapper.toDTO(computer.getCompany());
-		CompanyDTO companyDTO = comp.isPresent() ? comp.get() : null;
+		CompanyDTO companyDTO = comp.orElse(null);
 
-		computerDTO = new ComputerDTO.Builder(name).setId(id).setIntroduced(introduced).setDiscontinued(discontinued).setCompanyDTO(companyDTO).build();
+		computerDTO = new ComputerDTO.Builder(name)
+				.setId(id)
+				.setIntroduced(introduced)
+				.setDiscontinued(discontinued)
+				.setCompanyDTO(companyDTO).build();
 
 		return computerDTO;
 	}

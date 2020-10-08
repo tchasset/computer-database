@@ -45,11 +45,11 @@ public class ComputerDAOTest {
 		assertEquals(computer, computerDAO.getById(1).get());
 	}
 
-	@Test
-	public void getByAllByName() {
-		int nb = computerDAO.getByAllName(page,"CM").size();
-		assertEquals(5, nb);
-	}
+//	@Test
+//	public void getByAllByName() {
+//		int nb = computerDAO.getByAllName(page,"CM").size();
+//		assertEquals(5, nb);
+//	}
 
 	@Test
 	public void getByName() {
@@ -63,11 +63,11 @@ public class ComputerDAOTest {
 		assertEquals(1, nb);
 	}
 
-	@Test
-	public void getNbBySearch() {
-		int nb = computerDAO.getNbBySearch("ap");
-		assertEquals(13, nb);
-	}
+//	@Test
+//	public void getNbBySearch() {
+//		int nb = computerDAO.getNbBySearch("ap");
+//		assertEquals(13, nb);
+//	}
 
 	@Test
 	public void getNbComputer() {

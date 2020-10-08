@@ -24,8 +24,8 @@ import com.excilys.tchasset.validator.ComputerValidation;
 @RequestMapping("/addComputer")
 public class AddComputer {
 
-	private ComputerService computerService;
-	private CompanyService companyService;
+	private final ComputerService computerService;
+	private final CompanyService companyService;
 
 	@Autowired
 	public AddComputer(ComputerService computerService, CompanyService companyService) {
@@ -36,9 +36,9 @@ public class AddComputer {
 	@GetMapping
 	public ModelAndView addComputer() {
 		ModelAndView view = new ModelAndView("addComputer");
-		
+
 		view.addObject("companies", companyService.getCompanies());
-		
+
 		return view;
 	}
 
@@ -57,12 +57,12 @@ public class AddComputer {
 		ComputerValidation.checkValidity(computerDTO);
 		if(ComputerValidation.messageError.isEmpty()) {
 			Computer computer = ComputerMapper.fromDTO(computerDTO);
-			
+
 			computerService.addComputer(computer);
 			view.setViewName("redirect:dashboard?addSuccess=1");
 		}
 		else {
-			view.addObject("error", ComputerValidation.messageError);	
+			view.addObject("error", ComputerValidation.messageError);
 			view.setViewName("redirect:addComputer");
 		}
 		return view;

@@ -1,5 +1,6 @@
 package com.excilys.tchasset.rest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -7,7 +8,6 @@ import java.util.stream.Collectors;
 
 import javax.ws.rs.QueryParam;
 
-import com.excilys.tchasset.log.Logging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -36,12 +36,27 @@ public class ComputerREST {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<ComputerDTO>> getComputers (@QueryParam("page") int page) {
+	public ResponseEntity<List<ComputerDTO>> getComputers (	@QueryParam("page") int page, 
+															@RequestParam(value="order", defaultValue="") String order, 
+															@RequestParam(value="search", defaultValue="") String search,
+															@RequestParam(value="by", defaultValue="" ) String by,
+															@RequestParam(value="size", defaultValue="10") int size) {
 		pages.setCurrentPage(page);
+		pages.setSize(size);
 		try {
-			List<ComputerDTO> computers = computerService.getAllComputers(pages).stream()
-					.map(computer -> ComputerMapper.toDTO(computer))
-					.collect(Collectors.toList());
+			List<ComputerDTO> computers = new ArrayList<>();
+			if(by.isEmpty() && search.isEmpty()) {
+				computers = computerService.getAllComputers(pages).stream()
+						.map(computer -> ComputerMapper.toDTO(computer))
+						.collect(Collectors.toList());
+			}
+			else if (!order.isEmpty() && !by.isEmpty() ) {
+				return orderBy(page, order, search, by);
+			}
+			else if ( !search.isEmpty()) {
+				return getComputerByName(search, page);
+			}
+				
 			if (!computers.isEmpty()) {
 				return new ResponseEntity<>(computers, HttpStatus.OK);
 			}
@@ -70,9 +85,95 @@ public class ComputerREST {
 
 		pages.setCurrentPage(page);
 		try {
-			List<ComputerDTO> computers = computerService.getByAllName(pages, name).stream()
+			List<ComputerDTO> computers= computerService.getByAllName(pages, name)
+					.stream()
 					.map(computer -> ComputerMapper.toDTO(computer))
 					.collect(Collectors.toList());
+			if (!computers.isEmpty()) {
+				return new ResponseEntity<>(computers, HttpStatus.OK);
+			}
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} catch (DataAccessException ex) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+	
+	public ResponseEntity<List<ComputerDTO>> orderBy(int page, String order, String search, String by) {
+		if(by.equals("name")) {
+			return orderByComputer(page, order, search);
+		}
+		else if (by.equals("introduced")) {
+			return orderByIntroduced(page, order, search);
+		}
+		else if (by.equals("discontinued")) {
+			return orderByDiscontinued(page, order, search);
+		}
+		else if (by.equals("companyName")) {
+			return orderByCompany(page, order, search);
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	public ResponseEntity<List<ComputerDTO>> orderByComputer (int page, String order,String search) {
+
+		pages.setCurrentPage(page);
+		try {
+			List<ComputerDTO> computers = computerService.getComputersOrderByComputer(pages, order, search).stream()
+					.map(computer -> ComputerMapper.toDTO(computer))
+					.collect(Collectors.toList());
+			
+			if (!computers.isEmpty()) {
+				return new ResponseEntity<>(computers, HttpStatus.OK);
+			}
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} catch (DataAccessException ex) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	public ResponseEntity<List<ComputerDTO>> orderByIntroduced (int page, String order,String search) {
+
+		pages.setCurrentPage(page);
+		try {
+			List<ComputerDTO> computers = computerService.getComputersOrderByIntroduced(pages, order, search).stream()
+					.map(computer -> ComputerMapper.toDTO(computer))
+					.collect(Collectors.toList());
+			
+			if (!computers.isEmpty()) {
+				return new ResponseEntity<>(computers, HttpStatus.OK);
+			}
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} catch (DataAccessException ex) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	public ResponseEntity<List<ComputerDTO>> orderByDiscontinued (int page, String order,String search) {
+
+		pages.setCurrentPage(page);
+		try {
+			List<ComputerDTO> computers = computerService.getComputersOrderByDiscontinued(pages, order, search).stream()
+					.map(computer -> ComputerMapper.toDTO(computer))
+					.collect(Collectors.toList());
+			
+			if (!computers.isEmpty()) {
+				return new ResponseEntity<>(computers, HttpStatus.OK);
+			}
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} catch (DataAccessException ex) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	public ResponseEntity<List<ComputerDTO>> orderByCompany (int page, String order, String search) {
+
+		pages.setCurrentPage(page);
+		try {
+			List<ComputerDTO> computers = computerService.getComputersOrderByCompany(pages, order, search).stream()
+					.map(computer -> ComputerMapper.toDTO(computer))
+					.collect(Collectors.toList());
+			
 			if (!computers.isEmpty()) {
 				return new ResponseEntity<>(computers, HttpStatus.OK);
 			}

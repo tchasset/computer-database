@@ -1,16 +1,17 @@
 package com.excilys.tchasset.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
+@RequestMapping("errors")
 public class Error {
 
-    @RequestMapping(value = "errors", method = RequestMethod.GET)
+    @GetMapping
     public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
 
         ModelAndView errorPage = new ModelAndView("errorPage");
@@ -39,7 +40,7 @@ public class Error {
                 break;
             }
             default: {
-            	errorMsg = "Http Error Code: 500. Internal Server Error";
+            	errorMsg = "Unknown Error";
                 break;
             }
         }

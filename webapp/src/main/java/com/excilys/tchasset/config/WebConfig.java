@@ -15,7 +15,6 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -30,12 +29,12 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableWebMvc
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer implements WebMvcConfigurer, WebApplicationInitializer {
-	
+
 	/*
 	 * WebApplicationInitializer
 	 */
 	@Override
-	public void onStartup(ServletContext servletContext) throws ServletException {
+	public void onStartup(ServletContext servletContext) {
 
 		AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
 		context.register(PersistenceConfig.class, WebConfig.class, SecurityConfig.class);
@@ -46,7 +45,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 		registration.setLoadOnStartup(1);
 		registration.addMapping("/");
 	}
-	
+
 	/*
 	 * WebMvcConfigurer
 	 */
@@ -54,7 +53,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
 	}
-	
+
 	@Bean
 	public ViewResolver viewResolver() {
 	    InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
@@ -63,17 +62,12 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 	    viewResolver.setSuffix(".jsp");
 	    return viewResolver;
 	}
-	
+
 	@Override
     public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/login");
     }
-	
-	/*@Override
-	public void addCorsMappings(CorsRegistry registry) {
-		 registry.addMapping("/**").allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
-	}*/
-	
+
 	@Bean
 	public MessageSource messageSource() {
 	    ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
@@ -81,7 +75,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 	    messageSource.setDefaultEncoding("ISO-8859-1");
 	    return messageSource;
 	}
-	
+
 	@Bean
 	public LocaleResolver localeResolver() {
 	    SessionLocaleResolver slr = new SessionLocaleResolver();
@@ -95,7 +89,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 	    lci.setParamName("lang");
 	    return lci;
 	}
-	
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 	    registry.addInterceptor(localeChangeInterceptor());

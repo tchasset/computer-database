@@ -11,24 +11,26 @@ import com.excilys.tchasset.persistence.CompanyDAO;
 
 @Service
 public class CompanyService {
-	
+
+	private final CompanyDAO companyDAO;
+
 	@Autowired
-	private CompanyDAO companyDAO;
-	
+	public CompanyService(CompanyDAO companyDAO) {
+		this.companyDAO = companyDAO;
+	}
+
 	public List<Company> getCompanies() {
 		return companyDAO.getCompanies();
 	}
-	
+
 	public Optional<Company> getById(int id) {
-		Optional<Company> company = companyDAO.getById(id);
-		return company;
+		return companyDAO.getById(id);
 	}
-	
+
 	public Optional<Company> getByName(String name) {
-		Optional<Company> company = companyDAO.getByName(name);
-		return company;
+		return companyDAO.getByName(name);
 	}
-	
+
 	public boolean deleteCompany(int id) {
 		return companyDAO.deleteCompany(id);
 	}

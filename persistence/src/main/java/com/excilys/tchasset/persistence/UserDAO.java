@@ -22,14 +22,17 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 @Transactional
 public class UserDAO {
 
+	private final UserRepository repo;
+
 	@Autowired
-	private UserRepository repo;
+	public UserDAO(UserRepository repo) {
+		this.repo = repo;
+	}
 
 	public List<User> getUsers() {
 		Iterable<User> iterable = repo.findAll();
-		List<User> users = StreamSupport.stream(iterable.spliterator(), false)
+		return StreamSupport.stream(iterable.spliterator(), false)
 	                                      		.collect(Collectors.toList());
-		return users;
 	}
 
 	public Optional<User> getUser (String username, String password){

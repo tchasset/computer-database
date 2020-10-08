@@ -15,22 +15,19 @@ public class ComputerValidation {
 	public static List<String> messageError;
 
 	public static boolean checkValidity(ComputerDTO computer) {
-		messageError = new ArrayList<String>();
+		messageError = new ArrayList<>();
 		checkId(computer);
 		checkName(computer);
 		checkIntroduced(computer);
 		checkDiscontinued(computer);
 		checkDate(computer);
 		checkCompanyDTO(computer);
-		if(messageError.isEmpty()) {
-			return true;
-		}
-		return false;
+		return messageError.isEmpty();
 	}
 
 	private static void checkId(ComputerDTO computer) {
 		try {
-			if (computer.getId().isEmpty()) 
+			if (computer.getId().isEmpty())
 				throw new Exception("Computer id can't be empty");
 		} catch(NullPointerException e) {
 			Logging.error("Computer id can't be NULL", ComputerValidation.class);
@@ -43,14 +40,14 @@ public class ComputerValidation {
 
 	private static void checkName(ComputerDTO computer) {
 		try {
-			if (computer.getName().isEmpty()) 
+			if (computer.getName().isEmpty())
 				throw new Exception("Computer name can't be empty");
-			
-			Pattern p = Pattern.compile("^[a-zA-Z0-9 \\-/_+]+$");
+
+			Pattern p = Pattern.compile("^[a-zA-Z0-9 \\-/_+.]+$");
 			Matcher match = p.matcher(computer.getName());
 			if(!match.matches())
 				throw new Exception("Computer name contains invalid character");
-			
+
 		} catch(NullPointerException e) {
 			Logging.error("Computer name can't be NULL", ComputerValidation.class);
 			messageError.add("Computer name can't be NULL");
@@ -65,9 +62,9 @@ public class ComputerValidation {
 			if (computer.getIntroduced()!=null && !computer.getIntroduced().isEmpty())
 				LocalDate.parse(computer.getIntroduced());
 		} catch (DateTimeParseException e) {
-			Logging.error("Introduced date is not in format (YYYY-MM-DD) or is invalid", ComputerValidation.class);	
+			Logging.error("Introduced date is not in format (YYYY-MM-DD) or is invalid", ComputerValidation.class);
 			messageError.add("Introduced date is not in format (YYYY-MM-DD) or is invalid");
-		} 
+		}
 	}
 
 	private static void checkDiscontinued(ComputerDTO computer) {
@@ -75,9 +72,9 @@ public class ComputerValidation {
 			if (computer.getDiscontinued()!=null && !computer.getDiscontinued().isEmpty())
 				LocalDate.parse(computer.getDiscontinued());
 		} catch (DateTimeParseException e) {
-			Logging.error("Discontinued date is not in format (YYYY-MM-DD) or is invalid", ComputerValidation.class);		
+			Logging.error("Discontinued date is not in format (YYYY-MM-DD) or is invalid", ComputerValidation.class);
 			messageError.add("Discontinued date is not in format (YYYY-MM-DD) or is invalid");
-		} 
+		}
 	}
 
 	private static void checkCompanyDTO(ComputerDTO computer) {
@@ -108,12 +105,12 @@ public class ComputerValidation {
 			if(LocalDate.parse(disco).isBefore(LocalDate.parse(intro)))
 				messageError.add("Discontinued date can't be before introduced date");
 
-		if(	intro!=null && 
+		if(	intro!=null &&
 				(LocalDate.parse(intro).isBefore(LocalDate.of(1970,1,2)) || LocalDate.parse(intro).isAfter(LocalDate.of(2038,1,18))) ){
 			messageError.add("Introduced date can't be before 02/01/1970 or afeter 18/01/2038");
 		}
 
-		if(	disco!=null && 
+		if(	disco!=null &&
 				(LocalDate.parse(disco).isBefore(LocalDate.of(1970,1,2)) || LocalDate.parse(disco).isAfter(LocalDate.of(2038,1,18))) ) {
 			messageError.add("Discontinued date can't be before 02/01/1970 or afeter 18/01/2038");
 		}

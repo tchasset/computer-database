@@ -20,7 +20,7 @@ import com.excilys.tchasset.service.CompanyService;
 @CrossOrigin
 public class CompanyREST {
 
-	private CompanyService companyService;
+	private final CompanyService companyService;
 
 	@Autowired
 	public CompanyREST(CompanyService companyService) {
@@ -39,7 +39,7 @@ public class CompanyREST {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (DataAccessException ex) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}	
+		}
 	}
 
 	@GetMapping(path = "/{id}")
@@ -53,7 +53,7 @@ public class CompanyREST {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (DataAccessException ex) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}		
+		}
 	}
 
 	@DeleteMapping(path = "/{id}")
@@ -65,6 +65,6 @@ public class CompanyREST {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (DataAccessException ex) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}	
+		}
 	}
 }

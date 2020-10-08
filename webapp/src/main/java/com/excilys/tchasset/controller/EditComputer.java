@@ -20,31 +20,31 @@ import com.excilys.tchasset.validator.ComputerValidation;
 @RequestMapping("/editComputer")
 public class EditComputer {
 
-	private ComputerService computerService;
-	private CompanyService companyService;
-	
+	private final ComputerService computerService;
+	private final CompanyService companyService;
+
 	@Autowired
 	public EditComputer(ComputerService computerService, CompanyService companyService) {
 		this.computerService = computerService;
 		this.companyService = companyService;
 	}
-	
+
 	@GetMapping
 	public ModelAndView editComputer(@RequestParam (name = "id", required = true) String ID) {
 		ModelAndView view = new ModelAndView("editComputer");
 
-		int id = Integer.valueOf(ID);
+		int id = Integer.parseInt(ID);
 		Optional<Computer> computer = computerService.getById(id);
 
 		if(!computer.isPresent()) {
 			view.setViewName("redirect:dashboard");
 		}
-			
+
 		ComputerDTO computerDTO = ComputerMapper.toDTO(computer.get());
 		view.addObject("computer", computerDTO);
-			
+
 		view.addObject("companies", companyService.getCompanies());
-		
+
 		return view;
 	}
 
@@ -63,14 +63,14 @@ public class EditComputer {
 		ComputerValidation.checkValidity(computerDTO);
 		if(ComputerValidation.messageError.isEmpty()) {
 			Computer computer = ComputerMapper.fromDTO(computerDTO);
-			
+
 			computerService.updateComputer(computer);
 			view.setViewName("redirect:dashboard?editSuccess=1");
 		}
 		else {
 			view.setViewName("redirect:editComputer");
 			view.addObject("id",computerDTO.getId());
-			view.addObject("error", ComputerValidation.messageError);	
+			view.addObject("error", ComputerValidation.messageError);
 		}
 		return view;
 	}
