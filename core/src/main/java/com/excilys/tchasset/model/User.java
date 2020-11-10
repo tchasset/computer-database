@@ -3,6 +3,7 @@ package com.excilys.tchasset.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.persistence.Entity;
@@ -20,14 +21,14 @@ public class User implements UserDetails{
 	private String username;
 	@Nonnull
 	private String password;
-	private Boolean enabled=true;
+	private boolean enabled=true;
 	@Nonnull
 	private String role;
 
 	public static class Builder {
 		private String username;
 		private String password;
-		private Boolean enabled;
+		private boolean enabled=true;
 		private String role;
 
 		public Builder setUsername(String username) {
@@ -60,7 +61,7 @@ public class User implements UserDetails{
 	public User(Builder builder) {
 		this.username = builder.username;
 		this.password = builder.password;
-		this.enabled = builder.enabled != null && builder.enabled;
+		this.enabled = builder.enabled;
 		this.role = builder.role;
 	}
 
@@ -124,5 +125,21 @@ public class User implements UserDetails{
 				", enabled=" + enabled +
 				", role='" + role + '\'' +
 				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		User user = (User) o;
+		return username.equals(user.username) &&
+				password.equals(user.password) &&
+				(enabled == user.enabled) &&
+				role.equals(user.role);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(username, password, enabled, role);
 	}
 }

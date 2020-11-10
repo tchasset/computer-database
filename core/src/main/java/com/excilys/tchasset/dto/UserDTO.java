@@ -1,14 +1,18 @@
 package com.excilys.tchasset.dto;
 
+import java.util.Objects;
+
 public class UserDTO {
 	private String username;
 	private String password;
 	private String role;
+	private boolean enabled=true;
 
 	public static class Builder {
 		private String username;
 		private String password;
 		private String role;
+		private boolean enabled=true;
 
 		public Builder setUsername(String username) {
 			this.username = username;
@@ -25,6 +29,11 @@ public class UserDTO {
 			return this;
 		}
 
+		public Builder setEnabled(boolean enabled) {
+			this.enabled = enabled;
+			return this;
+		}
+
 		public UserDTO build() {
 			return new UserDTO(this);
 		}
@@ -34,6 +43,7 @@ public class UserDTO {
 		this.setUsername(builder.username);
 		this.setPassword(builder.password);
 		this.setRole(builder.role);
+		this.setEnabled(builder.enabled);
 	}
 
 	public String getUsername() {
@@ -58,5 +68,29 @@ public class UserDTO {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		UserDTO userDTO = (UserDTO) o;
+		return enabled == userDTO.enabled &&
+				username.equals(userDTO.username) &&
+				password.equals(userDTO.password) &&
+				role.equals(userDTO.role);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(username, password, role, enabled);
 	}
 }
