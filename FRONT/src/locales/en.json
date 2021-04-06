@@ -1,0 +1,54 @@
+{
+  "editComputer" : "Edit Computer",
+  "addComputer" : "Add new computer",
+  "submit": "Submit",
+  "add": "Add a new Computer",
+  "name": "Name",
+  "introduced": "Introduced",
+  "discontinued": "Discontinued",
+  "company" : "Company name",
+  "cancel" : "Cancel",
+  "introduction" : "Introduction date",
+  "discontinuation" : "Discontinuation date",
+  "company_form" : "Company",
+  "ok" : "ok",
+  "password" : "Password",
+  "loggedIn" : "You are logged in",
+  "badCredent" : "Invalid credentials",
+  "logout.success" : "You are now logged out",
+  "logout.error" : "Error while logging out",
+  "register.success" : "Register completed",
+  "register.used" : "Username already used",
+  "register.error" : "Network error during register",
+  "add.success" : "Computer successfully added to database",
+  "add.error" : "Error while trying to add the computer",
+  "edit.success" : "Computer successfully updated",
+  "edit.error" : "Error while trying to update the computer",
+  "required" : "Required",
+  "register" : "Register",
+  "login" : "Login",
+  "username" : "Username",
+  "confirmpassword" : "Confirm the password",
+  "logout" : "Logout",
+  "rulename" : "UserName must be less than 25 characters",
+  "rulename6" : "Must be at least 6 characters",
+  "samepass" : "Required and equal to password",
+  "search" : "Search",
+  "welcome" : "Welcome to CDB ",
+  "logged" : "Logged in as :",
+  "required.name" : "The name field is required",
+  "special.characters" : "No special characters are allowed except  +-/_.",
+  "delete.error" : "Error when deleting computer",
+  "delete.success" : "Selected computers have been deleted",
+  "database.error" : "Error while querying the database"
+
+
+
+
+
+
+
+
+
+
+}
